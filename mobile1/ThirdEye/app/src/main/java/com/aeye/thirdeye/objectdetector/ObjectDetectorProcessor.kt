@@ -27,13 +27,19 @@ import com.google.mlkit.vision.objects.DetectedObject
 import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.ObjectDetectorOptionsBase
+import kotlinx.coroutines.*
 import java.io.IOException
 
 /** A processor to run object detector.  */
-class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBase) :
+class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBase, alertListener: DetectSuccessListener) :
   VisionProcessorBase<List<DetectedObject>>(context) {
 
   private val detector: ObjectDetector = ObjectDetection.getClient(options)
+  private var trackingId: Int = -1
+  private var label: String = ""
+  private var job: Job? = null
+  private var isResultChanged = true
+  private val detectSuccessListener = alertListener
 
   override fun stop() {
     super.stop()
@@ -55,7 +61,63 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
   override fun onSuccess(results: List<DetectedObject>, graphicOverlay: GraphicOverlay) {
     for (result in results) {
       graphicOverlay.add(ObjectGraphic(graphicOverlay, result))
+      checkResult(result)
     }
+  }
+
+  /**
+   * trackingId가 변했다면 결과 업데이트 후, 타이머 초기화 실행
+   * 변하지 않았다면 label 비교
+   *
+   * label이 같다면 isResultChanged = false
+   * 다르거나 없다면
+   */
+  private fun checkResult(result: DetectedObject) {
+    if(trackingId != result.trackingId) {
+      Log.d(TAG, "checkResult: TrackingId Changed")
+      updateResult(result)
+      stopTimer()
+      startTimer()
+    } else {
+      if(result.labels.isNotEmpty() && result.labels[0].text == label) {
+        Log.d(TAG, "checkResult: keep going")
+        isResultChanged = false
+      } else {
+        Log.d(TAG, "checkResult: Label Changed")
+        updateResult(result)
+        stopTimer()
+        startTimer()
+      }
+    }
+  }
+
+  private fun updateResult(result: DetectedObject) {
+    result.trackingId?.let {
+      trackingId = it
+    }?: run {
+      trackingId = -1
+    }
+
+    label = if(result.labels.isEmpty()) {
+      ""
+    } else {
+      result.labels[0].text
+    }
+  }
+
+  private fun startTimer() {
+    job = CoroutineScope(Dispatchers.Default).launch {
+      isResultChanged = true
+      delay(1000L)
+      if(!isResultChanged) {
+        Log.d(TAG, "detect success")
+        detectSuccessListener.detectSuccess(label)
+      }
+    }
+  }
+
+  private fun stopTimer() {
+    job?.cancel()
   }
 
   override fun onFailure(e: Exception) {
@@ -64,5 +126,9 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
 
   companion object {
     private const val TAG = "ObjectDetectorProcessor"
+  }
+
+  interface DetectSuccessListener {
+    fun detectSuccess(label: String)
   }
 }
