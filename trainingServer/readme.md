@@ -24,7 +24,8 @@ python 3.8.10
 *  하드웨어 정보 확인 :  sudo lshw -short | egrep 'process|display'
 *  가상환경 생성 : python3 -m venv {가상환경 이름}
 *  가상환경 실행 : source ./{가상환경 이름}/bin/activate    // 디렉토리 위치는 가상환경 상위
-*  
+*  접속하고 anaconda 초기화를 해야함 : source ~/.bashrc
+*  아나콘다 가상환경 목록 확인 : conda info --envs 
 
 # 이슈 정리
 
