@@ -46,6 +46,25 @@ dependencies {
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+	// 슬랙
+	implementation("com.slack.api:slack-api-client:1.20.1")
+	implementation 'com.slack.api:slack-api-model:1.20.1'
+	implementation 'com.slack.api:bolt:1.20.1'
+	implementation 'com.slack.api:bolt-socket-mode:1.20.1'
+	implementation 'com.slack.api:bolt-jetty:1.20.1'
+	implementation 'com.slack.api:bolt-jakarta-jetty:1.20.1'
+	implementation 'com.slack.api:bolt-aws-lambda:1.20.1'
+	implementation 'com.slack.api:bolt-google-cloud-functions:1.20.1'
+	implementation 'com.slack.api:bolt-micronaut:1.20.1'
+	implementation 'com.slack.api:bolt-helidon:1.20.1'
+	implementation 'com.slack.api:bolt-http4k:1.20.1'
+	implementation 'com.slack.api:bolt-ktor:1.20.1'
+	implementation 'com.slack.api:slack-app-backend:1.20.1'
+
+	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
+
+
 }
 
 tasks.named('test') {

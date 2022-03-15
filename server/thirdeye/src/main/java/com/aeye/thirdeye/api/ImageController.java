@@ -1,26 +1,33 @@
 package com.aeye.thirdeye.api;
 
+import com.aeye.thirdeye.service.SlackImageService;
+import com.slack.api.Slack;
+import com.slack.api.app_backend.interactive_components.ActionResponseSender;
+import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
+import com.slack.api.app_backend.interactive_components.response.ActionResponse;
+import com.slack.api.model.block.LayoutBlock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.JSONParser;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+
+import static com.slack.api.webhook.WebhookPayloads.payload;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ImageController {
 
-    private final RestTemplate restTemplate;
+    private final SlackImageService slackImageService;
+
+    @Value("${notification.slack.webhook.url}")
+    private String url;
 
     @PostMapping("/image/test")
     public ResponseEntity<?> test(@RequestPart(value = "image", required = false) MultipartFile file,
@@ -29,67 +36,50 @@ public class ImageController {
         return null;
     }
 
-    @PostMapping("/actions")
-    public ResponseEntity<?> testtest(){
-        // "{" +                 "}";
-        String strJson =
-                "{\n" +
-                "  \"attachments\": [\n" +
-                "    {\n" +
-                "      \"pretext\": \"This is the attachment pretext.\",\n" +
-                "      \"text\": \"This is the attachment text.\",\n" +
-                "      \"actions\": [\n" +
-                "        {\n" +
-                "          \"id\": \"message\",\n" +
-                "          \"name\": \"Ephemeral Message\",\n" +
-                "          \"integration\": {\n" +
-                "            \"url\": \"http://localhost:8080/actions/test1\",\n" +
-                "            \"context\": {\n" +
-                "              \"action\": \"do_something_ephemeral\"\n" +
-                "            }\n" +
-                "          }\n" +
-                "        }, {\n" +
-                "          \"id\": \"update\",\n" +
-                "          \"name\": \"Update\",\n" +
-                "          \"integration\": {\n" +
-                "            \"url\": \"http://localhost:8080/actions/test2\",\n" +
-                "            \"context\": {\n" +
-                "              \"action\": \"do_something_update\"         \n" +
-                "            }\n" +
-                "          }\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+    // 슬랙 검수 코드
+    @PostMapping("/slack/request")
+    public ResponseEntity<?> reallytest(){
+        List<LayoutBlock> layoutBlocks = slackImageService.makeLayout();
+
+        // 위에 만든 payload Slack에 전송
+        try {
+            Slack.getInstance().send(url,
+                    payload(p -> p
+                            .text("슬랙에 메시지를 출력하지 못했습니다.")
+                            .blocks(layoutBlocks)
+                    )
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    // Slack 버튼 결과 여기로 받음 일단
+    @RequestMapping(value = "/slack/response", method = RequestMethod.POST,
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<?> test12(@RequestParam String payload){
+
+        BlockActionPayload blockActionPayload = slackImageService.responseSlackLayout(payload);
+        ActionResponse response =
+                ActionResponse.builder()
+                        .replaceOriginal(true) // 변경은되는데 여기서 변경이 안돼서
+                        .deleteOriginal(true) // 삭제로 구현해놓음
+                        .blocks(blockActionPayload.getMessage().getBlocks())
+                        .build();
+
+        Slack slack = Slack.getInstance();
+        ActionResponseSender sender = new ActionResponseSender(slack);
 
         try {
-            JSONObject jsonObject = new JSONObject(strJson);
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-type", MediaType.APPLICATION_JSON_VALUE);
-
-            HttpEntity<String> entity = new HttpEntity<>(strJson, headers);
-            restTemplate.postForEntity("https://meeting.ssafy.com/hooks/3mwi6urfribuf8hbfnzwh17knw", entity, String.class);
-        }
-        catch (JSONException e){
+            sender.send(blockActionPayload.getResponseUrl(), response);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("크허허허허");
     }
-
-    @PostMapping("/actions/test1")
-    public ResponseEntity<?> test1(){
-        System.out.println("test1test1");
-        return ResponseEntity.status(HttpStatus.OK).body("크허허허허");
-    }
-
-    @PostMapping("/actions/test2")
-    public ResponseEntity<?> test2(){
-        System.out.println("test2test2");
-
-        return null;
-    }
-
 
 }
