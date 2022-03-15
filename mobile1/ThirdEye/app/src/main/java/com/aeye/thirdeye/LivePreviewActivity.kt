@@ -32,6 +32,7 @@ import com.aeye.thirdeye.objectdetector.ObjectDetectorProcessor
 import com.aeye.thirdeye.preference.PreferenceUtils
 import com.aeye.thirdeye.sound.SoundAlarmUtil
 import com.aeye.thirdeye.vibrator.TextToSpeechUtil
+import com.aeye.thirdeye.vibrator.VibratorUtil
 import com.google.android.gms.common.annotation.KeepName
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.perf.FirebasePerformance
@@ -45,16 +46,18 @@ import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.linkfirebase.FirebaseModelSource
 import java.io.IOException
 import java.util.ArrayList
+import java.util.regex.Pattern
 
 /** Live preview demo for ML Kit APIs. */
 @KeepName
 class LivePreviewActivity :
-    AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
+    AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback, ObjectDetectorProcessor.DetectSuccessListener {
 
     private var cameraSource: CameraSource? = null
     private var preview: CameraSourcePreview? = null
     private var graphicOverlay: GraphicOverlay? = null
     private var selectedModel = OBJECT_DETECTION_CUSTOM
+    lateinit var resultTextView: TextView
 
     // firebase 관련 변수들
     lateinit var remoteConfig: FirebaseRemoteConfig
@@ -103,15 +106,17 @@ class LivePreviewActivity :
         val refreshButton = findViewById<Button>(R.id.button_live_preview_refresh).apply {
             setOnClickListener {
                 // TODO: 재인식
+                startCameraSource()
+                resultTextView.text = ""
             }
         }
 
         // object detection의 결과
-        val result = findViewById<TextView>(R.id.tv_detection_result)
+        resultTextView = findViewById<TextView>(R.id.tv_detection_result)
 
         val voiceButton = findViewById<Button>(R.id.button_live_preview_voice).apply {
             setOnClickListener {
-                TextToSpeechUtil(this@LivePreviewActivity, result.text.toString())
+                TextToSpeechUtil(this@LivePreviewActivity, resultTextView.text.toString())
             }
         }
 
@@ -128,7 +133,7 @@ class LivePreviewActivity :
                     Log.i(TAG, "Using Object Detector Processor")
                     val objectDetectorOptions = PreferenceUtils.getObjectDetectorOptionsForLivePreview(this)
                     cameraSource!!.setMachineLearningFrameProcessor(
-                        ObjectDetectorProcessor(this, objectDetectorOptions)
+                        ObjectDetectorProcessor(this, objectDetectorOptions, this)
                     )
                 }
                 OBJECT_DETECTION_CUSTOM -> {
@@ -142,7 +147,7 @@ class LivePreviewActivity :
                         PreferenceUtils.getCustomObjectDetectorOptionsForLivePreviewWithRemoteModel(this, aEyeRemoteModel)
                     }
                     cameraSource!!.setMachineLearningFrameProcessor(
-                        ObjectDetectorProcessor(this, objectDetectorOption)
+                        ObjectDetectorProcessor(this, objectDetectorOption, this)
                     )
                     startCameraSource()
                 }
@@ -156,7 +161,7 @@ class LivePreviewActivity :
                             customAutoMLODTLocalModel
                         )
                     cameraSource!!.setMachineLearningFrameProcessor(
-                        ObjectDetectorProcessor(this, customAutoMLODTOptions)
+                        ObjectDetectorProcessor(this, customAutoMLODTOptions, this)
                     )
                 }
 
@@ -298,7 +303,7 @@ class LivePreviewActivity :
         Log.d("확인", "옵션: ${customObjectDetectorOptions}")
         Log.d("확인", "Remote 실행함수")
         cameraSource!!.setMachineLearningFrameProcessor(
-            ObjectDetectorProcessor(this, customObjectDetectorOptions)
+            ObjectDetectorProcessor(this, customObjectDetectorOptions, this)
         )
     }
 
@@ -309,7 +314,7 @@ class LivePreviewActivity :
         Log.d("확인", "옵션: ${customObjectDetectorOptions}")
         Log.d("확인", "Local 실행함수")
         cameraSource!!.setMachineLearningFrameProcessor(
-            ObjectDetectorProcessor(this, customObjectDetectorOptions)
+            ObjectDetectorProcessor(this, customObjectDetectorOptions, this)
         )
     }
 
@@ -443,5 +448,18 @@ class LivePreviewActivity :
         }
         Log.i(TAG, "Permission NOT granted: $permission")
         return false
+    }
+
+    override fun detectSuccess(label: String) {
+        runOnUiThread {
+            preview?.stop()
+            alert()
+            resultTextView.text = label
+        }
+    }
+
+    private fun alert() {
+        SoundAlarmUtil.play()
+        VibratorUtil.vibrate(this)
     }
 }
