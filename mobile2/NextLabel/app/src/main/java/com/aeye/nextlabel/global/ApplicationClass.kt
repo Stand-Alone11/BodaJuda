@@ -18,12 +18,12 @@ class ApplicationClass: Application() {
         lateinit var sContentResolver: ContentResolver
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        initRetrofit()
-
-        sContentResolver = contentResolver
-    }
+//    override fun onCreate() {
+//        super.onCreate()
+//        initRetrofit()
+//
+//        sContentResolver = contentResolver
+//    }
 
     private fun initRetrofit() {
         val client: OkHttpClient = OkHttpClient.Builder()
