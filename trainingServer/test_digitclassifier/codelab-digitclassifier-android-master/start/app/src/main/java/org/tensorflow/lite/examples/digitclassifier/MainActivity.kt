@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
     remoteConfig.fetchAndActivate()
       .addOnCompleteListener { task ->
         if (task.isSuccessful) {
-          val modelName = remoteConfig.getString("model_name")
+          val modelName = remoteConfig.getString("mname")
           val downloadTrace = firebasePerformance.newTrace("download_model")
           downloadTrace.start()
           downloadModel(modelName)

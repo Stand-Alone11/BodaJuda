@@ -6,13 +6,11 @@ from firebase_admin import ml
 
 with open("./keys/aeye01-firebase-adminsdk-als38-ca1cc3f0d6.json",'r') as f:
    uploaded = json.load(f)
-# uploaded = files.upload()
 print(uploaded['type'])
 
 for fn in uploaded.keys():
   print('User uploaded file "{name}" with length {length} bytes'.format(
       name=fn, length=len(uploaded[fn])))
-#   os.environ["GOOGLE_APPLICATION_CREDENTIALS"]='/content/' + fn
   projectID = fn.rsplit("-firebase")[0]
   firebase_admin.initialize_app(
       options={'projectId': projectID, 
