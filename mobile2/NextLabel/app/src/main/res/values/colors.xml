@@ -8,5 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <!--  custom colors  -->
-    <color name="background">#9DC1D1</color>
+    <color name="brand_color">#9DC1D1</color>
 </resources>
