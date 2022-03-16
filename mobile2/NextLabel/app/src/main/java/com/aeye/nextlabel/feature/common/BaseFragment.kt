@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.common
+package com.aeye.nextlabel.feature.common
 
 import android.os.Bundle
 import android.view.LayoutInflater
