@@ -97,12 +97,6 @@ class LivePreviewActivity :
             Log.d(TAG, "graphicOverlay is null")
         }
 
-        val detailButton = findViewById<Button>(R.id.button_live_preview_detail).apply {
-            setOnClickListener {
-                // TODO: 상세 정보 음성 안내
-            }
-        }
-
         val refreshButton = findViewById<Button>(R.id.button_live_preview_refresh).apply {
             setOnClickListener {
                 // TODO: 재인식
