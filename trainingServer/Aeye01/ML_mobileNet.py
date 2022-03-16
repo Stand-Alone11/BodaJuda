@@ -83,7 +83,8 @@ print("모델 가져오기")
 
 # Create a Model Format
 model_format = ml.TFLiteFormat(model_source=source)
-
+print("!!!!!!!!!!!!model_format!!!!!!!!!!!!!!!!")
+print(model_format)
 print("모델 tflite로 변환")
 
 # Create a Model object
