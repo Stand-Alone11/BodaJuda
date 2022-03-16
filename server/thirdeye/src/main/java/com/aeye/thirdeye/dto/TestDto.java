@@ -6,6 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TestDto {
-
-    private int Seq;
+    private int seq;
 }
