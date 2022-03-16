@@ -1,16 +1,15 @@
-package com.aeye.thirdeye.vibrator
+package com.aeye.thirdeye.tts
 
 import android.app.Activity
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import java.util.*
 
-class TextToSpeechUtil(val activity: Activity,
-                       val txt: String,
-                       val pit: Double = 1.0,
-                       val spd: Double = 1.0): TextToSpeech.OnInitListener {
+class TextToSpeechUtil(activity: Activity,
+                       private val pit: Double = 1.0,
+                       private val spd: Double = 1.0): TextToSpeech.OnInitListener {
 
-    val ttsCustom = TextToSpeech(activity, this)
+    val ttsCustom = TextToSpeech(activity, this, "com.google.android.tts")
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
@@ -21,14 +20,14 @@ class TextToSpeechUtil(val activity: Activity,
             } else {
                 ttsCustom.setPitch(pit.toFloat())
                 ttsCustom.setSpeechRate(spd.toFloat())
-                speakTxt(txt)
             }
         } else {
             Log.d("TTS", "failed initialization")
         }
     }
 
-    private fun speakTxt(txt: String) {
+    fun speakTxt(txt: String) {
         ttsCustom.speak(txt, TextToSpeech.QUEUE_FLUSH, null, null)
     }
+
 }
