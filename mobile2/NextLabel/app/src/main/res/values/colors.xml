@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <!--  custom colors  -->
     <color name="brand_color">#9DC1D1</color>
+    <color name="brand_color_secondary">#00264B</color>
+    <color name="deactivated">#C4C4C4</color>
 </resources>
