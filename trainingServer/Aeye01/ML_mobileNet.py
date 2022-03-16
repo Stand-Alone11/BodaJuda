@@ -2,16 +2,19 @@
 import tensorflow as tf
 from tensorflow import keras
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import random
+# import random
+import os
+import firebase_admin
+from firebase_admin import ml
 
 print("TensorFlow version:", tf.__version__)
 
 # GPU 사용 여부 확인
-from tensorflow.python.client import device_lib
-print(device_lib.list_local_devices())
+# from tensorflow.python.client import device_lib
+# print(device_lib.list_local_devices())
 
 # Import MNIST dataset
 mnist = keras.datasets.mnist
@@ -60,31 +63,20 @@ print(hist.history['loss'])
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
 converter.optimizations = [tf.lite.Optimize.DEFAULT]
 tflite_model = converter.convert()
-with open('./model/mnist_v5.tflite', "wb") as f:
+with open('./model/mnist_v7.tflite', "wb") as f:
   f.write(tflite_model)
 
-import os
-import json
-import firebase_admin
-from firebase_admin import ml
 
-
-with open("./keys/aeye01-firebase-adminsdk-als38-67adf4ae6e.json",'r') as f:
-   uploaded = json.load(f)
-
-print("파일 로드 성공")
-
-
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]='/content/' + 'aeye01-firebase-adminsdk-als38-67adf4ae6e.json'
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]='./keys/' + 'aeye01-firebase-adminsdk-als38-67adf4ae6e.json'
 
 firebase_admin.initialize_app(
-    options={'projectId': uploaded['project_id'], 
-              'storageBucket': uploaded['project_id'] + '.appspot.com' })
+    options={'projectId': "aeye01", 
+              'storageBucket': "aeye01" + '.appspot.com' })
 
 print("파일 옵션 설정 확인")
 
 # This uploads it to your bucket as mmnist_v2.tflite
-source = ml.TFLiteGCSModelSource.from_keras_model(model, './model/mnist_v5.tflite')
+source = ml.TFLiteGCSModelSource.from_keras_model(model, './model/mnist_v7.tflite')
 print (source.gcs_tflite_uri)
 
 print("모델 가져오기")
@@ -95,7 +87,7 @@ model_format = ml.TFLiteFormat(model_source=source)
 print("모델 tflite로 변환")
 
 # Create a Model object
-sdk_model_1 = ml.Model(display_name="mnist_v5", model_format=model_format)
+sdk_model_1 = ml.Model(display_name="mnist_v7", model_format=model_format)
 
 print("firebase 모델 이름 저장")
 
