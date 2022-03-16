@@ -18,24 +18,20 @@ package com.aeye.thirdeye
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import android.view.View
 import android.widget.*
-import android.widget.AdapterView.OnItemSelectedListener
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.aeye.thirdeye.objectdetector.ObjectDetectorProcessor
 import com.aeye.thirdeye.preference.PreferenceUtils
 import com.aeye.thirdeye.sound.SoundAlarmUtil
-import com.aeye.thirdeye.vibrator.TextToSpeechUtil
+import com.aeye.thirdeye.tts.TextToSpeechUtil
 import com.aeye.thirdeye.vibrator.VibratorUtil
 import com.google.android.gms.common.annotation.KeepName
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -58,6 +54,8 @@ class LivePreviewActivity :
     private var graphicOverlay: GraphicOverlay? = null
     private var selectedModel = OBJECT_DETECTION_CUSTOM
     lateinit var resultTextView: TextView
+    private var resultLast = ""
+    lateinit var tsUtil: TextToSpeechUtil
 
     // firebase 관련 변수들
     lateinit var remoteConfig: FirebaseRemoteConfig
@@ -77,8 +75,8 @@ class LivePreviewActivity :
         if(!allRuntimePermissionsGranted()) {
             getRuntimePermissions()
             showToast("권한을 허용해주세요")
-            TextToSpeechUtil(this, "권한을 허용해주세요")
-        } else {
+            tsUtil.speakTxt("권한을 허용해주세요")
+       } else {
             // 모델 다운로드 확인 & 모델 다운로드
             getModelName()
         }
@@ -87,6 +85,8 @@ class LivePreviewActivity :
     private fun isCameraPermissionAccepted(): Boolean = isPermissionGranted(this, Manifest.permission.CAMERA)
 
     private fun init() {
+        tsUtil = TextToSpeechUtil(this)
+
         preview = findViewById(R.id.preview_view)
         if (preview == null) {
             Log.d(TAG, "Preview is null")
@@ -97,17 +97,12 @@ class LivePreviewActivity :
             Log.d(TAG, "graphicOverlay is null")
         }
 
-        val detailButton = findViewById<Button>(R.id.button_live_preview_detail).apply {
-            setOnClickListener {
-                // TODO: 상세 정보 음성 안내
-            }
-        }
-
         val refreshButton = findViewById<Button>(R.id.button_live_preview_refresh).apply {
             setOnClickListener {
                 // TODO: 재인식
                 startCameraSource()
-                resultTextView.text = ""
+                resultLast = ""
+                resultTextView.text = resultLast
             }
         }
 
@@ -116,7 +111,7 @@ class LivePreviewActivity :
 
         val voiceButton = findViewById<Button>(R.id.button_live_preview_voice).apply {
             setOnClickListener {
-                TextToSpeechUtil(this@LivePreviewActivity, resultTextView.text.toString())
+                tsUtil.speakTxt(resultLast)
             }
         }
 
@@ -377,6 +372,7 @@ class LivePreviewActivity :
         if (cameraSource != null) {
             cameraSource?.release()
         }
+        tsUtil.ttsCustom.shutdown()
     }
 
     companion object {
@@ -454,12 +450,23 @@ class LivePreviewActivity :
         runOnUiThread {
             preview?.stop()
             alert()
-            resultTextView.text = label
+            resultLast = getKorean(label)
+            resultTextView.text = resultLast
         }
     }
 
     private fun alert() {
         SoundAlarmUtil.play()
         VibratorUtil.vibrate(this)
+    }
+
+    private fun getKorean(string: String): String {
+        val sb = StringBuffer()
+        val pattern = Pattern.compile("[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]")
+        val matcher = pattern.matcher(string)
+        while (matcher.find()) {
+            sb.append(matcher.group())
+        }
+        return sb.toString()
     }
 }

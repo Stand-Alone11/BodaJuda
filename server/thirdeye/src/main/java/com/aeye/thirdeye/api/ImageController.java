@@ -1,5 +1,6 @@
 package com.aeye.thirdeye.api;
 
+import com.aeye.thirdeye.dto.ImageDto;
 import com.aeye.thirdeye.service.SlackImageService;
 import com.slack.api.Slack;
 import com.slack.api.app_backend.interactive_components.ActionResponseSender;
@@ -29,14 +30,53 @@ public class ImageController {
     @Value("${notification.slack.webhook.url}")
     private String url;
 
-    @PostMapping("/image/test")
-    public ResponseEntity<?> test(@RequestPart(value = "image", required = false) MultipartFile file,
-                                  @RequestBody Map<String, String> input){
+    @PostMapping("/inspect/request")
+    public ResponseEntity<?> inspectRequest(@RequestPart(value = "image", required = false) MultipartFile file,
+                                  @RequestBody ImageDto imageDto){
+        List<LayoutBlock> layoutBlocks = slackImageService.makeRequestLayout(imageDto);
 
-        return null;
+        // 위에 만든 payload Slack에 전송
+        try {
+            Slack.getInstance().send(url,
+                    payload(p -> p
+                            .text("슬랙에 메시지를 출력하지 못했습니다.")
+                            .blocks(layoutBlocks)
+                    )
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    // 슬랙 검수 코드
+    // Slack 버튼 결과 여기로 받아서 처리
+    @RequestMapping(value = "/inspect/response", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<?> inspectResponse(@RequestParam String payload){
+
+        BlockActionPayload blockActionPayload = slackImageService.makeResponseLayout(payload);
+        ActionResponse response =
+                ActionResponse.builder()
+                        .replaceOriginal(true) // 변경은되는데 여기서 변경이 안돼서
+                        .deleteOriginal(true) // 삭제로 구현해놓음
+                        .blocks(blockActionPayload.getMessage().getBlocks())
+                        .build();
+
+        Slack slack = Slack.getInstance();
+        ActionResponseSender sender = new ActionResponseSender(slack);
+
+        try {
+            sender.send(blockActionPayload.getResponseUrl(), response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+
+    // 슬랙 검수 코드 (테스트)
     @PostMapping("/slack/request")
     public ResponseEntity<?> reallytest(){
         List<LayoutBlock> layoutBlocks = slackImageService.makeLayout();
@@ -57,7 +97,7 @@ public class ImageController {
     }
 
 
-    // Slack 버튼 결과 여기로 받음 일단
+    // Slack 버튼 결과 여기로 받음 일단 (테스트)
     @RequestMapping(value = "/slack/response", method = RequestMethod.POST,
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<?> test12(@RequestParam String payload){
