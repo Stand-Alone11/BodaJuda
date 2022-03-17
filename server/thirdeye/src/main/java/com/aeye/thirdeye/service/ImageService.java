@@ -47,6 +47,7 @@ public class ImageService{
 
         
         newFile = new File(absolutePath + fileName + ".jpg");
+        System.out.println(newFile.getAbsolutePath());
         file.transferTo(newFile);
         savedImage.setImage(newFile.getAbsolutePath());
         imageRepository.save(savedImage);
