@@ -40,6 +40,7 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
   private var job: Job? = null
   private var isResultChanged = true
   private val detectSuccessListener = alertListener
+  private var id = 0
 
   override fun stop() {
     super.stop()
@@ -73,10 +74,11 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
    * 다르거나 없다면
    */
   private fun checkResult(result: DetectedObject) {
+    Log.d(TAG, "id: ${id++}, trackingId: ${result.trackingId}, label: ${result.labels[0].text}, isResultChanged: $isResultChanged")
     if(trackingId != result.trackingId) {
       Log.d(TAG, "checkResult: TrackingId Changed")
-      updateResult(result)
       stopTimer()
+      updateResult(result)
       startTimer()
     } else {
       if(result.labels.isNotEmpty() && result.labels[0].text == label) {
@@ -84,8 +86,8 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
         isResultChanged = false
       } else {
         Log.d(TAG, "checkResult: Label Changed")
-        updateResult(result)
         stopTimer()
+        updateResult(result)
         startTimer()
       }
     }
@@ -105,18 +107,28 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
     }
   }
 
+  /**
+   * 1초 후에도 isResultChange 가 true인 상황 예외 처리 방법
+   *  trackingId, label 초기화 하여 다시 타이머 실행하게 함
+   */
   private fun startTimer() {
+    Log.d(TAG, "startTimer: start")
     job = CoroutineScope(Dispatchers.Default).launch {
       isResultChanged = true
       delay(1000L)
+      Log.d(TAG, "inTimer: $isResultChanged")
       if(!isResultChanged) {
         Log.d(TAG, "detect success")
         detectSuccessListener.detectSuccess(label)
       }
+      isResultChanged = true
+      trackingId = -1
+      label = ""
     }
   }
 
   private fun stopTimer() {
+    Log.d(TAG, "startTimer: stop")
     job?.cancel()
   }
 
