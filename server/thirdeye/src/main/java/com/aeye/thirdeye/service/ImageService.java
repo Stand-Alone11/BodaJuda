@@ -49,7 +49,6 @@ public class ImageService{
         savedImage.setImage(newFile.getAbsolutePath());
         imageRepository.save(savedImage);
 
-
         File newFile2 = new File(absolutePath + fileName + ".json");
         System.out.println(newFile2.getAbsolutePath());
         newFile2.createNewFile();
