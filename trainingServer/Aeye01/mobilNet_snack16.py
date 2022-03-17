@@ -15,13 +15,12 @@ import pathlib
 # from tensorflow.python.client import device_lib
 # print(device_lib.list_local_devices())
 
-image_path = pathlib.Path('/home/team1/AEye/data/image/16_category')
+image_path = pathlib.Path('/home/team1/AEye/data/image/16_category_rota')
 data = DataLoader.from_folder(image_path)
 
 train_data, rest_data = data.split(0.8)
 validation_data, test_data = rest_data.split(0.5)
 
-import cv2
 data = DataLoader.from_folder(image_path)
 
 model = image_classifier.create(train_data, validation_data=validation_data)
