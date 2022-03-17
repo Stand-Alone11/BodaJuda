@@ -61,7 +61,9 @@
             app:tabIndicatorColor="?attr/colorPrimary"
             app:tabIndicator="@drawable/tab_layout_indicator"
             app:tabRippleColor="@null"
-            app:tabIndicatorFullWidth="true">
+            app:tabIndicatorFullWidth="true"
+            app:tabTextAppearance="@style/tab_text_size"
+            android:paddingTop="5dp">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
