@@ -4,12 +4,15 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.ActivityChooserView
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
@@ -20,6 +23,7 @@ import com.aeye.nextlabel.databinding.FragmentCameraBinding
 import com.google.common.util.concurrent.ListenableFuture
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -27,11 +31,11 @@ class CameraFragment: Fragment() {
 
     val binding by lazy { FragmentCameraBinding.inflate(layoutInflater) }
     lateinit var activity: MainActivity
-    lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
 
     private var imageCapture: ImageCapture? = null
-    private lateinit var outputDirectory: File
+    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var outputDirectory: File
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,12 +66,9 @@ class CameraFragment: Fragment() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             if (PackageManager.PERMISSION_GRANTED == grantResults.firstOrNull()) {
                 startCamera()
-
             } else {
                 activity.finish()
             }
@@ -79,23 +80,49 @@ class CameraFragment: Fragment() {
         cameraProviderFuture.addListener(Runnable {
             val cameraProvider = cameraProviderFuture.get()
 
-            val preview = getPreview()
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(binding.pvCamera.surfaceProvider)
+                }
             imageCapture = ImageCapture.Builder().build()
 
-            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+            } catch(exc: Exception) {
+                Log.e(TAG, "Binding failed", exc)
+            }
         }, ContextCompat.getMainExecutor(activity))
     }
 
-    fun getPreview(): Preview {
-        val preview: Preview = Preview.Builder().build()
-        preview.setSurfaceProvider(binding.pvCamera.getSurfaceProvider())
-
-        return preview
-    }
-
     fun takePhoto() {
+        val imageCapture = imageCapture ?: return
 
+        val imageFile = File(
+            outputDirectory,
+            SimpleDateFormat(FILENAME_FORMAT, Locale.KOREA).format(System.currentTimeMillis()) + ".jpg"
+        )
+
+        // Create output options object which contains file + metadata
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(imageFile).build()
+
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(activity),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onError(exc: ImageCaptureException) {
+                    Log.e(TAG, "Image capture failed: ${exc.message}", exc)
+                }
+
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    val msg = "Image capture succeeded: ${output.savedUri}"
+                    Log.d(TAG, msg)
+                }
+            }
+        )
     }
 
     fun getOutputDirectory(): File {
@@ -111,8 +138,8 @@ class CameraFragment: Fragment() {
     }
 
     companion object {
-        private const val TAG = "CameraXBasic"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val TAG = "CameraX"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss"
         val PERMISSIONS_REQUEST_CODE = 10
         val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
