@@ -66,12 +66,12 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="프로그램 설명"/>
+                android:text="프로그램 설명" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="기여하기"/>
+                android:text="기여하기" />
 
         </com.google.android.material.tabs.TabLayout>
 
