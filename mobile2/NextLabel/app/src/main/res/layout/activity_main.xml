@@ -40,16 +40,41 @@
         app:layout_constraintBottom_toBottomOf="@id/img_sample_logo"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="25dp" />
-
-    <FrameLayout
-        android:id="@+id/area_fragment"
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_viewpager_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/round_corner_top"
         app:layout_constraintTop_toBottomOf="@id/img_sample_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="25dp" />
+        android:background="@drawable/round_corner_top"
+        android:layout_marginTop="25dp" >
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/constraint_layout_viewpager_container"
+            app:layout_constraintTop_toTopOf="@id/constraint_layout_viewpager_container"
+            app:tabIndicatorColor="?attr/colorPrimary"
+            app:tabIndicator="@drawable/tab_layout_indicator"
+            app:tabRippleColor="@null"
+            app:tabIndicatorFullWidth="true">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="프로그램 설명"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="기여하기"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
