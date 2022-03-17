@@ -54,6 +54,7 @@ public class ImageService{
         System.out.println(newFile2.getAbsolutePath());
         newFile2.createNewFile();
 
+        
         FileWriter fileWriter = new FileWriter(newFile2);
         gson.toJson(savedImage,fileWriter);
         fileWriter.close();
