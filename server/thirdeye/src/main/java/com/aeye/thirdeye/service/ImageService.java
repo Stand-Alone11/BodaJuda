@@ -44,7 +44,6 @@ public class ImageService{
         if(!newFile.exists()){
             newFile.mkdirs();
         }
-
         
         newFile = new File(absolutePath + fileName + ".jpg");
         System.out.println(newFile.getAbsolutePath());
