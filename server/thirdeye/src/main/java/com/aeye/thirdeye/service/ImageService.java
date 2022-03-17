@@ -45,6 +45,7 @@ public class ImageService{
             newFile.mkdirs();
         }
 
+        
         newFile = new File(absolutePath + fileName + ".jpg");
         file.transferTo(newFile);
         savedImage.setImage(newFile.getAbsolutePath());
