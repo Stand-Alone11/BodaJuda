@@ -43,37 +43,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
         }
     }
-
-
-//    fun settingHomeFragment() {
-//        val fragmentTransaction = supportFragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id.area_fragment, HomeFragment())
-//        fragmentTransaction.commit()
-//    }
-//
-//    fun settingButton() {
-//        val labelingBtn = findViewById<Button>(R.id.btn_labeling)
-//
-//        labelingBtn?.setOnClickListener {
-//            val fragmentTransaction = supportFragmentManager.beginTransaction()
-//            fragmentTransaction.replace(R.id.area_fragment, CameraFragment())
-//            fragmentTransaction.commit()
-//        }
-//    }
-//
-//    fun settingNavBar() {
-//        val homeTxt = findViewById<TextView>(R.id.nav_home)
-//        val labelingTxt = findViewById<TextView>(R.id.nav_labeling)
-//
-//        homeTxt?.setOnClickListener {
-//            val fragmentTransaction = supportFragmentManager.beginTransaction()
-//            fragmentTransaction.replace(R.id.area_fragment, HomeFragment())
-//            fragmentTransaction.commit()
-//        }
-//        labelingTxt?.setOnClickListener {
-//            val fragmentTransaction = supportFragmentManager.beginTransaction()
-//            fragmentTransaction.replace(R.id.area_fragment, CameraFragment())
-//            fragmentTransaction.commit()
-//        }
-//    }
 }

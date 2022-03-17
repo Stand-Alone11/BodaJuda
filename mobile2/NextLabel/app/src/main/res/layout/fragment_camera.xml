@@ -4,66 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/nav_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="프로젝트 설명"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/bar_home"
-        app:layout_constraintEnd_toEndOf="@id/bar_home"
-        app:layout_constraintStart_toStartOf="@id/bar_home"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/nav_labeling"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="기여하기"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/bar_labeling"
-        app:layout_constraintEnd_toEndOf="@id/bar_labeling"
-        app:layout_constraintStart_toStartOf="@id/bar_labeling"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/bar_home"
-        android:layout_width="160dp"
-        android:layout_height="5dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/deactivated"
-        app:layout_constraintEnd_toStartOf="@+id/bar_labeling"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nav_home" />
-
-    <TextView
-        android:id="@+id/bar_labeling"
-        android:layout_width="160dp"
-        android:layout_height="5dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/brand_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/bar_home"
-        app:layout_constraintTop_toBottomOf="@id/nav_labeling" />
-
-    <TextView
-        android:id="@+id/txt_home"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="카메라를 이곳에 연동시킬 것입니다."
-        android:textColor="@color/black"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/bar_home"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/pv_camera"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_labeling"
-        app:layout_constraintStart_toStartOf="@+id/bar_home"
-        app:layout_constraintEnd_toEndOf="@+id/bar_labeling" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="80dp" />
 
     <Button
         android:id="@+id/btn_labeling"
@@ -74,8 +24,10 @@
         android:textSize="18sp"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/bar_home"
-        app:layout_constraintEnd_toEndOf="@id/bar_labeling"
-        android:layout_marginBottom="25dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
