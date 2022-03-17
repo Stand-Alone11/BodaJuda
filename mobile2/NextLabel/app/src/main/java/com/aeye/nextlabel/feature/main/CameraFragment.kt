@@ -17,6 +17,9 @@ import com.google.common.util.concurrent.ListenableFuture
 
 class CameraFragment: Fragment() {
 
+    val PERMISSIONS_REQUEST_CODE = 1
+    val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA)
+
     val binding by lazy { FragmentCameraBinding.inflate(layoutInflater) }
     lateinit var activity: MainActivity
     lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -28,9 +31,33 @@ class CameraFragment: Fragment() {
     ): View? {
         activity = context as MainActivity
 
-        startCamera()
+        if (!hasPermissions(activity)) {
+            requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
+        } else {
+            startCamera()
+        }
 
         return binding.root
+    }
+
+    fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all {
+        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSIONS_REQUEST_CODE) {
+            if (PackageManager.PERMISSION_GRANTED == grantResults.firstOrNull()) {
+                startCamera()
+            } else {
+                activity.finish()
+            }
+        }
     }
 
     fun startCamera() {
