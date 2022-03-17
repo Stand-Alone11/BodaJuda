@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -18,7 +19,7 @@ import com.google.common.util.concurrent.ListenableFuture
 class CameraFragment: Fragment() {
 
     val PERMISSIONS_REQUEST_CODE = 1
-    val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA)
+    val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
 
     val binding by lazy { FragmentCameraBinding.inflate(layoutInflater) }
     lateinit var activity: MainActivity
@@ -64,6 +65,7 @@ class CameraFragment: Fragment() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
         cameraProviderFuture.addListener(Runnable {
             val cameraProvider = cameraProviderFuture.get()
+
             val preview = getPreview()
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
