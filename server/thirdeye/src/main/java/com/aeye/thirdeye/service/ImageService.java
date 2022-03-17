@@ -4,13 +4,13 @@ import com.aeye.thirdeye.entity.Image;
 import com.aeye.thirdeye.repository.ImageRepository;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -23,6 +23,15 @@ public class ImageService{
     Gson gson = new Gson();
     @Value("${spring.http.multipart.location}")
     private String absolutePath;
+
+    public byte[] showImage(long id) throws Exception{
+        Image image = imageRepository.findById(id).get();
+        String path = image.getImage();
+        InputStream is = new FileInputStream(path);
+        byte[] imageByteArray = IOUtils.toByteArray(is);
+        is.close();
+        return imageByteArray;
+    }
 
     @Transactional
     public void insertImage(MultipartFile file, Image image) throws Exception{
