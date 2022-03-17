@@ -20,6 +20,7 @@ public class ImageService{
 
     private final ImageRepository imageRepository;
 
+    
     Gson gson = new Gson();
     @Value("${spring.http.multipart.location}")
     private String absolutePath;
