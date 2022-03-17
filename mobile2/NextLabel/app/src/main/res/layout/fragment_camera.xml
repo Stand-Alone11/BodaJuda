@@ -9,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_labeling"
+        app:layout_constraintBottom_toTopOf="@id/btn_camera"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="80dp"
         android:layout_marginBottom="80dp" />
 
     <Button
-        android:id="@+id/btn_labeling"
+        android:id="@+id/btn_camera"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/round_corner_all_brand"
