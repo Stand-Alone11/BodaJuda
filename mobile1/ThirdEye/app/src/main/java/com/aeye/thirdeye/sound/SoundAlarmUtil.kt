@@ -36,6 +36,9 @@ object SoundAlarmUtil {
         }
     }
 
+    /**
+     * release() 호출 되면 soundPool은 null
+     */
     fun release() {
         soundPool.release()
     }

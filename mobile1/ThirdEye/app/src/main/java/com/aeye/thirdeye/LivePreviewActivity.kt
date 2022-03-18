@@ -349,11 +349,6 @@ class LivePreviewActivity :
         SoundAlarmUtil.load(this)
     }
 
-    override fun onStop() {
-        super.onStop()
-        SoundAlarmUtil.release()
-    }
-
     public override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume")
@@ -373,6 +368,7 @@ class LivePreviewActivity :
             cameraSource?.release()
         }
         tsUtil.ttsCustom.shutdown()
+        SoundAlarmUtil.release()
     }
 
     companion object {
