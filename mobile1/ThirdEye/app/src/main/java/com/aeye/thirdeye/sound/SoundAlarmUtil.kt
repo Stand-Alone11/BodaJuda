@@ -3,6 +3,7 @@ package com.aeye.thirdeye.sound
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.SoundPool
+import android.util.Log
 import com.aeye.thirdeye.R
 
 object SoundAlarmUtil {
@@ -12,15 +13,26 @@ object SoundAlarmUtil {
 
     private val audioAttributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build()
     private val soundPool = SoundPool.Builder().setMaxStreams(MAX_STREAM).setAudioAttributes(audioAttributes).build()
-    var loadId: Any? = null
+    var loadId: Int = -1
+    private const val TAG = "SoundAlarmUtil_debuk"
 
     fun load(context: Context) {
-        loadId = soundPool.load(context, R.raw.alarm, PRIORITY)
+        if(loadId == -1) {
+            soundPool.setOnLoadCompleteListener { _, sampleId, status ->
+                if(status == 0) {
+                    loadId = sampleId
+                    Log.d(TAG, "loadCompleted: $loadId")
+                }
+            }
+            soundPool.load(context, R.raw.alarm, PRIORITY)
+            Log.d(TAG, "beforeLoad: $loadId")
+        }
     }
 
     fun play() {
-        loadId?.let {
-            soundPool.play(it as Int, 1f, 1f, PRIORITY, 0, 1f)
+        Log.d(TAG, "play: $loadId")
+        if(loadId != -1) {
+            soundPool.play(loadId, 1f, 1f, PRIORITY, 0, 1f)
         }
     }
 
