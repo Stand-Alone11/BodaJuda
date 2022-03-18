@@ -44,9 +44,7 @@ class CameraFragment: Fragment() {
     ): View? {
         activity = context as MainActivity
 
-        if (hasPermissions(activity)) {
-            startCamera()
-        } else {
+        if (!hasPermissions(activity)) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
         }
 
@@ -55,6 +53,11 @@ class CameraFragment: Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startCamera()
     }
 
     fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all {
@@ -106,7 +109,6 @@ class CameraFragment: Fragment() {
             SimpleDateFormat(FILENAME_FORMAT, Locale.KOREA).format(System.currentTimeMillis()) + ".jpg"
         )
 
-        // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions.Builder(imageFile).build()
 
         imageCapture.takePicture(
