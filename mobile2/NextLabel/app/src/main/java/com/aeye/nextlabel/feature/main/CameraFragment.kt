@@ -5,15 +5,13 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.util.Rational
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.widget.ActivityChooserView
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
+import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -34,8 +32,8 @@ class CameraFragment: Fragment() {
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
-    private lateinit var cameraExecutor: ExecutorService
     private lateinit var outputDirectory: File
+    private lateinit var cameraExecutor: ExecutorService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,9 +42,7 @@ class CameraFragment: Fragment() {
     ): View? {
         activity = context as MainActivity
 
-        if (hasPermissions(activity)) {
-            startCamera()
-        } else {
+        if (!hasPermissions(activity)) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
         }
 
@@ -55,6 +51,11 @@ class CameraFragment: Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startCamera()
     }
 
     fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all {
@@ -85,7 +86,7 @@ class CameraFragment: Fragment() {
                 .also {
                     it.setSurfaceProvider(binding.pvCamera.surfaceProvider)
                 }
-            imageCapture = ImageCapture.Builder().build()
+            imageCapture = ImageCapture.Builder().setTargetResolution(Size(640, 640)).build()
 
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -106,7 +107,6 @@ class CameraFragment: Fragment() {
             SimpleDateFormat(FILENAME_FORMAT, Locale.KOREA).format(System.currentTimeMillis()) + ".jpg"
         )
 
-        // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions.Builder(imageFile).build()
 
         imageCapture.takePicture(
