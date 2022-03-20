@@ -6,7 +6,10 @@ import com.slack.api.Slack;
 import com.slack.api.app_backend.interactive_components.ActionResponseSender;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
 import com.slack.api.app_backend.interactive_components.response.ActionResponse;
+import com.slack.api.model.ModelConfigurator;
+import com.slack.api.model.block.ImageBlock;
 import com.slack.api.model.block.LayoutBlock;
+import com.slack.api.util.json.GsonFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.slack.api.model.block.Blocks.*;
+import static com.slack.api.model.block.composition.BlockCompositions.markdownText;
+import static com.slack.api.model.block.composition.BlockCompositions.plainText;
+import static com.slack.api.model.block.element.BlockElements.*;
 import static com.slack.api.webhook.WebhookPayloads.payload;
 
 @Slf4j
@@ -56,19 +64,32 @@ public class ImageController {
     public ResponseEntity<?> inspectResponse(@RequestParam String payload){
 
         BlockActionPayload blockActionPayload = slackImageService.makeResponseLayout(payload);
-        ActionResponse response =
-                ActionResponse.builder()
-                        .replaceOriginal(true) // 변경은되는데 여기서 변경이 안돼서
-                        .deleteOriginal(true) // 삭제로 구현해놓음
-                        .blocks(blockActionPayload.getMessage().getBlocks())
-                        .build();
+        ActionResponse response = null;
+        String nowActionId = blockActionPayload.getActions().get(0).getActionId();
+        if(nowActionId.equals("typeAaction")
+                || nowActionId.equals("typeBaction")
+                || nowActionId.equals("typeCaction")){
+
+            response =
+                    ActionResponse.builder()
+                            .replaceOriginal(true) // 변경은되는데 여기서 변경이 안돼서
+                            .blocks(blockActionPayload.getMessage().getBlocks())
+                            .build();
+        }
+        else {
+            response =
+                    ActionResponse.builder()
+                            .replaceOriginal(true) // 변경은되는데 여기서 변경이 안돼서
+                            .deleteOriginal(true) // 삭제로 구현해놓음
+                            .blocks(blockActionPayload.getMessage().getBlocks())
+                            .build();
+        }
 
         Slack slack = Slack.getInstance();
         ActionResponseSender sender = new ActionResponseSender(slack);
-
         try {
             sender.send(blockActionPayload.getResponseUrl(), response);
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
         }
 
@@ -100,24 +121,33 @@ public class ImageController {
     // Slack 버튼 결과 여기로 받음 일단 (테스트)
     @RequestMapping(value = "/slack/response", method = RequestMethod.POST,
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<?> test12(@RequestParam String payload){
+    public ResponseEntity<?> test12(@RequestParam String payload) throws IOException {
 
         BlockActionPayload blockActionPayload = slackImageService.responseSlackLayout(payload);
-        ActionResponse response =
-                ActionResponse.builder()
-                        .replaceOriginal(true) // 변경은되는데 여기서 변경이 안돼서
-                        .deleteOriginal(true) // 삭제로 구현해놓음
-                        .blocks(blockActionPayload.getMessage().getBlocks())
-                        .build();
+        ActionResponse response = null;
+        String nowActionId = blockActionPayload.getActions().get(0).getActionId();
+        if(nowActionId.equals("typeAaction")
+                || nowActionId.equals("typeBaction")
+                || nowActionId.equals("typeCaction")){
+
+            response =
+                    ActionResponse.builder()
+                            .replaceOriginal(true) // 변경은되는데 여기서 변경이 안돼서
+                            .blocks(blockActionPayload.getMessage().getBlocks())
+                            .build();
+        }
+        else {
+            response =
+                    ActionResponse.builder()
+                            .replaceOriginal(true) // 변경은되는데 여기서 변경이 안돼서
+                            .deleteOriginal(true) // 삭제로 구현해놓음
+                            .blocks(blockActionPayload.getMessage().getBlocks())
+                            .build();
+        }
 
         Slack slack = Slack.getInstance();
         ActionResponseSender sender = new ActionResponseSender(slack);
-
-        try {
-            sender.send(blockActionPayload.getResponseUrl(), response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sender.send(blockActionPayload.getResponseUrl(), response);
 
         return ResponseEntity.status(HttpStatus.OK).body("크허허허허");
     }
