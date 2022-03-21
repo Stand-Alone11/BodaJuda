@@ -35,7 +35,7 @@ print(accuracy)
 
 
 config = QuantizationConfig.for_float16()
-model.export(export_dir='./model_float16', tflite_filename='snack_v2.tflite', quantization_config=config)
+model.export(export_dir='./model_float16', tflite_filename='snack_v3.tflite', quantization_config=config)
 
 
 from tensorflow import keras
@@ -52,7 +52,7 @@ firebase_admin.initialize_app(
 print("파일 옵션 설정 확인")
 
 # This uploads it to your bucket as mmnist_v2.tflite
-source = ml.TFLiteGCSModelSource.from_tflite_model_file('./model_float16/snack_v2.tflite')
+source = ml.TFLiteGCSModelSource.from_tflite_model_file('./model_float16/snack_v3.tflite')
 print (source.gcs_tflite_uri)
 
 print("모델 가져오기")
@@ -64,7 +64,7 @@ print("모델 tflite로 변환")
 
 # Create a Model object
 # format 어떻게 구해야하지....
-sdk_model_1 = ml.Model(display_name="snack_v2", model_format=model_format)
+sdk_model_1 = ml.Model(display_name="snack_v3", model_format=model_format)
 # sdk_model_1 = ml.Model(display_name="snack_model")
 
 print("firebase 모델 이름 저장")

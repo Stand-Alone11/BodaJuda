@@ -18,10 +18,11 @@ def createFolder(directory):
 for i in os.listdir(path):
    print(path+'/'+i +"경로 이미지 작업 중...")
    for j in os.listdir(path+'/'+i):
-      image = cv2.imdecode(np.fromfile(path+'/'+i+'/'+j, dtype=np.uint8), cv2.IMREAD_COLOR)
+      # 이미지 값 /255 로 정규화...?
+      image = cv2.imdecode(np.fromfile(path+'/'+i+'/'+j, dtype=np.uint8), cv2.IMREAD_COLOR)/255
       createFolder(path + '_rota/'+i)
       h, w, c = image.shape
-      for degree in range(361):
+      for degree in range(0,361,5):
          matrix = cv2.getRotationMatrix2D((h/2,w/2), degree, 1)
          rota_image = cv2.warpAffine(image, matrix, (h, w))
          new_img_name = path + '_rota/' + i +'/rota'+str(degree)+'_'+j
