@@ -37,8 +37,8 @@ class CameraFragment: Fragment() {
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
-    private lateinit var cameraExecutor: ExecutorService
     private lateinit var outputDirectory: File
+    private lateinit var cameraExecutor: ExecutorService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,9 +47,7 @@ class CameraFragment: Fragment() {
     ): View? {
         activity = context as MainActivity
 
-        if (hasPermissions(activity)) {
-            startCamera()
-        } else {
+        if (!hasPermissions(activity)) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
         }
 
@@ -58,6 +56,11 @@ class CameraFragment: Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startCamera()
     }
 
     private fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all {
@@ -112,13 +115,7 @@ class CameraFragment: Fragment() {
 
         val photoFile = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION)
 
-        val imageFile = File(
-            outputDirectory,
-            SimpleDateFormat(FILENAME_FORMAT, Locale.KOREA).format(System.currentTimeMillis()) + ".jpg"
-        )
-
-        // Create output options object which contains file + metadata
-        val outputOptions = ImageCapture.OutputFileOptions.Builder(imageFile).build()
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
         imageCapture.takePicture(
             outputOptions,
@@ -161,8 +158,8 @@ class CameraFragment: Fragment() {
     }
 
     companion object {
-        private const val TAG = "CameraFragment_debuk"
-        private const val FILENAME = "yyyy-MM-dd-HH-mm-ss"
+        private val TAG = "CameraFragment_debuk"
+        private val FILENAME = "yyyy-MM-dd-HH-mm-ss"
         private const val PHOTO_EXTENSION = ".jpg"
         val PERMISSIONS_REQUEST_CODE = 10
         val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
