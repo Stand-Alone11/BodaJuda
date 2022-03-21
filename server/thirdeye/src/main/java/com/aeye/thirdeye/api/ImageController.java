@@ -13,11 +13,20 @@ import com.slack.api.util.json.GsonFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +46,7 @@ public class ImageController {
 
     @Value("${notification.slack.webhook.url}")
     private String url;
+
 
     @PostMapping("/inspect/request")
     public ResponseEntity<?> inspectRequest(@RequestPart(value = "image", required = false) MultipartFile file,
@@ -129,7 +139,9 @@ public class ImageController {
         if(nowActionId.equals("typeAaction")
                 || nowActionId.equals("typeBaction")
                 || nowActionId.equals("typeCaction")){
-
+            for(int i = 0 ; i < blockActionPayload.getMessage().getBlocks().size(); i++) {
+                System.out.println(blockActionPayload.getMessage().getBlocks());
+            }
             response =
                     ActionResponse.builder()
                             .replaceOriginal(true) // 변경은되는데 여기서 변경이 안돼서
@@ -151,5 +163,14 @@ public class ImageController {
 
         return ResponseEntity.status(HttpStatus.OK).body("크허허허허");
     }
+
+    @PostMapping("/test/upload")
+    public ResponseEntity<?> fileUpload() throws IOException {
+
+        slackImageService.fileUpload();
+
+        return ResponseEntity.status(HttpStatus.OK).body("크허허허허");
+    }
+
 
 }

@@ -12,8 +12,19 @@ import com.slack.api.model.block.element.BlockElement;
 import com.slack.api.model.block.element.PlainTextInputElement;
 import com.slack.api.util.json.GsonFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +39,12 @@ public class SlackImageService {
 
     private final SlackImageRepository slackImageRepository;
 
+    @Value("${notification.slack.token}")
+    private String token;
+
     // Slack request layout
     public List<LayoutBlock> makeRequestLayout(ImageDto imageDto){
 
-        TestDto testDto = new TestDto(1);
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
         // 텍스트를 남길 SectionBlock
         layoutBlocks.add(section(section -> section.text(markdownText("*이미지 라벨링 검수*"))));
@@ -141,70 +154,73 @@ public class SlackImageService {
 
         TestDto testDto = new TestDto(1);
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
-        // 텍스트를 남길 SectionBlock
-        layoutBlocks.add(section(section -> section.text(markdownText("*이미지 라벨링 검수*"))));
-        // Action과 텍스트를 구분하기 위한 Divider
-        layoutBlocks.add(divider());
-        // $$$테스트용 이미지 ( 나중에 값들어오는 이미지로 바꾼다 )
-        layoutBlocks.add(image((ModelConfigurator<ImageBlock.ImageBlockBuilder>) image -> image.imageUrl("https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/service/a85d0594017900001.jpg")
-                .altText("카카오프렌즈 테스트사진")));
-        layoutBlocks.add(divider());
+//        // 텍스트를 남길 SectionBlock
+//        layoutBlocks.add(section(section -> section.text(markdownText("*이미지 라벨링 검수*"))));
+//        // Action과 텍스트를 구분하기 위한 Divider
+//        layoutBlocks.add(divider());
+//        // $$$테스트용 이미지 ( 나중에 값들어오는 이미지로 바꾼다 )
 
-        layoutBlocks.add(
-                input(input -> input.element(
-                                plainTextInput(p -> p
-                                        .actionId("typeAaction")
-                                        .placeholder(plainText("대분류를 입력해주세요"))
-                                )
-                        ).label(
-                                plainText(pt -> pt.text("대분류").emoji(true))
-                        ).dispatchAction(true)
-                )
-        );
+//        layoutBlocks.add(image((ModelConfigurator<ImageBlock.ImageBlockBuilder>) image -> image.imageUrl("https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/service/a85d0594017900001.jpg")
+//                .altText("카카오프렌즈 테스트사진")));
 
-        layoutBlocks.add(
-                input(input -> input.element(
-                                plainTextInput(p -> p
-                                        .actionId("typeBaction")
-                                        .placeholder(plainText("중분류를 입력해주세요"))
-                                )
-                        ).label(
-                                plainText(pt -> pt.text("중분류").emoji(true))
-                        ).dispatchAction(true)
-                )
-        );
-
-        layoutBlocks.add(
-                input(input -> input.element(
-                                plainTextInput(p -> p
-                                        .actionId("typeCaction")
-                                        .placeholder(plainText("소분류를 입력해주세요"))
-                                )
-                        ).label(
-                                plainText(pt -> pt.text("소분류").emoji(true))
-                        ).dispatchAction(true)
-                )
-        );
-
-        // Action과 텍스트를 구분하기 위한 Divider
-        layoutBlocks.add(divider());
-        // ActionBlock에 승인 버튼과 거부 버튼을 추가
-        layoutBlocks.add(
-                actions(actions -> actions
-                        .elements(asElements(
-                                button(b -> b.text(plainText(pt -> pt.emoji(true).text("승인")))
-                                        .value(Integer.toString(testDto.getSeq()))
-                                        .style("primary")
-                                        .actionId("action_approve")
-                                ),
-                                button(b -> b.text(plainText(pt -> pt.emoji(true).text("거부")))
-                                        .value(Integer.toString(testDto.getSeq()))
-                                        .style("danger")
-                                        .actionId("action_reject")
-                                )
-                        ))
-                )
-        );
+        layoutBlocks.add(file(file -> file.source("http://j6s004.p.ssafy.io/home/ubuntu/connection.PNG")));
+//        layoutBlocks.add(divider());
+//
+//        layoutBlocks.add(
+//                input(input -> input.element(
+//                                plainTextInput(p -> p
+//                                        .actionId("typeAaction")
+//                                        .placeholder(plainText("대분류를 입력해주세요"))
+//                                )
+//                        ).label(
+//                                plainText(pt -> pt.text("대분류").emoji(true))
+//                        ).dispatchAction(true)
+//                )
+//        );
+//
+//        layoutBlocks.add(
+//                input(input -> input.element(
+//                                plainTextInput(p -> p
+//                                        .actionId("typeBaction")
+//                                        .placeholder(plainText("중분류를 입력해주세요"))
+//                                )
+//                        ).label(
+//                                plainText(pt -> pt.text("중분류").emoji(true))
+//                        ).dispatchAction(true)
+//                )
+//        );
+//
+//        layoutBlocks.add(
+//                input(input -> input.element(
+//                                plainTextInput(p -> p
+//                                        .actionId("typeCaction")
+//                                        .placeholder(plainText("소분류를 입력해주세요"))
+//                                )
+//                        ).label(
+//                                plainText(pt -> pt.text("소분류").emoji(true))
+//                        ).dispatchAction(true)
+//                )
+//        );
+//
+//        // Action과 텍스트를 구분하기 위한 Divider
+//        layoutBlocks.add(divider());
+//        // ActionBlock에 승인 버튼과 거부 버튼을 추가
+//        layoutBlocks.add(
+//                actions(actions -> actions
+//                        .elements(asElements(
+//                                button(b -> b.text(plainText(pt -> pt.emoji(true).text("승인")))
+//                                        .value(Integer.toString(testDto.getSeq()))
+//                                        .style("primary")
+//                                        .actionId("action_approve")
+//                                ),
+//                                button(b -> b.text(plainText(pt -> pt.emoji(true).text("거부")))
+//                                        .value(Integer.toString(testDto.getSeq()))
+//                                        .style("danger")
+//                                        .actionId("action_reject")
+//                                )
+//                        ))
+//                )
+//        );
         return layoutBlocks;
     }
 
@@ -246,14 +262,14 @@ public class SlackImageService {
                 System.out.println(typeCstr.split("\\*")[1]);
             }
             else if(action.getActionId().equals("typeAaction")){
-                blockActionPayload.getMessage().getBlocks().remove(2);
-                blockActionPayload.getMessage().getBlocks().add(2,
-                        image((ModelConfigurator<ImageBlock.ImageBlockBuilder>) image -> image.imageUrl("https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/service/a85d0594017900001.jpg")
-                                .altText("카카오프렌즈 테스트사진"))
-                );
-                blockActionPayload.getMessage().getBlocks().remove(4);
-                blockActionPayload.getMessage().getBlocks().add(4,
-                        section(section -> section.text(markdownText("대분류 : " + "*" + action.getValue() + "*"))));
+//                blockActionPayload.getMessage().getBlocks().remove(2);
+//                blockActionPayload.getMessage().getBlocks().add(2,
+//                        image((ModelConfigurator<ImageBlock.ImageBlockBuilder>) image -> image.imageUrl("https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/service/a85d0594017900001.jpg")
+//                                .altText("카카오프렌즈 테스트사진"))
+//                );
+//                blockActionPayload.getMessage().getBlocks().remove(4);
+//                blockActionPayload.getMessage().getBlocks().add(4,
+//                        section(section -> section.text(markdownText("대분류 : " + "*" + action.getValue() + "*"))));
             }
             else if(action.getActionId().equals("typeBaction")){
                 blockActionPayload.getMessage().getBlocks().remove(2);
@@ -279,6 +295,26 @@ public class SlackImageService {
         return blockActionPayload;
     }
 
+
+    public void fileUpload(){
+        RestTemplate restTemplate = new RestTemplate();
+        File file = new File("C:/Users/dahon/Desktop/connection.PNG");
+        // 파일을 resource 형태로 넣어야함!!!!!!
+        Resource resource = new FileSystemResource(file);
+
+        System.out.println(token);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.setBearerAuth(token); // pass generated token here
+        MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
+        bodyMap.add("file", resource); // convert file to ByteArrayOutputStream and pass with toByteArray() or pass with new File()
+        bodyMap.add("filename", "connection.PNG");
+        bodyMap.add("initial_comment", "이미지 라벨링 검수입니다."); // pass comments with file
+        bodyMap.add("channels", "project"); // pass channel codeID
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(bodyMap, headers);
+        ResponseEntity<Object> responseEntity = restTemplate.postForEntity("https://slack.com/api/files.upload", entity,
+                Object.class);
+    }
 
 
 }
