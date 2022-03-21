@@ -3,13 +3,15 @@ package com.aeye.nextlabel.feature.main
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.widget.ActivityChooserView
+import android.webkit.MimeTypeMap
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -17,6 +19,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentCameraBinding
@@ -50,14 +53,14 @@ class CameraFragment: Fragment() {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
         }
 
-        binding.btnCamera.setOnClickListener { takePhoto() }
         outputDirectory = getOutputDirectory()
+        binding.btnCamera.setOnClickListener { takePhoto() }
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         return binding.root
     }
 
-    fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all {
+    private fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all {
         ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -75,7 +78,7 @@ class CameraFragment: Fragment() {
         }
     }
 
-    fun startCamera() {
+    private fun startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
         cameraProviderFuture.addListener(Runnable {
             val cameraProvider = cameraProviderFuture.get()
@@ -85,7 +88,8 @@ class CameraFragment: Fragment() {
                 .also {
                     it.setSurfaceProvider(binding.pvCamera.surfaceProvider)
                 }
-            imageCapture = ImageCapture.Builder().build()
+
+            imageCapture = ImageCapture.Builder().setTargetResolution(Size(3000, 3000)).build()
 
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -98,8 +102,15 @@ class CameraFragment: Fragment() {
         }, ContextCompat.getMainExecutor(activity))
     }
 
-    fun takePhoto() {
+    /** Helper function used to create a timestamped file */
+    private fun createFile(baseFolder: File, format: String, extension: String) =
+        File(baseFolder, SimpleDateFormat(format, Locale.US)
+            .format(System.currentTimeMillis()) + extension)
+
+    private fun takePhoto() {
         val imageCapture = imageCapture ?: return
+
+        val photoFile = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION)
 
         val imageFile = File(
             outputDirectory,
@@ -119,13 +130,25 @@ class CameraFragment: Fragment() {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val msg = "Image capture succeeded: ${output.savedUri}"
+                    val savedUri = output.savedUri?: Uri.fromFile(photoFile)
                     Log.d(TAG, msg)
+
+                    val mimeType = MimeTypeMap.getSingleton()
+                        .getMimeTypeFromExtension(savedUri.toFile().extension)
+
+                    MediaScannerConnection.scanFile(
+                        context,
+                        arrayOf(savedUri.toFile().absolutePath),
+                        arrayOf(mimeType)
+                    ) { _, uri ->
+                        Log.d(TAG, "Image capture scanned into media store: $uri")
+                    }
                 }
             }
         )
     }
 
-    fun getOutputDirectory(): File {
+    private fun getOutputDirectory(): File {
         val mediaDir = activity.externalMediaDirs.firstOrNull()?.let {
             File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
         }
@@ -138,9 +161,10 @@ class CameraFragment: Fragment() {
     }
 
     companion object {
-        private const val TAG = "CameraX"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss"
+        private const val TAG = "CameraFragment_debuk"
+        private const val FILENAME = "yyyy-MM-dd-HH-mm-ss"
+        private const val PHOTO_EXTENSION = ".jpg"
         val PERMISSIONS_REQUEST_CODE = 10
-        val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
+        val PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 }
