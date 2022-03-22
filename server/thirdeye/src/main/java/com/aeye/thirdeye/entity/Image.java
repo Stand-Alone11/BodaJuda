@@ -36,7 +36,7 @@ public class Image {
     private String typeC;
 
     @Size(max = 50)
-    private String Provider;
+    private String provider;
 
     private String faceYN;
 

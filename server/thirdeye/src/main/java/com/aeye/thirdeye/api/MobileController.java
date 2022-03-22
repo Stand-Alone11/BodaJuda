@@ -83,15 +83,22 @@ public class MobileController {
                             .replaceOriginal(true)
                             .blocks(blockActionPayload.getMessage().getBlocks())
                             .build();
+            int seq = Integer.parseInt(blockActionPayload.getActions().get(0).getValue());
             // 승인
             if(nowActionId.equals("action_approve")){
-
-
+                try {
+                    imageService.approveImage(seq);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
             // 거부
             else{
-
-
+                try {
+                    imageService.rejectImage(seq);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
 
