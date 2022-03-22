@@ -3,6 +3,9 @@ package com.aeye.nextlabel.temp.api
 import com.aeye.nextlabel.temp.dto.UserJoin
 import com.aeye.nextlabel.temp.dto.UserLeave
 import com.aeye.nextlabel.temp.dto.UserLogin
+import com.aeye.nextlabel.temp.response.JoinResponse
+import com.aeye.nextlabel.temp.response.LeaveResponse
+import com.aeye.nextlabel.temp.response.LoginResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -24,5 +27,5 @@ interface UserApi {
 
     // 4. 회원 탈퇴
     @DELETE("/api/user/signout")
-    suspend fun leave(@Body user: UserLeave): Response<LoginResponse>
+    suspend fun leave(@Body user: UserLeave): Response<LeaveResponse>
 }
