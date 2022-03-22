@@ -18,6 +18,7 @@ public class ImageDto {
     private String typeB;
     private String typeC;
     private String Provider;
+    private String faceYN;
 
     private double L_X;
     private double L_Y;
@@ -33,6 +34,7 @@ public class ImageDto {
         this.typeB = image.getTypeB();
         this.typeC = image.getTypeC();
         this.Provider = image.getProvider();
+        this.faceYN = image.getFaceYN();
 
         this.L_X = image.getL_X();
         this.L_Y = image.getL_Y();
