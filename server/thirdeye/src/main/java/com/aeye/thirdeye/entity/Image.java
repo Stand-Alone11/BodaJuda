@@ -13,7 +13,6 @@ import javax.validation.constraints.Size;
 @Getter @Setter
 @NoArgsConstructor//(access = AccessLevel.PROTECTED)
 public class Image {
-
     @Id
     @GeneratedValue
     private Long id;
@@ -47,5 +46,6 @@ public class Image {
     private double R_X;
 
     private double R_Y;
+
 }
 
