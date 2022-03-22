@@ -2,13 +2,13 @@
   "parameters": {
     "model_name": {
       "defaultValue": {
-        "value": "snack_v6"
+        "value": "snack_v8"
       },
       "valueType": "STRING"
     },
     "next_model": {
       "defaultValue": {
-        "value": "snack_v8"
+        "value": "snack_v9"
       },
       "valueType": "STRING"
     }
