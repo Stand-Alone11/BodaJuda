@@ -63,6 +63,7 @@ public class ImageService{
 
         String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + System.nanoTime();
 
+
         nowImage.setImage(pathPrefix2 + pathSurfix + fileName + ".jpg");
 
         File folder = new File(pathPrefix + pathSurfix);
@@ -91,5 +92,17 @@ public class ImageService{
 
 
         imageRepository.save(nowImage);
+    }
+
+    @Transactional
+    public void rejectImage(int seq) throws Exception{
+        Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
+
+        File curFile = new File(nowImage.getImage());
+
+        if(curFile.exists()){
+            curFile.delete();
+            System.out.println("파일 삭제");
+        }
     }
 }
