@@ -8,6 +8,7 @@ import com.slack.api.app_backend.interactive_components.payload.BlockActionPaylo
 import com.slack.api.model.ModelConfigurator;
 import com.slack.api.model.block.ImageBlock;
 import com.slack.api.model.block.LayoutBlock;
+import com.slack.api.model.block.composition.OptionObject;
 import com.slack.api.util.json.GsonFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.slack.api.model.block.Blocks.*;
-import static com.slack.api.model.block.composition.BlockCompositions.markdownText;
-import static com.slack.api.model.block.composition.BlockCompositions.plainText;
+import static com.slack.api.model.block.composition.BlockCompositions.*;
 import static com.slack.api.model.block.element.BlockElements.*;
 import static com.slack.api.webhook.WebhookPayloads.payload;
 
@@ -46,6 +46,8 @@ public class SlackImageService {
     @Value("${notification.slack.webhook.url}")
     private String url;
 
+    private String checked;
+
     // Slack request layout
     public void makeRequestLayout(ImageDto imageDto){
 
@@ -54,6 +56,12 @@ public class SlackImageService {
 //        layoutBlocks.add(section(section -> section.text(markdownText("*이미지 라벨링 검수*"))));
         // Action과 텍스트를 구분하기 위한 Divider
         layoutBlocks.add(divider());
+
+        layoutBlocks.add(section(section ->
+                section.text(markdownText("*상품명* : " + "*" + imageDto.getTitle() + "*" ))));
+
+        layoutBlocks.add(section(section ->
+                section.text(markdownText("*제조사* : " + "*" + imageDto.getProvider() + "*" ))));
 
         layoutBlocks.add(
                 input(input -> input.element(
@@ -88,6 +96,19 @@ public class SlackImageService {
                         ).label(
                                 plainText(pt -> pt.text("소분류").emoji(true))
                         ).dispatchAction(true)
+                )
+        );
+        // 전면 / 후면 라디오 버튼
+        layoutBlocks.add(
+                section(section -> section.text(markdownText("전면 / 후면"))
+                        .accessory(radioButtons( radio -> radio.options(asOptions(
+                                                        option(o -> o.text(plainText(p->p.text("전면").emoji(true))).value("전면")),
+                                                        option(o -> o.text(plainText(p->p.text("후면").emoji(true))).value("후면"))
+                                                )
+                                        ).actionId("typeDaction")
+                                )
+                        )
+
                 )
         );
 
@@ -135,19 +156,12 @@ public class SlackImageService {
 
             if (action.getActionId().equals("action_reject")) {
                 int seq = Integer.parseInt(action.getValue());
-//                blockActionPayload.getMessage().getBlocks().add(0,
-//                        section(section ->
-//                                section.text(markdownText("거부거부"))
-//                        )
-//                );
-//                blockActionPayload.getMessage().getBlocks().add(4,
-//                        section(section -> section.text(markdownText("*반려 되었습니다*"))));
-                // 여기에 DB 이미지 정보 관련(거절) code (DB에서 값 삭제)
                 Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
                 if(nowImage != null){
-                    nowImage.setImageValidate("F");
+                    nowImage.setImageValidate("N");
                     imageRepository.save(nowImage);
                 }
+                checked = "";
                 int len = blockActionPayload.getMessage().getBlocks().size();
                 // 맨 앞에 divider 빼고 모두 삭제
                 if (len > 1) {
@@ -157,18 +171,9 @@ public class SlackImageService {
                         section(section -> section.text(markdownText("*거부 완료*"))));
             } else if(action.getActionId().equals("action_approve")) {
                 int seq = Integer.parseInt(action.getValue());
-//                blockActionPayload.getMessage().getBlocks().add(0,
-//                        section(section ->
-//                                section.text(markdownText("승인승인"))
-//                        )
-//                );
-//                blockActionPayload.getMessage().getBlocks().add(4,
-//                        section(section -> section.text(markdownText("*승인 되었습니다*"))));
-                // 여기에 DB 이미지 정보 관련(승인) code
-//                블라블라~~
                 String[] typeStr = new String[3];
-                for(int i = 1; i <= 3; i++){
-                    typeStr[i-1] = blockActionPayload.getMessage().getBlocks().get(i).toString();
+                for(int i = 3; i <= 5; i++){
+                    typeStr[i-3] = blockActionPayload.getMessage().getBlocks().get(i).toString();
                 }
 
                 Image image = imageRepository.findById(Long.valueOf(seq)).orElse(null);
@@ -177,9 +182,10 @@ public class SlackImageService {
                     image.setTypeB(typeStr[1].split("\\*")[1].trim());
                     image.setTypeC(typeStr[2].split("\\*")[1].trim());
                     image.setImageValidate("Y");
+                    image.setFaceYN(checked);
                     imageRepository.save(image);
                 }
-
+                checked = "";
                 int len = blockActionPayload.getMessage().getBlocks().size();
                 // 맨 앞에 divider 빼고 모두 삭제
                 if (len > 1) {
@@ -189,19 +195,22 @@ public class SlackImageService {
                         section(section -> section.text(markdownText("*승인 완료*"))));
             }
             else if(action.getActionId().equals("typeAaction")){
-                blockActionPayload.getMessage().getBlocks().remove(1);
-                blockActionPayload.getMessage().getBlocks().add(1,
+                blockActionPayload.getMessage().getBlocks().remove(3);
+                blockActionPayload.getMessage().getBlocks().add(3,
                         section(section -> section.text(markdownText("대분류 : " + "*" + action.getValue() + "*"))));
             }
             else if(action.getActionId().equals("typeBaction")){
-                blockActionPayload.getMessage().getBlocks().remove(2);
-                blockActionPayload.getMessage().getBlocks().add(2,
+                blockActionPayload.getMessage().getBlocks().remove(4);
+                blockActionPayload.getMessage().getBlocks().add(4,
                         section(section -> section.text(markdownText("중분류 : " + "*" + action.getValue() + "*"))));
             }
             else if(action.getActionId().equals("typeCaction")){
-                blockActionPayload.getMessage().getBlocks().remove(3);
-                blockActionPayload.getMessage().getBlocks().add(3,
+                blockActionPayload.getMessage().getBlocks().remove(5);
+                blockActionPayload.getMessage().getBlocks().add(5,
                         section(section -> section.text(markdownText("소분류 : " + "*" + action.getValue() + "*"))));
+            }
+            else if(action.getActionId().equals("typeDaction")){
+                checked = action.getSelectedOption().getValue();
             }
         });
         return blockActionPayload;

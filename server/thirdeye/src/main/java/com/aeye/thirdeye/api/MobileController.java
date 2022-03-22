@@ -66,7 +66,7 @@ public class MobileController {
         BlockActionPayload blockActionPayload = slackImageService.makeResponseLayout(payload);
         ActionResponse response = null;
         String nowActionId = blockActionPayload.getActions().get(0).getActionId();
-
+        String checked = "";
         if(nowActionId.equals("typeAaction")
                 || nowActionId.equals("typeBaction")
                 || nowActionId.equals("typeCaction")){
