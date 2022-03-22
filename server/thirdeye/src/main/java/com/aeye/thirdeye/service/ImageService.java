@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -31,28 +34,62 @@ public class ImageService{
 
         Image savedImage = imageRepository.save(image);
         String fileName = Long.toString(savedImage.getId());
-        File newFile = new File(absolutePath);
+        File folder = new File(absolutePath + "tmpImgs");
 
-        if(!newFile.exists()){
-            newFile.mkdirs();
+        if(!folder.exists()){
+            folder.mkdirs();
         }
         
-        newFile = new File(absolutePath + fileName + ".jpg");
-        System.out.println(newFile.getAbsolutePath());
+        File newFile = new File(folder + File.separator + fileName + ".jpg");
         file.transferTo(newFile);
         savedImage.setImage(newFile.getAbsolutePath());
         imageRepository.save(savedImage);
 
-        File newFile2 = new File(absolutePath + fileName + ".json");
-        System.out.println(newFile2.getAbsolutePath());
-        newFile2.createNewFile();
-        
-        FileWriter fileWriter = new FileWriter(newFile2);
-        gson.toJson(savedImage,fileWriter);
-        fileWriter.close();
-
-        savedImage.setImage(absolutePath+fileName + ".jpg");
+        savedImage.setImage(newFile.getAbsolutePath());
 
         return new ImageDto(savedImage);
+    }
+
+    @Transactional
+    public void approveImage(int seq) throws Exception{
+        Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
+
+        File curFile = new File(nowImage.getImage());
+        String pathPrefix = absolutePath + "gpuImgs/";
+        String pathPrefix2 = absolutePath + "savedImgs/";
+        String pathSurfix = nowImage.getTypeA() + "/" + nowImage.getTypeB() + "/" + nowImage.getTypeC() + "/" + nowImage.getTitle() + "/" + nowImage.getFaceYN() + "/";
+
+        LocalDate now = LocalDate.now();
+
+        String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + System.nanoTime();
+
+        nowImage.setImage(pathPrefix2 + pathSurfix + fileName + ".jpg");
+
+        File folder = new File(pathPrefix + pathSurfix);
+        if(!folder.exists()){
+            folder.mkdirs();
+        }
+
+        File imgFile = new File(folder + File.separator + fileName + ".jpg");
+        curFile.renameTo(imgFile);
+        File jsonFile = new File(folder + File.separator + fileName + ".json");
+        jsonFile.createNewFile();
+        FileWriter fileWriter = new FileWriter(jsonFile);
+        gson.toJson(nowImage,fileWriter);
+        fileWriter.close();
+
+        File folder2 = new File(pathPrefix2 + pathSurfix);
+        if(!folder2.exists()){
+            folder2.mkdirs();
+        }
+        File imgFile2 = new File(folder2 + File.separator + fileName + ".jpg");
+
+        Files.copy(imgFile.toPath(), imgFile2.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        curFile.renameTo(imgFile);
+        File jsonFile2 = new File(folder2 + File.separator + fileName + ".json");
+        Files.copy(jsonFile.toPath(), jsonFile2.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+
+        imageRepository.save(nowImage);
     }
 }
