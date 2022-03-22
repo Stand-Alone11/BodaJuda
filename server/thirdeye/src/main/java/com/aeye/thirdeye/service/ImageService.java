@@ -1,5 +1,6 @@
 package com.aeye.thirdeye.service;
 
+import com.aeye.thirdeye.dto.ImageDto;
 import com.aeye.thirdeye.entity.Image;
 import com.aeye.thirdeye.repository.ImageRepository;
 import com.google.gson.Gson;
@@ -25,17 +26,8 @@ public class ImageService{
     @Value("${spring.http.multipart.location}")
     private String absolutePath;
 
-    public byte[] showImage(long id) throws Exception{
-        Image image = imageRepository.findById(id).get();
-        String path = image.getImage();
-        InputStream is = new FileInputStream(path);
-        byte[] imageByteArray = IOUtils.toByteArray(is);
-        is.close();
-        return imageByteArray;
-    }
-
     @Transactional
-    public void insertImage(MultipartFile file, Image image) throws Exception{
+    public ImageDto insertImage(MultipartFile file, Image image) throws Exception{
 
         Image savedImage = imageRepository.save(image);
         String fileName = Long.toString(savedImage.getId());
@@ -60,5 +52,7 @@ public class ImageService{
         fileWriter.close();
 
         savedImage.setImage(absolutePath+fileName + ".jpg");
+
+        return new ImageDto(savedImage);
     }
 }
