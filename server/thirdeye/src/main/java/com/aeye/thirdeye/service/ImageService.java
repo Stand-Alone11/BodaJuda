@@ -38,6 +38,9 @@ public class ImageService{
 
         if(!folder.exists()){
             folder.mkdirs();
+            folder.setReadable(true);
+            folder.setWritable(true);
+//            Runtime.getRuntime().exec("chmod -R 777 "+ folder.getAbsolutePath());
         }
         
         File newFile = new File(folder + File.separator + fileName + ".jpg");
