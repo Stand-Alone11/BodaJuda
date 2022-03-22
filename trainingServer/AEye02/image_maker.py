@@ -1,7 +1,7 @@
 import os
 import cv2
 import numpy as np
-
+import math
 
 # path = '/home/team1/AEye/data/image/snack_4'
 # path = 'C:/Users/deter/Desktop/snack_4'
@@ -17,13 +17,13 @@ def createFolder(directory):
 
 def image_maker(path):
    for i in os.listdir(path):
-      print(path+'/'+i +"경로 이미지 작업 중...")
+      print(path+'/'+i +" 경로 이미지 전처리 중...")
       for j in os.listdir(path+'/'+i):
          # 이미지 값 /255 로 정규화...? 여기서 하면 이미지파일 생성 단계에서 문제가 발생한다. 학습시키기 전에 정규화를 거치자!!!
          image = cv2.imdecode(np.fromfile(path+'/'+i+'/'+j, dtype=np.uint8), cv2.IMREAD_COLOR)
          
          h, w, c = image.shape
-         s = 0.15
+         s = (1-(1/math.sqrt(2)))/2
          if(h>w):
             tb = int(h*s)
             rl = int((h-w)/2 + h*s)
@@ -49,3 +49,5 @@ def image_maker(path):
             if result:
                with open(new_img_name, mode='w+b') as f:
                   encoded_img.tofile(f)
+                  
+         os.remove(path+'/'+i+'/'+j)
