@@ -2,10 +2,7 @@ package com.aeye.thirdeye.entity;
 
 import com.aeye.thirdeye.entity.auth.ProviderType;
 import com.aeye.thirdeye.entity.auth.RoleType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +13,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,9 +20,10 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "User")
-@Getter
-@Setter
-@NoArgsConstructor//(access = AccessLevel.PROTECTED)
+@Builder
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
