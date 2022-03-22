@@ -1,0 +1,25 @@
+{
+  "parameters": {
+    "model_name": {
+      "defaultValue": {
+        "value": "snack_v6"
+      },
+      "valueType": "STRING"
+    },
+    "next_model": {
+      "defaultValue": {
+        "value": "snack_v8"
+      },
+      "valueType": "STRING"
+    }
+  },
+  "version": {
+    "versionNumber": "10",
+    "updateTime": "2022-03-22T08:18:49.032625Z",
+    "updateUser": {
+      "email": "determination9212@gmail.com"
+    },
+    "updateOrigin": "CONSOLE",
+    "updateType": "INCREMENTAL_UPDATE"
+  }
+}
