@@ -24,7 +24,7 @@ public class Image {
     private String title;
 
     @Size(max = 1)
-    private String imageValidate = "F";
+    private String imageValidate = "W";
 
     @Size(max = 20)
     private String typeA;
@@ -46,6 +46,10 @@ public class Image {
     private double R_X;
 
     private double R_Y;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
 
 }
 

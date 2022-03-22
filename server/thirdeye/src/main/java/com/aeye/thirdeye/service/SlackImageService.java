@@ -143,10 +143,15 @@ public class SlackImageService {
 //                blockActionPayload.getMessage().getBlocks().add(4,
 //                        section(section -> section.text(markdownText("*반려 되었습니다*"))));
                 // 여기에 DB 이미지 정보 관련(거절) code (DB에서 값 삭제)
-                imageRepository.deleteById(Long.valueOf(seq));
+                Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
+                if(nowImage != null){
+                    nowImage.setImageValidate("F");
+                    imageRepository.save(nowImage);
+                }
                 int len = blockActionPayload.getMessage().getBlocks().size();
-                for(int i = 1 ; i < len; i++){
-                    blockActionPayload.getMessage().getBlocks().remove(i);
+                // 맨 앞에 divider 빼고 모두 삭제
+                if (len > 1) {
+                    blockActionPayload.getMessage().getBlocks().subList(1, len).clear();
                 }
                 blockActionPayload.getMessage().getBlocks().add(1,
                         section(section -> section.text(markdownText("*거부 완료*"))));
@@ -171,6 +176,7 @@ public class SlackImageService {
                     image.setTypeA(typeStr[0].split("\\*")[1].trim());
                     image.setTypeB(typeStr[1].split("\\*")[1].trim());
                     image.setTypeC(typeStr[2].split("\\*")[1].trim());
+                    image.setImageValidate("Y");
                     imageRepository.save(image);
                 }
 

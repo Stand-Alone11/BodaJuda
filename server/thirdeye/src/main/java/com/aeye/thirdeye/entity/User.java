@@ -4,11 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "User")
@@ -31,5 +32,17 @@ public class User {
 
     @Size(max = 20)
     private String nickName;
+
+    @Column(name = "CREATED_AT")
+//    @NotNull
+    private OffsetDateTime createdAt;
+
+    @PrePersist
+    private void beforeSaving() {
+        createdAt = OffsetDateTime.now();
+    }
+
+    @OneToMany(mappedBy = "user")
+    private List<Image> imageList = new ArrayList<>();
 
 }
