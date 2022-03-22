@@ -1,22 +1,33 @@
 package com.aeye.thirdeye.entity;
 
+import com.aeye.thirdeye.entity.auth.ProviderType;
+import com.aeye.thirdeye.entity.auth.RoleType;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "User")
 @Getter
 @Setter
 @NoArgsConstructor//(access = AccessLevel.PROTECTED)
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -35,14 +46,89 @@ public class User {
 
     @Column(name = "CREATED_AT")
 //    @NotNull
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
-    @PrePersist
-    private void beforeSaving() {
-        createdAt = OffsetDateTime.now();
-    }
+    @Column(name = "MODIFIED_AT")
+//    @NotNull
+    private LocalDateTime modifiedAt;
+
+    @Column(name = "PROVIDER_TYPE", length = 20)
+    @Enumerated(EnumType.STRING)
+//    @NotNull
+    private ProviderType providerType;  // 구글, 카카오, 네이버
+
+    @Column(name = "ROLE_TYPE", length = 20)
+    @Enumerated(EnumType.STRING)
+//    @NotNull
+    private RoleType roleType;
 
     @OneToMany(mappedBy = "user")
     private List<Image> imageList = new ArrayList<>();
 
+
+
+    /**
+     * Security 회원 가입
+     */
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return nickName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public User(
+            @Size(max = 64) String userId,
+            @NotNull @Size(max = 100) String nickName,
+            @NotNull @Size(max = 512) String email,
+//            @Size(max = 512) String profileImageUrl,
+            ProviderType providerType,
+            RoleType roleType,
+            LocalDateTime createdAt,
+            LocalDateTime modifiedAt
+            ) {
+        this.userId = userId;
+        this.nickName = nickName;
+        this.password = "NO_PASS";
+        this.email = email != null ? email : "NO_EMAIL";
+//        this.profileImage = profileImage != null ? profileImage : "";
+        this.providerType = providerType != null ? providerType : ProviderType.LOCAL;
+        this.roleType = roleType != null ? roleType : RoleType.USER;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+    @Transactional
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        password = passwordEncoder.encode(password);
+    }
 }

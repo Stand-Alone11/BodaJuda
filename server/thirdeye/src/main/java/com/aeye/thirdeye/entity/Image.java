@@ -38,6 +38,8 @@ public class Image {
     @Size(max = 50)
     private String Provider;
 
+    private String faceYN;
+
     // 바운딩 박스 필요시 추가 예정
     private double L_X;
 
