@@ -13,5 +13,6 @@
         <item name="android:statusBarColor">@color/brand_color</item>
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
     </style>
 </resources>
