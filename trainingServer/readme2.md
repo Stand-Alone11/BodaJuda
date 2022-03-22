@@ -13,3 +13,5 @@ pip install tensorflow-gpu
 pip install tflite_model_maker
 
 pip install firebase_admin
+
+pip install oauth2client

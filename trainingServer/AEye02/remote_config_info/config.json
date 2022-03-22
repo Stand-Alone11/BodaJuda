@@ -1,0 +1,25 @@
+{
+	"parameters": {
+		"model_name": {
+			"defaultValue": {
+				"value": "snack_v9"
+			},
+			"valueType": "STRING"
+		},
+		"next_model": {
+			"defaultValue": {
+				"value": "snack_v10"
+			},
+			"valueType": "STRING"
+		}
+	},
+	"version": {
+		"versionNumber": "11",
+		"updateTime": "2022-03-22T10:28:39.956018Z",
+		"updateUser": {
+			"email": "firebase-adminsdk-9glw7@aeye-9c1ee.iam.gserviceaccount.com"
+		},
+		"updateOrigin": "REST_API",
+		"updateType": "INCREMENTAL_UPDATE"
+	}
+}

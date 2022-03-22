@@ -17,7 +17,7 @@ def _get_access_token():
   :return: Access token.
   """
   credentials = ServiceAccountCredentials.from_json_keyfile_name(
-      'aeye-9c1ee-firebase-adminsdk-9glw7-8f233a41fb.json', SCOPES)
+      '/home/team1/AEye/keys/aeye-9c1ee-firebase-adminsdk-9glw7-8f233a41fb.json', SCOPES)
   access_token_info = credentials.get_access_token()
   return access_token_info.access_token
 
@@ -32,14 +32,14 @@ def _get():
   resp = requests.get(REMOTE_CONFIG_URL, headers=headers)
 
   if resp.status_code == 200:
-    with io.open('config.json', 'wb') as f:
+    with io.open('/home/team1/AEye/remote_config_info/config.json', 'wb') as f:
       f.write(resp.text.encode('utf-8'))
 
     print('Retrieved template has been written to config.json')
-    print('ETag from server: {}'.format(resp.headers['ETag']))
+    # print('ETag from server: {}'.format(resp.headers['ETag']))
   else:
     print('Unable to get template')
-    print(resp.text)
+    # print(resp.text)
 
 def _listVersions():
   """Print the last 5 Remote Config version's metadata."""
@@ -50,10 +50,10 @@ def _listVersions():
 
   if resp.status_code == 200:
     print('Versions:')
-    print(resp.text)
+    # print(resp.text)
   else:
     print('Request to print template versions failed.')
-    print(resp.text)
+    # print(resp.text)
 
 def _publish(etag):
   """Publish local template to Firebase server.
@@ -61,7 +61,7 @@ def _publish(etag):
     etag: ETag for safe (avoid race conditions) template updates.
         * can be used to force template replacement.
   """
-  with open('config.json', 'r', encoding='utf-8') as f:
+  with open('/home/team1/AEye/remote_config_info/config.json', 'r', encoding='utf-8') as f:
     content = f.read()
   headers = {
     'Authorization': 'Bearer ' + _get_access_token(),
@@ -71,17 +71,10 @@ def _publish(etag):
   resp = requests.put(REMOTE_CONFIG_URL, data=content.encode('utf-8'), headers=headers)
   if resp.status_code == 200:
     print('Template has been published.')
-    print('ETag from server: {}'.format(resp.headers['ETag']))
+    # print('ETag from server: {}'.format(resp.headers['ETag']))
   else:
     print('Unable to publish template.')
-    print(resp.text)
+    # print(resp.text)
 
-# _get()
-# _listVersions()
 
-headers = {
-    'Authorization': 'Bearer ' + _get_access_token()
-  }
-resp = requests.get(REMOTE_CONFIG_URL, headers=headers)
-_publish(format(resp.headers['ETag']))
 
