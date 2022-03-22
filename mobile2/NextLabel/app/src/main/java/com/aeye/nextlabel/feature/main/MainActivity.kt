@@ -39,7 +39,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         override fun createFragment(position: Int): Fragment {
             return when(position) {
                 0 -> HomeFragment()
-                else -> CameraFragment()
+                else -> ContainerFragment()
             }
         }
     }

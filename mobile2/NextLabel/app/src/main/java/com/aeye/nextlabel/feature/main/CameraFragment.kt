@@ -20,9 +20,15 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentCameraBinding
+import com.aeye.nextlabel.global.BUNDLE_KEY_TO_MOVE
+import com.aeye.nextlabel.global.REQUEST_KEY_TO_MOVE
 import com.google.common.util.concurrent.ListenableFuture
 import java.io.File
 import java.text.SimpleDateFormat
@@ -33,6 +39,9 @@ import java.util.concurrent.Executors
 class CameraFragment: Fragment() {
 
     val binding by lazy { FragmentCameraBinding.inflate(layoutInflater) }
+    val viewModel: ContainerViewModel by viewModels(ownerProducer = {requireParentFragment()})
+
+    // TODO: activity를 MainActivity로 바로 사용하지 않게 수정
     lateinit var activity: MainActivity
 
     private var imageCapture: ImageCapture? = null
@@ -138,6 +147,8 @@ class CameraFragment: Fragment() {
                         arrayOf(savedUri.toFile().absolutePath),
                         arrayOf(mimeType)
                     ) { _, uri ->
+                        viewModel.imageSavedUri = uri
+                        setFragmentResult(REQUEST_KEY_TO_MOVE, bundleOf(BUNDLE_KEY_TO_MOVE to "NEXT"))
                         Log.d(TAG, "Image capture scanned into media store: $uri")
                     }
                 }
