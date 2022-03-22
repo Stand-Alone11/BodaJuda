@@ -42,11 +42,11 @@ class ContainerFragment : BaseFragment<ContainerFragmentBinding>(ContainerFragme
     private fun moveNext() {
         when(fragmentIndex) {
             0 -> {
-                childFragmentManager.beginTransaction().replace(R.id.frame_layout_container, CameraFragment()).addToBackStack(null).commit()
+                childFragmentManager.beginTransaction().replace(R.id.frame_layout_container, LabelFragment()).addToBackStack(null).commit()
                 fragmentIndex++
             }
             1 -> {
-                childFragmentManager.beginTransaction().replace(R.id.frame_layout_container, CameraFragment()).addToBackStack(null).commit()
+                childFragmentManager.beginTransaction().replace(R.id.frame_layout_container, LabelFragment()).addToBackStack(null).commit()
                 fragmentIndex++
             }
             else -> {}
