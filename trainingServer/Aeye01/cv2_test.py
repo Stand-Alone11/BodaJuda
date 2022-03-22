@@ -2,8 +2,10 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-path = 'C:/Users/deter/Downloads/30_cate-20220316T055655Z-001/30_cate'
-img_name = '/농심매운새우깡_90G/10093_0_m_1.jpg'
+# path = 'C:/Users/deter/Downloads/30_cate-20220316T055655Z-001/16_category'
+# img_name = '/농심매운새우깡_90G/10093_0_s_2.jpg'
+path = 'C:/Users/deter/Desktop/'
+img_name = 'rota95_KakaoTalk_20220321_165133464_10.jpg'
 full_path = path + img_name
 # print(full_path)
 img_array = np.fromfile(full_path, np.uint8)
@@ -23,6 +25,7 @@ print('chk2')
 # plt.show(block = True)
 
 
+print(image[0])
 
 
 image = cv2.resize(image, dsize=(640,640), interpolation=cv2.INTER_AREA)
@@ -62,6 +65,21 @@ matrix =cv2.getRotationMatrix2D((h/2,w/2), 60, 1)
 image6 = cv2.warpAffine(image, matrix, (h, w))
 plt.subplot(336)
 plt.imshow(image6)
+
+# sure_bg = cv2.dilate(image, np.ones((3,3),np.uint8), iterations=3)
+# dist_transform = cv2.distanceTransform(image, cv2.DIST_L2, 5)
+# ret, sure_fg = cv2.threshold(dist_transform, 0.7*dist_transform.max(), 2565,0)
+
+# sure_fg = np.uint8(sure_fg)
+# unknown = cv2.subtract(sure_bg, sure_fg)
+
+# ret, markers = cv2.connectedComponents(sure_fg)
+
+# markers = markers + 1
+# markers[unknown==255] = 0
+
+# plt.subplot(337)
+# plt.imshow(image6)
 
 
 plt.show()

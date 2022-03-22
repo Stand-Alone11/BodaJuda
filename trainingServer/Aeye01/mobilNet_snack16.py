@@ -14,16 +14,19 @@ import pathlib
 # GPU 사용 여부 확인
 # from tensorflow.python.client import device_lib
 # print(device_lib.list_local_devices())
+model_name = "snack_v5"
 
-image_path = pathlib.Path('/home/team1/AEye/data/image/16_category_rota')
+image_path = pathlib.Path('/home/team1/AEye/data/image/snack_3_rota')
 data = DataLoader.from_folder(image_path)
 
 train_data, rest_data = data.split(0.8)
 validation_data, test_data = rest_data.split(0.5)
+# train_data = train_data/255
+# rest_data = rest_data/255
+print(train_data[0][0])
 
-data = DataLoader.from_folder(image_path)
-
-model = image_classifier.create(train_data, validation_data=validation_data)
+# 학습된 모델 정확도가 낮아서 에폭 증가 5->15
+model = image_classifier.create(train_data, validation_data=validation_data, epochs=30)
 model.summary()
 loss, accuracy = model.evaluate(test_data)
 print("loss, accuracy")
@@ -35,7 +38,7 @@ print(accuracy)
 
 
 config = QuantizationConfig.for_float16()
-model.export(export_dir='./model_float16', tflite_filename='snack_v3.tflite', quantization_config=config)
+model.export(export_dir='./model_float16', tflite_filename=(model_name+'.tflite'), quantization_config=config)
 
 
 from tensorflow import keras
@@ -52,7 +55,7 @@ firebase_admin.initialize_app(
 print("파일 옵션 설정 확인")
 
 # This uploads it to your bucket as mmnist_v2.tflite
-source = ml.TFLiteGCSModelSource.from_tflite_model_file('./model_float16/snack_v3.tflite')
+source = ml.TFLiteGCSModelSource.from_tflite_model_file('./model_float16/'+model_name+'.tflite')
 print (source.gcs_tflite_uri)
 
 print("모델 가져오기")
@@ -64,7 +67,7 @@ print("모델 tflite로 변환")
 
 # Create a Model object
 # format 어떻게 구해야하지....
-sdk_model_1 = ml.Model(display_name="snack_v3", model_format=model_format)
+sdk_model_1 = ml.Model(display_name=model_name, model_format=model_format)
 # sdk_model_1 = ml.Model(display_name="snack_model")
 
 print("firebase 모델 이름 저장")
