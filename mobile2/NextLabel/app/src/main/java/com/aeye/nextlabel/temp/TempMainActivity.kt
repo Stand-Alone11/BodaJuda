@@ -1,10 +1,15 @@
 package com.aeye.nextlabel.temp
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.aeye.nextlabel.databinding.TempFragmentBinding
 import com.aeye.nextlabel.feature.common.BaseActivity
+import com.aeye.nextlabel.temp.dto.UserJoin
+import com.aeye.nextlabel.temp.viewmodel.UserViewModel
 
 class TempMainActivity : BaseActivity<TempFragmentBinding>(TempFragmentBinding::inflate) {
+
+    val userViewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,4 +20,13 @@ class TempMainActivity : BaseActivity<TempFragmentBinding>(TempFragmentBinding::
 
     }
 
+    private fun join() {
+        val id = binding.editId.text.toString()
+        val password = binding.editPw.text.toString()
+        val passwordConformation = binding.editPwConfirmation.text.toString()
+        val email = binding.editEmail.text.toString()
+        val nickname = binding.editNickname.text.toString()
+
+        userViewModel.join(UserJoin(id, password, passwordConformation, email, nickname))
+    }
 }

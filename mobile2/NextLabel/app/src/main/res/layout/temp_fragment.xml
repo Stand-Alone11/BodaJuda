@@ -34,32 +34,52 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
-        android:id="@+id/image_captured"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/sample_image"
-        app:layout_constraintDimensionRatio="w,1:1"
-        app:layout_constraintTop_toTopOf="@id/guideline3"
-        app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintEnd_toEndOf="@id/guideline2" />
-
     <EditText
-        android:id="@+id/edit_item"
+        android:id="@+id/edit_id"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:hint="상품명 입력"
-        app:layout_constraintTop_toBottomOf="@id/image_captured"
+        android:hint="ID 입력"
+        app:layout_constraintTop_toBottomOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline1"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         android:layout_marginTop="30dp" />
 
     <EditText
-        android:id="@+id/edit_provider"
+        android:id="@+id/edit_pw"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:hint="제조사 입력"
-        app:layout_constraintTop_toBottomOf="@id/edit_item"
+        android:hint="PW 입력"
+        app:layout_constraintTop_toBottomOf="@id/edit_id"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        android:layout_marginTop="30dp" />
+
+    <EditText
+        android:id="@+id/edit_pw_confirmation"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="PW 재입력"
+        app:layout_constraintTop_toBottomOf="@id/edit_pw"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        android:layout_marginTop="30dp" />
+
+    <EditText
+        android:id="@+id/edit_email"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="Email 입력"
+        app:layout_constraintTop_toBottomOf="@id/edit_pw_confirmation"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        android:layout_marginTop="30dp" />
+
+    <EditText
+        android:id="@+id/edit_nickname"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="Nickname 입력"
+        app:layout_constraintTop_toBottomOf="@id/edit_email"
         app:layout_constraintStart_toStartOf="@id/guideline1"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         android:layout_marginTop="30dp" />
@@ -67,8 +87,8 @@
     <Button
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:text="제출"
-        app:layout_constraintTop_toBottomOf="@id/edit_provider"
+        android:text="회원 가입"
+        app:layout_constraintTop_toBottomOf="@id/edit_nickname"
         app:layout_constraintStart_toStartOf="@id/guideline1"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         android:layout_marginTop="30dp" />
