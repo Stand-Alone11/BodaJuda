@@ -45,6 +45,13 @@ public class ImageService{
         
         File newFile = new File(folder + File.separator + fileName + ".jpg");
         file.transferTo(newFile);
+
+        File jsonFile = new File(folder + File.separator + fileName + ".json");
+        jsonFile.createNewFile();
+        FileWriter fileWriter = new FileWriter(jsonFile);
+        gson.toJson(savedImage,fileWriter);
+        fileWriter.close();
+
         savedImage.setImage(newFile.getAbsolutePath());
         imageRepository.save(savedImage);
 
