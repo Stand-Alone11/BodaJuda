@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NextLabel">
         <activity
-            android:name=".temp.TempMainActivity"
+            android:name=".feature.user.TempMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

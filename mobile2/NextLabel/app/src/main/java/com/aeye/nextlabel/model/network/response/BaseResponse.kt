@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.temp.response
+package com.aeye.nextlabel.model.network.response
 
 import com.google.gson.annotations.SerializedName
 

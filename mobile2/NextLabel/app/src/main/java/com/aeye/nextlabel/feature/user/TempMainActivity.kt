@@ -1,11 +1,11 @@
-package com.aeye.nextlabel.temp
+package com.aeye.nextlabel.feature.user
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.aeye.nextlabel.databinding.TempFragmentBinding
 import com.aeye.nextlabel.feature.common.BaseActivity
-import com.aeye.nextlabel.temp.dto.UserJoin
-import com.aeye.nextlabel.temp.viewmodel.UserViewModel
+import com.aeye.nextlabel.model.dto.UserJoin
+import com.aeye.nextlabel.feature.user.UserViewModel
 
 class TempMainActivity : BaseActivity<TempFragmentBinding>(TempFragmentBinding::inflate) {
 

@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.temp.dto
+package com.aeye.nextlabel.model.dto
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,14 +1,14 @@
-package com.aeye.nextlabel.temp.repository
+package com.aeye.nextlabel.repository
 
 import com.aeye.nextlabel.global.ApplicationClass
-import com.aeye.nextlabel.temp.Resource
-import com.aeye.nextlabel.temp.api.UserApi
-import com.aeye.nextlabel.temp.dto.UserJoin
-import com.aeye.nextlabel.temp.dto.UserLeave
-import com.aeye.nextlabel.temp.dto.UserLogin
-import com.aeye.nextlabel.temp.response.JoinResponse
-import com.aeye.nextlabel.temp.response.LeaveResponse
-import com.aeye.nextlabel.temp.response.LoginResponse
+import com.aeye.nextlabel.util.Resource
+import com.aeye.nextlabel.model.network.api.UserApi
+import com.aeye.nextlabel.model.dto.UserJoin
+import com.aeye.nextlabel.model.dto.UserLeave
+import com.aeye.nextlabel.model.dto.UserLogin
+import com.aeye.nextlabel.model.network.response.JoinResponse
+import com.aeye.nextlabel.model.network.response.LeaveResponse
+import com.aeye.nextlabel.model.network.response.LoginResponse
 import java.lang.Exception
 
 class UserRepository {

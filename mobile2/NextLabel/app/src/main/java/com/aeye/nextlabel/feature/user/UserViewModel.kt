@@ -1,15 +1,15 @@
-package com.aeye.nextlabel.temp.viewmodel
+package com.aeye.nextlabel.feature.user
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aeye.nextlabel.temp.Resource
-import com.aeye.nextlabel.temp.dto.UserJoin
-import com.aeye.nextlabel.temp.dto.UserLeave
-import com.aeye.nextlabel.temp.dto.UserLogin
-import com.aeye.nextlabel.temp.repository.UserRepository
-import com.aeye.nextlabel.temp.response.JoinResponse
-import com.aeye.nextlabel.temp.response.LeaveResponse
-import com.aeye.nextlabel.temp.response.LoginResponse
+import com.aeye.nextlabel.util.Resource
+import com.aeye.nextlabel.model.dto.UserJoin
+import com.aeye.nextlabel.model.dto.UserLeave
+import com.aeye.nextlabel.model.dto.UserLogin
+import com.aeye.nextlabel.repository.UserRepository
+import com.aeye.nextlabel.model.network.response.JoinResponse
+import com.aeye.nextlabel.model.network.response.LeaveResponse
+import com.aeye.nextlabel.model.network.response.LoginResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
