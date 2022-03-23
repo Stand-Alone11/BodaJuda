@@ -37,7 +37,7 @@ json_data['parameters']['next_model']['defaultValue']['value'] = next_name
 with open(JSON_PATH, 'w', encoding='utf-8') as make_file:
     json.dump(json_data, make_file, indent="\t")
 
-# im(ORIGIN_IMAGE_PATH)
+im(ORIGIN_IMAGE_PATH)
 smm(model_name,INPUT_IMAGE_PATH,MODEL_PATH,KEY_PATH, KEY_NAME)
 
 headers = {
