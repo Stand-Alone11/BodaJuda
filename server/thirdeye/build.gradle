@@ -87,6 +87,9 @@ dependencies {
 
 	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
 
+	implementation group: 'org.qlrm', name: 'qlrm', version: '3.0.4'
+
+
 }
 
 configurations {
