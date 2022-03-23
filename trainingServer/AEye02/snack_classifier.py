@@ -29,7 +29,9 @@ def snack_model_maker(model_name, image_path, model_path, key_path, key_name):
     train_data, rest_data = data.split(0.8)
     validation_data, test_data = rest_data.split(0.5)
 
-    model = image_classifier.create(train_data, validation_data=validation_data, epochs=5)
+    # https://www.tensorflow.org/lite/api_docs/python/tflite_model_maker/image_classifier/create 파라미터
+    # model = image_classifier.create(train_data, validation_data=validation_data, epochs=10, dropout_rate=0.2, batch_size=1024, learning_rate = 0.001)
+    model = image_classifier.create(train_data, validation_data=validation_data, epochs=10)
     model.summary()
     loss, accuracy = model.evaluate(test_data)
     print("loss, accuracy")
