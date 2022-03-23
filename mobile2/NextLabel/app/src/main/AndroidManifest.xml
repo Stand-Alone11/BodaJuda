@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NextLabel">
         <activity
+            android:name=".feature.user.JoinActivity"
+            android:exported="false" />
+        <activity
             android:name=".feature.user.TempMainActivity"
             android:exported="true">
             <intent-filter>
@@ -27,9 +30,7 @@
         </activity>
         <activity
             android:name=".feature.main.MainActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
     </application>
 
 </manifest>
