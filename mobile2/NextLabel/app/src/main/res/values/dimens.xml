@@ -3,14 +3,18 @@
     <dimen name="margin_default">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
 
-<!--  padding for page  -->
+<!--  padding for root  -->
     <dimen name="padding_page">15dp</dimen>
 
 <!--  margin  -->
     <dimen name="margin_top">30dp</dimen>
     <dimen name="margin_top_related">20dp</dimen>
+    <dimen name="margin_left_related">10dp</dimen>
 
 <!--  margin for logo image  -->
     <dimen name="margin_logo">150dp</dimen>
+
+<!--  size for service name  -->
+    <dimen name="size_service_name">15sp</dimen>
 
 </resources>

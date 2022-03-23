@@ -11,5 +11,4 @@
 <!--  custom  -->
     <color name="brand_color">#77C4E0</color>
     <color name="brand_color_secondary">#002C86</color>
-    <color name="deactivated">#C4C4C4</color>
 </resources>

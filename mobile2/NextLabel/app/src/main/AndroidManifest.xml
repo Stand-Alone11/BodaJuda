@@ -18,9 +18,6 @@
         android:theme="@style/Theme.NextLabel">
         <activity
             android:name=".feature.user.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".feature.user.JoinActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,8 +26,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".feature.user.JoinActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".feature.main.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>
