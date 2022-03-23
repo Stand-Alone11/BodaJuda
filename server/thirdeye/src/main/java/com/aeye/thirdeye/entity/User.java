@@ -59,6 +59,8 @@ public class User implements UserDetails {
 //    @NotNull
     private RoleType roleType;
 
+    private String UUID;
+
     @OneToMany(mappedBy = "user")
     private List<Image> imageList = new ArrayList<>();
 

@@ -19,5 +19,5 @@ public class ProfileResponseDto {
     private int imageAccept;
     private int imageDeny;
     private int rank;
-    
+
 }

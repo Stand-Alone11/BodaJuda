@@ -1,12 +1,15 @@
 package com.aeye.thirdeye.api;
 
 import com.aeye.thirdeye.dto.response.ErrorResponse;
+import com.aeye.thirdeye.dto.response.ProfileResponseDto;
 import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.entity.auth.ProviderType;
 import com.aeye.thirdeye.entity.auth.RoleType;
 import com.aeye.thirdeye.repository.UserRepository;
 import com.aeye.thirdeye.service.UserService;
 import com.aeye.thirdeye.token.JwtTokenProvider;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -163,4 +168,35 @@ public class UserApiController {
         }
     }
 
+    @GetMapping("/accounts/info/{id}")
+    public ResponseEntity<?> getProfile(@PathVariable("id") Long id){
+        ProfileResponseDto profileResponseDto = userService.getProfile(id);
+        if(profileResponseDto == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(profileResponseDto);
+    }
+
+
+//    @PostMapping("/oauth/test")
+//    public ResponseEntity<?> testtest(@RequestBody Map<String, String> zzz) {
+//        System.out.println(zzz.get("str"));
+//        GoogleIdToken.Payload payload = null;
+//        try {
+//            payload = userService.testestset(zzz.get("str"));
+//            System.out.println(payload.getSubject());
+//            System.out.println(payload.getEmail());
+//            System.out.println(payload.get("name"));
+//            System.out.println(payload.get("picture"));
+//            System.out.println(payload.get("locale"));
+//            System.out.println(payload.get("given_name"));
+//            System.out.println(Boolean.valueOf(payload.getEmailVerified()));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (GeneralSecurityException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(payload);
+//    }
 }
