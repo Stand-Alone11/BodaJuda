@@ -1,5 +1,6 @@
 package com.aeye.thirdeye.service;
 
+import com.aeye.thirdeye.dto.LeaderBoardDto;
 import com.aeye.thirdeye.dto.response.ProfileResponseDto;
 import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.repository.ImageRepository;
@@ -9,18 +10,28 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import lombok.RequiredArgsConstructor;
+import org.qlrm.mapper.JpaResultMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService {
+
+    @PersistenceContext
+    EntityManager em;
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -113,6 +124,20 @@ public class UserService {
         }
         profileResponseDto.setRank(rank);
         return profileResponseDto;
+    }
+
+    public List<LeaderBoardDto> getLeaderBoard(int page, int size){
+        int pageStart = page * size;
+
+        String query = "SELECT u.id, u.nick_name, ranked.rank, ranked.total " +
+                "FROM (SELECT i.user_id, rank() over(order by count(*) DESC) AS RANK, " +
+                "COUNT(*) total from Image i group by i.user_id ) ranked, user u " +
+                "WHERE ranked.user_id = u.id limit " + pageStart + " ," + size;
+
+        JpaResultMapper result = new JpaResultMapper();
+        Query resultQuery = em.createNativeQuery(query);
+        List<LeaderBoardDto> leaderBoardDtos = result.list(resultQuery, LeaderBoardDto.class);
+        return leaderBoardDtos;
     }
 
 }
