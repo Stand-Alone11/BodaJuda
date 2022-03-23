@@ -1,11 +1,17 @@
 package com.aeye.nextlabel.feature.user
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.aeye.nextlabel.databinding.ActivityJoinBinding
+import com.aeye.nextlabel.feature.common.BaseActivity
 
-class JoinActivity : AppCompatActivity() {
+class JoinActivity : BaseActivity<ActivityJoinBinding>(ActivityJoinBinding::inflate) {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_join)
+        init()
+    }
+
+    private fun init() {
+
     }
 }
