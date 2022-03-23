@@ -5,4 +5,12 @@
 
 <!--  padding for page  -->
     <dimen name="padding_page">15dp</dimen>
+
+<!--  margin  -->
+    <dimen name="margin_top">30dp</dimen>
+    <dimen name="margin_top_related">20dp</dimen>
+
+<!--  margin for logo image  -->
+    <dimen name="margin_logo">150dp</dimen>
+
 </resources>

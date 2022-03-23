@@ -14,7 +14,7 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(ActivityJoinBinding::infl
 
     private fun init() {
         // button login
-        val btnLogin = binding.btnLogin
+        val btnLogin = binding.textButtonLogin
 
         btnLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
