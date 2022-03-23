@@ -6,7 +6,7 @@ from firebase_quickstart_python_remote_config import _get
 from image_maker import image_maker as im
 from snack_classifier import snack_model_maker as smm
 
-ORIGIN_IMAGE_PATH = '/home/team1/AEye/data/image/snack_11'
+ORIGIN_IMAGE_PATH = '/home/team1/AEye/data/image/snack_20+5'
 INPUT_IMAGE_PATH = ORIGIN_IMAGE_PATH + '_rota'
 MODEL_PATH = '/home/team1/AEye/model_float16'
 KEY_PATH = '/home/team1/AEye/keys'
@@ -37,11 +37,12 @@ json_data['parameters']['next_model']['defaultValue']['value'] = next_name
 with open(JSON_PATH, 'w', encoding='utf-8') as make_file:
     json.dump(json_data, make_file, indent="\t")
 
-im(ORIGIN_IMAGE_PATH)
+# im(ORIGIN_IMAGE_PATH)
 smm(model_name,INPUT_IMAGE_PATH,MODEL_PATH,KEY_PATH, KEY_NAME)
 
 headers = {
     'Authorization': 'Bearer ' + _get_access_token()
   }
 resp = requests.get(REMOTE_CONFIG_URL, headers=headers)
+
 _publish(format(resp.headers['ETag']))

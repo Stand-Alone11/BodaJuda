@@ -18,7 +18,7 @@ def createFolder(directory):
 def image_maker(path):
    for i in os.listdir(path):
       print(path+'/'+i +" 경로 이미지 전처리 중...")
-      for j in os.listdir(path+'/'+i):
+      for j in os.listdir(path+'/'+i)[1:15]:
          # 이미지 값 /255 로 정규화...? 여기서 하면 이미지파일 생성 단계에서 문제가 발생한다. 학습시키기 전에 정규화를 거치자!!!
          image = cv2.imdecode(np.fromfile(path+'/'+i+'/'+j, dtype=np.uint8), cv2.IMREAD_COLOR)
          
@@ -39,7 +39,7 @@ def image_maker(path):
          
          createFolder(path + '_rota/'+i)
 
-         for degree in range(0,361,5):
+         for degree in range(0,361,4):
             matrix = cv2.getRotationMatrix2D((h/2,w/2), degree, 1)
             rota_image = cv2.warpAffine(image, matrix, (h, w))
             rota_image = cv2.resize(rota_image,[224,224])
