@@ -1,5 +1,6 @@
 package com.aeye.thirdeye.api;
 
+import com.aeye.thirdeye.dto.LeaderBoardDto;
 import com.aeye.thirdeye.dto.response.ErrorResponse;
 import com.aeye.thirdeye.dto.response.ProfileResponseDto;
 import com.aeye.thirdeye.entity.User;
@@ -20,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -175,6 +179,16 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(profileResponseDto);
+    }
+
+    @GetMapping("/accounts/rank")
+    public ResponseEntity<?> getLeaderBoard(@RequestParam(value = "page") int page,
+                                            @RequestParam(value = "size") int size){
+        List<LeaderBoardDto> leaderBoardDtos = userService.getLeaderBoard(page, size);
+        if(leaderBoardDtos == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(leaderBoardDtos);
     }
 
 
