@@ -85,7 +85,11 @@ dependencies {
 
 	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.1'
 
+}
 
+configurations {
+	all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	all*.exclude group: 'org.springframework.boot', module: 'logback-classic'
 }
 
 tasks.named('test') {
