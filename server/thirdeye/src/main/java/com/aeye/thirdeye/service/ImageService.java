@@ -60,7 +60,12 @@ public class ImageService{
         File curFile = new File(nowImage.getImage());
         String pathPrefix = absolutePath + "gpuImgs/";
         String pathPrefix2 = absolutePath + "savedImgs/";
-        String pathSurfix = nowImage.getTypeA() + "/" + nowImage.getTypeB() + "/" + nowImage.getTypeC() + "/" + nowImage.getTitle() + "/" + nowImage.getFaceYN() + "/";
+        String pathSurfix = nowImage.getTypeA() + "/"
+                + nowImage.getTypeB() + "/"
+                + nowImage.getTypeC() + "/"
+                + nowImage.getProvider() + "_"
+                + nowImage.getTitle() + "_"
+                + nowImage.getFaceYN() + "/";
 
         LocalDate now = LocalDate.now();
 

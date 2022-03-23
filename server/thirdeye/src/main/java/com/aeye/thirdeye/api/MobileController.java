@@ -69,7 +69,8 @@ public class MobileController {
         String checked = "";
         if(nowActionId.equals("typeAaction")
                 || nowActionId.equals("typeBaction")
-                || nowActionId.equals("typeCaction")){
+                || nowActionId.equals("typeCaction")
+                || nowActionId.equals("typeDaction")){
 
             response =
                     ActionResponse.builder()
