@@ -6,15 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".feature.user.JoinActivity">
 
+<!--  text button login  -->
     <Button
         android:id="@+id/textButton_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="로그인"
+        android:textColor="@color/brand_color_secondary"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+<!--  brand  -->
     <ImageView
         android:id="@+id/img_service_logo"
         android:layout_width="0dp"
@@ -41,6 +44,7 @@
         android:layout_marginStart="@dimen/padding_page"
         android:layout_marginEnd="@dimen/padding_page"/>
 
+<!--  input  -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/outlinedTextField_id"
         android:layout_width="match_parent"
@@ -131,6 +135,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+<!--  button join  -->
     <Button
         android:id="@+id/containedButton_join"
         android:layout_width="match_parent"
