@@ -1,5 +1,7 @@
 package com.aeye.nextlabel.model.network.api
 
+import com.aeye.nextlabel.model.dto.UserForJoin
+import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.model.network.response.JoinResponse
 import com.aeye.nextlabel.model.network.response.LoginResponse
 import retrofit2.Response
