@@ -23,7 +23,7 @@ class LabelFragment : BaseFragment<FragmentLabelBinding>(FragmentLabelBinding::b
 
     private fun init() {
         viewModel.imageSavedUri?.let{
-            binding.imageViewLabelF.setImageURI(it)
+            binding.boxImageViewLabelF.setImage(it)
         }
     }
 }
