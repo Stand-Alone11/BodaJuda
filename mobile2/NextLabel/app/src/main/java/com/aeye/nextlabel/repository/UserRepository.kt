@@ -10,6 +10,7 @@ import com.aeye.nextlabel.model.network.response.LoginResponse
 import java.lang.Exception
 
 class UserRepository {
+    // 보통은 response.code()를 활용하여 예외처리 <- 요걸로
     var userApi: UserApi = ApplicationClass.sRetrofit.create(UserApi::class.java)
 
     suspend fun join(user: UserForJoin): Resource<JoinResponse> {
