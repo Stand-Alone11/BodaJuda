@@ -45,8 +45,7 @@ public class JwtTokenProvider {
     // JWT 토큰 생성 (parameter List<String> roles 는 사용 안해서 제외)
     public String createToken(String nickname, Long id) {
         Claims claims = Jwts.claims().setSubject(nickname); // JWT payload 에 저장되는 정보단위 (sub)
-        claims.put("id", id); // user_id를 저장. 정보는 key / value 쌍으로 저장된다.
-        claims.put("nickname", nickname);
+        claims.put("id", id); // id를 저장. 정보는 key / value 쌍으로 저장된다.
 //        claims.put("roles", roles);
         Date now = new Date();
         return Jwts.builder()

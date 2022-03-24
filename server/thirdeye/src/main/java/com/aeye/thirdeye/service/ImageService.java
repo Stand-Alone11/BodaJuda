@@ -2,6 +2,7 @@ package com.aeye.thirdeye.service;
 
 import com.aeye.thirdeye.dto.ImageDto;
 import com.aeye.thirdeye.entity.Image;
+import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.repository.ImageRepository;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class ImageService{
     private String absolutePath;
 
     @Transactional
-    public ImageDto insertImage(MultipartFile file, Image image) throws Exception{
+    public ImageDto insertImage(MultipartFile file, Image image, User user) throws Exception{
 
         Image savedImage = imageRepository.save(image);
         String fileName = Long.toString(savedImage.getId());
@@ -47,9 +48,8 @@ public class ImageService{
         file.transferTo(newFile);
 
         savedImage.setImage(newFile.getAbsolutePath());
+        savedImage.setUser(user);
         imageRepository.save(savedImage);
-
-        savedImage.setImage(newFile.getAbsolutePath());
 
         return new ImageDto(savedImage);
     }

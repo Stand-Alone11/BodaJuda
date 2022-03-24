@@ -1,6 +1,10 @@
 package com.aeye.thirdeye.api;
 
 import com.aeye.thirdeye.dto.LeaderBoardDto;
+import com.aeye.thirdeye.dto.request.ChangePasswordRequest;
+import com.aeye.thirdeye.dto.request.ChangeUserInfoRequest;
+import com.aeye.thirdeye.dto.request.LoginRequest;
+import com.aeye.thirdeye.dto.response.ApiResponse;
 import com.aeye.thirdeye.dto.response.ErrorResponse;
 import com.aeye.thirdeye.dto.response.ProfileResponseDto;
 import com.aeye.thirdeye.entity.User;
@@ -8,6 +12,7 @@ import com.aeye.thirdeye.entity.auth.ProviderType;
 import com.aeye.thirdeye.entity.auth.RoleType;
 import com.aeye.thirdeye.repository.UserRepository;
 import com.aeye.thirdeye.service.UserService;
+import com.aeye.thirdeye.service.auth.CustomGoogleUserService;
 import com.aeye.thirdeye.token.JwtTokenProvider;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -19,6 +24,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Response;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Pageable;
@@ -59,6 +65,8 @@ public class UserApiController {
     private final MessageSource messageSource;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final CustomGoogleUserService customGoogleUserService;
 
     /**
      * 회원 가입
@@ -125,7 +133,7 @@ public class UserApiController {
      */
     @DeleteMapping("/accounts/signout")
     @ApiOperation(value = "회원탈퇴", notes = "")
-    public ResponseEntity<?> signout(@RequestHeader(value = "Authorization") String token) {
+    public ResponseEntity<?> signout(@ApiParam(value = "jwt 토큰")@RequestHeader(value = "Authorization") String token) {
         if (!jwtTokenProvider.validateToken(token)) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -141,24 +149,24 @@ public class UserApiController {
 
     /**
      * 로그인 JWT 발급
-     * @param userInfo {email, password}
+     * @param loginRequest // {id , password}
      * @return
      */
     @PostMapping("/accounts/login")
     @ApiOperation(value = "일반 로그인", notes = "")
-    public ResponseEntity<?> login( @RequestBody Map<String, String> userInfo) {
-        User user = userRepository.findByUserId(userInfo.get("userId"));
+    public ResponseEntity<?> login(@ApiParam(value = "id, Password")@RequestBody LoginRequest loginRequest) {
+        User user = userRepository.findByUserId(loginRequest.getUserId());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse(messageSource.getMessage("error.none.user", null, LocaleContextHolder.getLocale())));
         }
 
-        if (!passwordEncoder.matches(userInfo.get("password"), user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse(messageSource.getMessage("error.wrong.password", null, LocaleContextHolder.getLocale())));
         }
 
-        String token = jwtTokenProvider.createToken(user.getUsername(), user.getId());
+        String token = jwtTokenProvider.createToken(user.getNickName(), user.getId());
 
         return ResponseEntity.ok(new LoginUserResponse(token));
     }
@@ -172,8 +180,15 @@ public class UserApiController {
         }
     }
 
+    /**
+     * 프로필 조회 API
+     * @param id
+     * @return
+     * 반환 코드 : 200 / 404
+     */
     @GetMapping("/accounts/info/{id}")
-    public ResponseEntity<?> getProfile(@PathVariable("id") Long id){
+    @ApiOperation(value = "프로필 조회", notes = "")
+    public ResponseEntity<?> getProfile(@ApiParam(value = "user 시퀀스 값") @PathVariable("id") Long id){
         ProfileResponseDto profileResponseDto = userService.getProfile(id);
         if(profileResponseDto == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -181,8 +196,18 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(profileResponseDto);
     }
 
+    /**
+     * 리더보드 순위 API
+     * @param page
+     * @param size
+     * @return
+     * 반환 코드 : 200 / 404
+     */
     @GetMapping("/accounts/rank")
-    public ResponseEntity<?> getLeaderBoard(@RequestParam(value = "page") int page,
+    @ApiOperation(value = "리더보드 순위 API", notes = "")
+    public ResponseEntity<?> getLeaderBoard(@ApiParam(value = "page (0부터 시작)")
+                                            @RequestParam(value = "page") int page,
+                                            @ApiParam(value = "size (페이지 당 size)")
                                             @RequestParam(value = "size") int size){
         List<LeaderBoardDto> leaderBoardDtos = userService.getLeaderBoard(page, size);
         if(leaderBoardDtos == null){
@@ -192,25 +217,87 @@ public class UserApiController {
     }
 
 
-//    @PostMapping("/oauth/test")
-//    public ResponseEntity<?> testtest(@RequestBody Map<String, String> zzz) {
-//        System.out.println(zzz.get("str"));
-//        GoogleIdToken.Payload payload = null;
-//        try {
-//            payload = userService.testestset(zzz.get("str"));
-//            System.out.println(payload.getSubject());
-//            System.out.println(payload.getEmail());
-//            System.out.println(payload.get("name"));
-//            System.out.println(payload.get("picture"));
-//            System.out.println(payload.get("locale"));
-//            System.out.println(payload.get("given_name"));
-//            System.out.println(Boolean.valueOf(payload.getEmailVerified()));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (GeneralSecurityException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(payload);
-//    }
+    /**
+     * 구글 로그인 API
+     * @param token
+     * @return
+     * 반환 코드 : 200
+     */
+    @PostMapping("/acoounts/auth/login")
+    @ApiOperation(value = "구글 로그인", notes = "")
+    public ApiResponse googleLogin(@ApiParam(value = "구글 토큰")
+                                       @RequestHeader(value = "Authorization") String token) {
+        GoogleIdToken.Payload payload = null;
+        String tokenResult = "";
+        try {
+            payload = userService.googleLogin(token);
+
+            // DB에 유저 저장
+            User user = customGoogleUserService.loadUser(payload);
+
+            // Token 생성
+            tokenResult = jwtTokenProvider.createToken(user.getNickName(), user.getId());
+
+            // Token return
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
+        return ApiResponse.success("token", tokenResult);
+    }
+
+    /**
+     * 패스워드 변경 API
+     * @param token
+     * @param changePasswordRequest // {paswword, passwordConfirm}
+     * @return
+     * 반환 코드 : 200 / 403 / 406
+     */
+    @PostMapping("/acoounts/update/password")
+    @ApiOperation(value = "패스워드 변경", notes = "")
+    public ResponseEntity<?> changePassword(@ApiParam(value = "Jwt 토큰")
+                                                @RequestHeader(value = "Authorization") String token,
+                                            @ApiParam(value = "Password") @RequestBody ChangePasswordRequest changePasswordRequest) {
+        if (!jwtTokenProvider.validateToken(token)) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
+        }
+        else{
+            Long id = jwtTokenProvider.getId(token);
+            if(changePasswordRequest == null ||
+                    !changePasswordRequest.getPassword().trim().equals(changePasswordRequest.getPasswordConfirm().trim())){
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Password Confirm is not Accepted");
+            }
+            userService.updatePassword(id, changePasswordRequest.getPassword());
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+
+
+    // 회원 정보 변경
+    @PostMapping("/acoounts/update/userinfo")
+    @ApiOperation(value = "회원 정보 변경", notes = "")
+    public ResponseEntity<?> changeUserInfo(@ApiParam(value = "jwt 토큰")@RequestHeader(value = "Authorization") String token,
+                                            @ApiParam(value = "email, Nickname") @RequestBody ChangeUserInfoRequest changeUserInfoRequest) {
+        if (!jwtTokenProvider.validateToken(token)) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
+        }
+        else{
+            Long id = jwtTokenProvider.getId(token);
+            if(changeUserInfoRequest == null || changeUserInfoRequest.getEmail() == null || changeUserInfoRequest.getNickName() == null){
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Content is null");
+            }
+            userService.updateUserInfo(id, changeUserInfoRequest.getNickName(), changeUserInfoRequest.getEmail());
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }
