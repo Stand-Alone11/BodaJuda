@@ -3,7 +3,7 @@ package com.aeye.nextlabel.repository
 import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.util.Resource
 import com.aeye.nextlabel.model.network.api.UserApi
-import com.aeye.nextlabel.model.dto.UserJoin
+import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.model.dto.UserLeave
 import com.aeye.nextlabel.model.dto.UserLogin
 import com.aeye.nextlabel.model.network.response.JoinResponse
@@ -14,7 +14,7 @@ import java.lang.Exception
 class UserRepository {
     var userApi: UserApi = ApplicationClass.sRetrofit.create(UserApi::class.java)
 
-    suspend fun join(user: UserJoin): Resource<JoinResponse> {
+    suspend fun join(user: UserForJoin): Resource<JoinResponse> {
         return try {
             val response = userApi.join(user)
             if(response.isSuccessful) {
@@ -48,7 +48,7 @@ class UserRepository {
         }
     }
 
-    suspend fun update(user: UserJoin): Resource<JoinResponse> {
+    suspend fun update(user: UserForJoin): Resource<JoinResponse> {
         return try {
             val response = userApi.update(user)
             if(response.isSuccessful) {

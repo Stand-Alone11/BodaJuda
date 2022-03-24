@@ -3,7 +3,7 @@ package com.aeye.nextlabel.feature.user
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aeye.nextlabel.util.Resource
-import com.aeye.nextlabel.model.dto.UserJoin
+import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.model.dto.UserLeave
 import com.aeye.nextlabel.model.dto.UserLogin
 import com.aeye.nextlabel.repository.UserRepository
@@ -21,7 +21,7 @@ class UserViewModel: ViewModel() {
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse?>>()
     val leaveRequestLiveData = MutableLiveData<Resource<LeaveResponse?>>()
 
-    fun join(user: UserJoin) = CoroutineScope(Dispatchers.Main).launch {
+    fun join(user: UserForJoin) = CoroutineScope(Dispatchers.Main).launch {
         joinRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             joinRequestLiveData.postValue(userRepository.join(user))
@@ -35,7 +35,7 @@ class UserViewModel: ViewModel() {
         }
     }
 
-    fun update(user: UserJoin) = CoroutineScope(Dispatchers.Main).launch {
+    fun update(user: UserForJoin) = CoroutineScope(Dispatchers.Main).launch {
         joinRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             joinRequestLiveData.postValue(userRepository.update(user))
