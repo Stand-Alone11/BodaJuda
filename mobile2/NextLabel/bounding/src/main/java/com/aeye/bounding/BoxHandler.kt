@@ -1,27 +1,25 @@
 package com.aeye.bounding
 
+import android.graphics.RectF
+
 /**
  * 바운딩 박스를 다루는 핸들러
  */
 
 /**
- * @param box 바운딩 박스
- * @param touchX 터치 이벤트의 x 좌표
- * @param touchY 터치 이벤트의 y 좌표
+ * @param rectF 바운딩 박스
  */
-class BoxHandler(box: Box, touchX: Float, touchY: Float) {
-    /** 상단 왼쪽 좌표 first:x, second:y*/
-    private val boxPointTL = Pair(0F, 0F)
+class BoxHandler(rectF: RectF, private val radius: Int) {
 
-    /** 상단 오른쪽 좌표 */
-    private val boxPointTR = Pair(0F, 0F)
-
-    /** 하단 왼쪽 좌표 */
-    private var pointBL = Pair(0F, 0F)
-
-    /** 상단 오른쪽 좌표 */
-    private var pointBR = Pair(0F, 0F)
-
-
-
+    enum class Type {
+        DRAG
+        , ADJUST_LEFT
+        , ADJUST_TOP
+        , ADJUST_RIGHT
+        , ADJUST_BOTTOM
+        , ADJUST_TL
+        , ADJUST_TR
+        , ADJUST_BR
+        , ADJUST_BL
+    }
 }
