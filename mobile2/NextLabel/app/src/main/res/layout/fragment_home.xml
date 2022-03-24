@@ -6,29 +6,29 @@
 
     <TextView
         android:id="@+id/txt_home"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="프로젝트 설명을 여기에 표현할 것입니다."
-        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:gravity="center"
+        android:text="Project Description"
+        android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_labeling"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/area_bottom_nav"/>
 
-    <Button
-        android:id="@+id/btn_labeling"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/area_bottom_nav"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_corner_all"
-        android:text="기여하기"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="25dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp" />
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/bottom_navigation_menu" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
