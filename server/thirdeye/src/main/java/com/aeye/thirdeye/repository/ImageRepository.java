@@ -5,6 +5,7 @@ import com.aeye.thirdeye.entity.Image;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,4 +24,8 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
             "from Image i group by i.user_id ) ranked WHERE ranked.user_id = :userId"
             , nativeQuery = true)
     Optional<Integer> getRank(@Param("userId") Long userid);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("delete from Image i where i.user.id = :id")
+    void deleteAllByUser(@Param("id") Long id);
 }

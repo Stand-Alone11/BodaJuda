@@ -1,6 +1,7 @@
 package com.aeye.thirdeye.service;
 
 import com.aeye.thirdeye.dto.LeaderBoardDto;
+import com.aeye.thirdeye.dto.request.ChangeUserInfoRequest;
 import com.aeye.thirdeye.dto.response.ProfileResponseDto;
 import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.repository.ImageRepository;
@@ -50,7 +51,7 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long id) {
-
+        imageRepository.deleteAllByUser(id);
         userRepository.deleteById(id);
     }
 
@@ -61,11 +62,11 @@ public class UserService {
         }
     }
 
-    public GoogleIdToken.Payload testestset(String idTokenString) throws IOException, GeneralSecurityException {
+    public GoogleIdToken.Payload googleLogin(String idTokenString) throws IOException, GeneralSecurityException {
 
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 // Specify the CLIENT_ID of the app that accesses the backend:
-                .setAudience(Collections.singletonList("81325643619-fdkkdvqs02u0cuj8hmij4gc7pqu6livj.apps.googleusercontent.com"))
+                .setAudience(Collections.singletonList("81325643619-id2cv0v6ulnggm10an4r8s1a6sudrh0k.apps.googleusercontent.com"))
                 // Or, if multiple clients access the backend:
                 //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
                 .build();
@@ -140,4 +141,19 @@ public class UserService {
         return leaderBoardDtos;
     }
 
+    public void updatePassword(Long id, String password){
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null) return;
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+
+    public void updateUserInfo(Long id, String nickName, String email) {
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null) return;
+        user.setNickName(nickName);
+        user.setEmail(email);
+        userRepository.save(user);
+    }
 }

@@ -8,31 +8,27 @@ import com.aeye.thirdeye.exception.OAuthProviderMissMatchException;
 import com.aeye.thirdeye.info.OAuth2UserInfo;
 import com.aeye.thirdeye.info.OAuth2UserInfoFactory;
 import com.aeye.thirdeye.repository.UserRepository;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+public class CustomGoogleUserService {
 
     private final UserRepository userRepository;
 
-
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User user = super.loadUser(userRequest);
+    public User loadUser(GoogleIdToken.Payload payload) throws OAuth2AuthenticationException {
 
         try {
-            return this.process(userRequest, user);
+            return this.process(payload);
         } catch (AuthenticationException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -41,11 +37,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
     }
 
-    private OAuth2User process(OAuth2UserRequest userRequest, OAuth2User user) {
-        ProviderType providerType = ProviderType.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
+    private User process(GoogleIdToken.Payload payload) {
+        ProviderType providerType = ProviderType.valueOf("GOOGLE");
 
-        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
-        User savedUser = userRepository.findByUserId(userInfo.getId());
+        User savedUser = userRepository.findByUUID(payload.getSubject());
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {
@@ -54,39 +49,41 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                                 " account. Please use your " + savedUser.getProviderType() + " account to login."
                 );
             }
-            updateUser(savedUser, userInfo);
+            updateUser(savedUser, payload);
         } else {
-            savedUser = createUser(userInfo, providerType);
+            savedUser = createUser(payload, providerType);
         }
 
-        return UserPrincipal.create(savedUser, user.getAttributes());
+        return savedUser;
     }
 
-    private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
+    private User createUser(GoogleIdToken.Payload payload, ProviderType providerType) {
         LocalDateTime now = LocalDateTime.now();
+        String profileImg = (String)(payload.get("picture"));
         User user = new User(
-                userInfo.getEmail(),
-                userInfo.getName(),
-                userInfo.getEmail(),
-                userInfo.getImageUrl(),
+                payload.getEmail(),
+                (String)payload.get("name"),
+                payload.getEmail(),
+                (String)payload.get("picture"),
                 providerType,
                 RoleType.USER,
                 now,
                 now,
-                "zzzz"
+                payload.getSubject()
         );
-        // 프로필 이미지 쓰면 추가
-//        if(user.getProfileImage() == null || user.getProfileImage().trim() == ""){
-//            int randNum = (int)(Math.random()*20) + 1;
-//            user.setProfileImage("#" + randNum);
-//        }
+
+        if(payload.get("picture") == null || profileImg.trim().equals("")){
+           // $$$Default profile Img 추가
+        }
+
         return userRepository.saveAndFlush(user);
     }
 
-    private User updateUser(User user, OAuth2UserInfo userInfo) {
-        if (userInfo.getName() != null && !user.getUsername().equals(userInfo.getName())) {
-            user.setNickName(userInfo.getName());
-        }
+    // 필요한가??
+    private User updateUser(User user, GoogleIdToken.Payload payload) {
+//        if (userInfo.getName() != null && !user.getUsername().equals(userInfo.getName())) {
+//            user.setNickName(userInfo.getName());
+//        }
 //
 //        if (userInfo.getImageUrl() != null && !user.getProfileImage().equals(userInfo.getImageUrl())) {
 //            user.setProfileImage(userInfo.getImageUrl());
