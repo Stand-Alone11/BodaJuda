@@ -149,11 +149,12 @@ public class UserService {
     }
 
 
-    public void updateUserInfo(Long id, String nickName, String email) {
+    public void updateUserInfo(Long id, String nickName, String email, String profileImage) {
         User user = userRepository.findById(id).orElse(null);
         if(user == null) return;
         user.setNickName(nickName);
         user.setEmail(email);
+        user.setProfileImage(profileImage);
         userRepository.save(user);
     }
 }

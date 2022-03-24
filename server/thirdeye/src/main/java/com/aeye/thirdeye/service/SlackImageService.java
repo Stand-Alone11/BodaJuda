@@ -5,10 +5,7 @@ import com.aeye.thirdeye.entity.Image;
 import com.aeye.thirdeye.repository.ImageRepository;
 import com.slack.api.Slack;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
-import com.slack.api.model.ModelConfigurator;
-import com.slack.api.model.block.ImageBlock;
 import com.slack.api.model.block.LayoutBlock;
-import com.slack.api.model.block.composition.OptionObject;
 import com.slack.api.util.json.GsonFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
