@@ -14,6 +14,14 @@ import android.view.View
 class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0, private val radius: Int = 24): View(context, attributeSet, defStyleAttr) {
     private val TAG = "BoxOverlayView_debuk"
 
+    /** 부모를 기준으로한 한계 좌표 */
+    private var leftLimit = 0
+    private var topLimit = 0
+    private var rightLimit = 0
+    private var bottomLimit = 0
+
+
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return if (isEnabled) {
             when (event!!.action) {
@@ -48,6 +56,14 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
 
     private fun onActionMove(eventX: Float, eventY: Float) {
 
+    }
+
+    /** 부모를 기준으로 한 한계좌표 set */
+    fun setLimits(left: Int, top: Int, right: Int ,bottom: Int) {
+        leftLimit = left
+        topLimit = top
+        rightLimit = right
+        bottomLimit = bottom
     }
 
     /** dp to pixel */
