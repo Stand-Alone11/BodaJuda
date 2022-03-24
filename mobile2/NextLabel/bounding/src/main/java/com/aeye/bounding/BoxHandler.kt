@@ -11,6 +11,19 @@ import android.graphics.RectF
  */
 class BoxHandler(rectF: RectF, private val radius: Int) {
 
+    /** mRect는 항상 최신 Rect로 유지 */
+    private var mRect = rectF
+
+    /** BoxOverlayView의 좌표를 기준으로한 touch event 좌표*/
+    private var mTouchX = -1f
+    private var mTouchY = -1f
+
+    /** mRect의 한계 좌표 */
+    private var mLeftLimit: Int = -1
+    private var mTopLimit: Int = -1
+    private var mRightLimit: Int = -1
+    private var mBottomLimit: Int = -1
+
     enum class Type {
         DRAG
         , ADJUST_LEFT
