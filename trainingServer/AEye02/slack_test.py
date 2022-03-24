@@ -1,4 +1,9 @@
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+import os
 from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 class SlackAPI:
     """
@@ -50,8 +55,10 @@ class SlackAPI:
         )
         return result
 
-token = "xoxb-3304749042240-3295636403457-PND6zGxAgmSk7NhoQYSnINeF"
-slack = SlackAPI(token)
+
+TOKEN = "xoxb-3304749042240-3295636403457-PND6zGxAgmSk7NhoQYSnINeF"
+slack = SlackAPI(TOKEN)
+
 
 channel_name = "sw-report"
 query = "동작 확인"
@@ -59,8 +66,45 @@ text = "자동 생성 문구 테스트"
 
 # 채널ID 파싱
 channel_id = slack.get_channel_id(channel_name)
-print(channel_id)
+# print(channel_id)
 # 메세지ts 파싱
-message_ts = slack.get_message_ts(channel_id, query)
+# message_ts = slack.get_message_ts(channel_id, query)
 # 댓글 달기
-slack.post_thread_message(channel_id, message_ts, text)
+# slack.post_thread_message(channel_id, message_ts, text)
+
+
+client = WebClient(TOKEN)
+client.chat_postMessage(
+    channel=channel_id,
+    blocks=[
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Danny Torrence left the following review for your property:"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "<https://example.com|Overlook Hotel> \n :star: \n Doors had too many axe holes, guest in room " +
+                    "237 was far too rowdy, whole place felt stuck in the 1920s."
+            },
+            "accessory": {
+                "type": "image",
+                "image_url": "https://images.pexels.com/photos/750319/pexels-photo-750319.jpeg",
+                "alt_text": "Haunted hotel image"
+            }
+        },
+        {
+            "type": "section",
+            "fields": [
+                {
+                    "type": "mrkdwn",
+                    "text": "*Average Rating*\n1.0"
+                }
+            ]
+        }
+    ]
+)
