@@ -10,14 +10,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/imageView_labelF"
+            <com.aeye.bounding.BoxImageView
+                android:id="@+id/boxImageView_labelF"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_labelF_name"
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:hint="상품명"
                 app:layout_constraintBottom_toTopOf="@+id/textInputLayout_labelF_manufacturer"
-                app:layout_constraintTop_toBottomOf="@+id/imageView_labelF"
+                app:layout_constraintTop_toBottomOf="@id/boxImageView_labelF"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="@dimen/margin_default"
