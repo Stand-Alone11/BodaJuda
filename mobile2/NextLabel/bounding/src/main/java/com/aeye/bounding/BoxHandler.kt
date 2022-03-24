@@ -24,6 +24,14 @@ class BoxHandler(rectF: RectF, private val radius: Int) {
     private var mRightLimit: Int = -1
     private var mBottomLimit: Int = -1
 
+    /** 한계좌표 설정 */
+    fun setLimit(leftLimit: Int, topLimit: Int, rightLimit: Int, bottomLimit: Int) {
+        mLeftLimit = leftLimit
+        mTopLimit = topLimit
+        mRightLimit = rightLimit
+        mBottomLimit = bottomLimit
+    }
+
     enum class Type {
         DRAG
         , ADJUST_LEFT
