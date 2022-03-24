@@ -1,11 +1,17 @@
 package com.aeye.nextlabel.feature.user
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.aeye.nextlabel.databinding.ActivityProfileBinding
+import com.aeye.nextlabel.feature.common.BaseActivity
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : BaseActivity<ActivityProfileBinding>(ActivityProfileBinding::inflate) {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        init()
+    }
+
+    private fun init() {
+
     }
 }
