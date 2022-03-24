@@ -1,11 +1,17 @@
 package com.aeye.nextlabel.feature.community
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.aeye.nextlabel.databinding.ActivityLoginBinding
+import com.aeye.nextlabel.feature.common.BaseActivity
 
-class LeaderboardActivity : AppCompatActivity() {
+class LeaderboardActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate) {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_leaderboard)
+        init()
+    }
+
+    private fun init() {
+
     }
 }
