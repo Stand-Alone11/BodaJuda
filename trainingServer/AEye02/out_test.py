@@ -101,7 +101,7 @@ for i in range(4):
    print()
 
 plt.figure(figsize=(10, 8))
-sns.heatmap(confuse_matrix, xticklabels=test_data.index_to_label, yticklabels=test_data.index_to_label, 
+sns.heatmap(confuse_matrix, xticklabels=range(datatype_len), yticklabels=range(datatype_len), 
           annot=True, fmt='g')
 plt.xlabel('Prediction')
 plt.ylabel('Label')
