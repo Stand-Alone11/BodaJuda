@@ -63,7 +63,7 @@ public class ImageAPIController {
 
         String token = request.getHeader("Authorization");
 
-        if(!jwtTokenProvider.validateToken(token)){
+        if(token != null && !jwtTokenProvider.validateToken(token)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalidate Token");
         }
 

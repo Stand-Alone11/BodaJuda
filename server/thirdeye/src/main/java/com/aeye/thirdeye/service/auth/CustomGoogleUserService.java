@@ -3,18 +3,13 @@ package com.aeye.thirdeye.service.auth;
 import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.entity.auth.ProviderType;
 import com.aeye.thirdeye.entity.auth.RoleType;
-import com.aeye.thirdeye.entity.auth.UserPrincipal;
 import com.aeye.thirdeye.exception.OAuthProviderMissMatchException;
-import com.aeye.thirdeye.info.OAuth2UserInfo;
-import com.aeye.thirdeye.info.OAuth2UserInfoFactory;
 import com.aeye.thirdeye.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

@@ -6,4 +6,5 @@ import lombok.Data;
 public class ChangeUserInfoRequest {
     private String nickName;
     private String email;
+    private String profileImage
 }

@@ -15,7 +15,6 @@ import com.aeye.thirdeye.service.UserService;
 import com.aeye.thirdeye.service.auth.CustomGoogleUserService;
 import com.aeye.thirdeye.token.JwtTokenProvider;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,12 +23,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.Response;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,16 +33,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -94,6 +85,7 @@ public class UserApiController {
         user.setCreatedAt(LocalDateTime.now());
         user.setModifiedAt(LocalDateTime.now());
         user.setRoleType(RoleType.USER);
+        user.setProfileImage(request.getProfileImage());
 
         try {
             Long id = userService.join(user);
@@ -119,7 +111,7 @@ public class UserApiController {
 //        @Length(min=3, max=128, message = "비밀번호 길이 불일치")
         private String password;
         @Size(max = 64) String userId;
-//        @Size(max = 512) String profileImageUrl;
+        @Size(max = 512) String profileImage;
 //        ProviderType providerType;
 //        RoleType roleType;
         LocalDateTime createdAt;
@@ -283,7 +275,7 @@ public class UserApiController {
     @PostMapping("/acoounts/update/userinfo")
     @ApiOperation(value = "회원 정보 변경", notes = "")
     public ResponseEntity<?> changeUserInfo(@ApiParam(value = "jwt 토큰")@RequestHeader(value = "Authorization") String token,
-                                            @ApiParam(value = "email, Nickname") @RequestBody ChangeUserInfoRequest changeUserInfoRequest) {
+                                            @RequestBody ChangeUserInfoRequest changeUserInfoRequest) {
         if (!jwtTokenProvider.validateToken(token)) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -291,10 +283,11 @@ public class UserApiController {
         }
         else{
             Long id = jwtTokenProvider.getId(token);
-            if(changeUserInfoRequest == null || changeUserInfoRequest.getEmail() == null || changeUserInfoRequest.getNickName() == null){
+            if(changeUserInfoRequest == null || changeUserInfoRequest.getEmail() == null ||
+                    changeUserInfoRequest.getNickName() == null || changeUserInfoRequest.getProfileImage() == null){
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Content is null");
             }
-            userService.updateUserInfo(id, changeUserInfoRequest.getNickName(), changeUserInfoRequest.getEmail());
+            userService.updateUserInfo(id, changeUserInfoRequest.getNickName(), changeUserInfoRequest.getEmail(),changeUserInfoRequest.getProfileImage());
         }
 
 
