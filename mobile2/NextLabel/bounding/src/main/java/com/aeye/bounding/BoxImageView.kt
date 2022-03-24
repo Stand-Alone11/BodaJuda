@@ -23,15 +23,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var exif: ExifInterface? = null
 
     /** image height */
-    var length: Int? = null
+    var imageLength: Int? = null
 
     /** image width */
-    var width: Int? = null
+    var imageWidth: Int? = null
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private val v: View = inflater.inflate(R.layout.box_image_view, this, true)
     private var imageView: ImageView = v.findViewById(R.id.imageView_bound)
-
+    private var mBoxOverlayView: BoxOverlayView = v.findViewById(R.id.boxOverlayView)
 
     private fun getExif(uri: Uri): ExifInterface? {
         return try {
@@ -46,9 +46,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     fun setImage(uri: Uri) {
         imageView.setImageURI(uri)
         exif = getExif(uri)
-        length = exif?.getAttribute(ExifInterface.TAG_IMAGE_LENGTH)?.toInt()
-        width = exif?.getAttribute(ExifInterface.TAG_IMAGE_WIDTH)?.toInt()
-        Log.d(TAG, "setImage: width $width length $length")
+        imageLength = exif?.getAttribute(ExifInterface.TAG_IMAGE_LENGTH)?.toInt()
+        imageWidth = exif?.getAttribute(ExifInterface.TAG_IMAGE_WIDTH)?.toInt()
+        Log.d(TAG, "setImage: width $imageWidth length $imageLength")
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        Log.d(TAG, "onLayout: $left, $top, $right, $bottom")
+
+        mBoxOverlayView.setLimits(left, top, right, bottom)
     }
 
 
