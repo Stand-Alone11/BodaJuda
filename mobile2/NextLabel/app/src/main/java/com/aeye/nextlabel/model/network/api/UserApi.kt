@@ -4,9 +4,12 @@ import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.model.network.response.JoinResponse
 import com.aeye.nextlabel.model.network.response.LoginResponse
+import com.aeye.nextlabel.model.network.response.ProfileResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface UserApi {
     // 1. Sign Up
@@ -25,4 +28,7 @@ interface UserApi {
 
     // 6. 비밀번호 수정
 
+    // 7. 프로필
+    @GET("/accounts/info/")
+    suspend fun getProfile(@Query("id") id: Int): Response<ProfileResponse>
 }

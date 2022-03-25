@@ -11,6 +11,7 @@ import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.util.InputValidUtil
 
 class JoinActivity : BaseActivity<ActivityJoinBinding>(ActivityJoinBinding::inflate) {
+
     val userViewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

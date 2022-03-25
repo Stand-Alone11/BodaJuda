@@ -9,6 +9,7 @@ import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.repository.UserRepository
 import com.aeye.nextlabel.model.network.response.JoinResponse
 import com.aeye.nextlabel.model.network.response.LoginResponse
+import com.aeye.nextlabel.model.network.response.ProfileResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ class UserViewModel: ViewModel() {
 
     val joinRequestLiveData = MutableLiveData<Resource<JoinResponse?>>()
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse>>()
+    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
 
     fun join(user: UserForJoin) = viewModelScope.launch {
         joinRequestLiveData.postValue(Resource.loading(null))
@@ -30,6 +32,13 @@ class UserViewModel: ViewModel() {
         loginRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             loginRequestLiveData.postValue(userRepository.login(user))
+        }
+    }
+
+    fun getProfile(userId: Int) = viewModelScope.launch {
+        profileRequestLiveData.postValue(Resource.loading(null))
+        CoroutineScope(Dispatchers.IO).launch {
+            profileRequestLiveData.postValue(userRepository.getProfile(userId))
         }
     }
 }
