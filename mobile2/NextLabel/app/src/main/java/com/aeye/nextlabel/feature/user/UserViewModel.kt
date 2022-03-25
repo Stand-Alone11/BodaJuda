@@ -12,7 +12,6 @@ import com.aeye.nextlabel.model.network.response.LoginResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class UserViewModel: ViewModel() {
     val userRepository = UserRepository()
@@ -20,24 +19,17 @@ class UserViewModel: ViewModel() {
     val joinRequestLiveData = MutableLiveData<Resource<JoinResponse?>>()
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse>>()
 
-    fun join(user: UserForJoin) = CoroutineScope(Dispatchers.Main).launch {
+    fun join(user: UserForJoin) = viewModelScope.launch {
         joinRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             joinRequestLiveData.postValue(userRepository.join(user))
         }
     }
 
-    fun login(user: UserForLogin) = CoroutineScope(Dispatchers.Main).launch {
+    fun login(user: UserForLogin) = viewModelScope.launch {
         loginRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             loginRequestLiveData.postValue(userRepository.login(user))
         }
     }
-
-//    fun emailLogin(user: UserForLogin) = viewModelScope.launch {
-//        _loginRequestLiveData.postValue(Resource.loading(null))
-//        withContext(Dispatchers.IO) {
-//            _loginRequestLiveData.postValue(userRepository.emailLogin(user))
-//        }
-//    }
 }
