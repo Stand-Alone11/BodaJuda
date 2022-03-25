@@ -92,7 +92,7 @@ public class UserApiController {
         user.setCreatedAt(LocalDateTime.now());
         user.setModifiedAt(LocalDateTime.now());
         user.setRoleType(RoleType.USER);
-        user.setProfileImage(request.getProfileImage());
+        user.setProfileImage("/default/default_profile.png");
 
         try {
             Long id = userService.join(user);
@@ -118,7 +118,7 @@ public class UserApiController {
 //        @Length(min=3, max=128, message = "비밀번호 길이 불일치")
         private String password;
         @Size(max = 64) String userId;
-        @Size(max = 512) String profileImage;
+//        @Size(max = 512) String profileImage;
 //        ProviderType providerType;
 //        RoleType roleType;
         LocalDateTime createdAt;
