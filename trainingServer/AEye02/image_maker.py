@@ -16,9 +16,13 @@ def createFolder(directory):
         print ('Error: Creating directory. ' +  directory)
 
 def image_maker(path):
+   list = dict()
+   a = 0
    for i in os.listdir(path):
       print(path+'/'+i +" 경로 이미지 전처리 중...")
-      for j in os.listdir(path+'/'+i)[1:15]:
+      list[a] = i
+      a += 1
+      for j in os.listdir(path+'/'+i):
          # 이미지 값 /255 로 정규화...? 여기서 하면 이미지파일 생성 단계에서 문제가 발생한다. 학습시키기 전에 정규화를 거치자!!!
          image = cv2.imdecode(np.fromfile(path+'/'+i+'/'+j, dtype=np.uint8), cv2.IMREAD_COLOR)
          
@@ -40,10 +44,12 @@ def image_maker(path):
          createFolder(path + '_rota/'+i)
 
          for degree in range(0,361,4):
+            new_img_name = path + '_rota/' + i +'/rota'+str(degree)+'_'+j
+            if os.path.isfile(new_img_name):
+               continue
             matrix = cv2.getRotationMatrix2D((h/2,w/2), degree, 1)
             rota_image = cv2.warpAffine(image, matrix, (h, w))
             rota_image = cv2.resize(rota_image,[224,224])
-            new_img_name = path + '_rota/' + i +'/rota'+str(degree)+'_'+j
             extension = os.path.splitext(new_img_name)[1]
             result, encoded_img = cv2.imencode(extension, rota_image)
             if result:
@@ -51,3 +57,4 @@ def image_maker(path):
                   encoded_img.tofile(f)
                   
          os.remove(path+'/'+i+'/'+j)
+   return list

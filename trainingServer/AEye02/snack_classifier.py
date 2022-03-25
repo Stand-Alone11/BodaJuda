@@ -12,6 +12,7 @@ from tflite_model_maker.config import QuantizationConfig
 from tflite_model_maker.image_classifier import DataLoader
 import matplotlib.pyplot as plt
 import pathlib
+import seaborn as sns
 
 # GPU 사용 여부 확인
 # from tensorflow.python.client import device_lib
@@ -23,6 +24,7 @@ import pathlib
 
 
 def snack_model_maker(model_name, image_path, model_path, key_path, key_name):
+    # 학습 이미지 가져오기
     image_path = pathlib.Path(image_path)
     data = DataLoader.from_folder(image_path)
 
@@ -32,7 +34,7 @@ def snack_model_maker(model_name, image_path, model_path, key_path, key_name):
     # https://www.tensorflow.org/lite/api_docs/python/tflite_model_maker/image_classifier/create 파라미터
     # model = image_classifier.create(train_data, validation_data=validation_data, epochs=10, dropout_rate=0.2, batch_size=1024, learning_rate = 0.001)
     model = image_classifier.create(train_data, validation_data=validation_data, epochs=10)
-    model.summary()
+    # model.summary()
     loss, accuracy = model.evaluate(test_data)
     print("loss, accuracy")
     print(f"loss : {loss:.4f}")
@@ -42,6 +44,66 @@ def snack_model_maker(model_name, image_path, model_path, key_path, key_name):
     # model.evaluate_tflite('./model/'+model_name+'_n.tflite', test_data)
 
 
+
+    # 학습 성능 지표
+    label_idx = dict()
+    for i, name in enumerate(test_data.index_to_label):
+        label_idx[name] = i
+
+    datatype_len = len(test_data.index_to_label)
+    predicts = model.predict_top_k(test_data, k=datatype_len)
+
+    confuse_matrix_cnt = [[0]*datatype_len for i in range(datatype_len)]
+    confuse_matrix_acc = [[0.0]*datatype_len for i in range(datatype_len)]
+    confuse_matrix_acc_all = [[0.0]*datatype_len for i in range(datatype_len)]
+    for i, (image, label) in enumerate(test_data.gen_dataset().unbatch().take(-1)):
+        predict_label = label_idx[predicts[i][0][0]]
+        target_label = label.numpy()
+        confuse_matrix_cnt[target_label][predict_label] += 1
+        confuse_matrix_acc[target_label][predict_label] += predicts[i][0][1]
+        for j in predicts[i]:
+            idx = label_idx[j[0]]
+            confuse_matrix_acc_all[target_label][idx] += j[1]
+
+    for i in range(datatype_len):
+        sumCnt = 0
+        for j in range(datatype_len):
+            sumCnt += confuse_matrix_cnt[i][j]
+
+        for j in range(datatype_len):
+            if confuse_matrix_cnt[i][j] != 0:
+                confuse_matrix_acc[i][j] = round( confuse_matrix_acc[i][j]/confuse_matrix_cnt[i][j],2)
+            confuse_matrix_cnt[i][j] = round( confuse_matrix_cnt[i][j]/sumCnt,2)
+            confuse_matrix_acc_all[i][j] = round( confuse_matrix_acc_all[i][j]/sumCnt,2)
+
+    plt.figure(figsize=(16,8))
+    sns.heatmap(confuse_matrix_cnt, xticklabels=range(datatype_len), yticklabels=range(datatype_len), 
+            annot=True, fmt='g')
+    plt.title('Classification Probability')
+    plt.xlabel('Prediction')
+    plt.ylabel('Target')
+    plt.savefig('./Classification_Probability.png',dpi = 300)
+
+    plt.figure(figsize=(16,8))
+    sns.heatmap(confuse_matrix_acc, xticklabels=range(datatype_len), yticklabels=range(datatype_len), 
+            annot=True, fmt='g')
+    plt.title('Classification Confidence Mean')
+    plt.xlabel('Prediction')
+    plt.ylabel('Target')
+    plt.savefig('./Classification_Confidence_Mean.png',dpi = 300)
+
+    plt.figure(figsize=(16,8))
+    sns.heatmap(confuse_matrix_acc_all, xticklabels=range(datatype_len), yticklabels=range(datatype_len), 
+            annot=True, fmt='g')
+    plt.title('Classification Confidence Mean')
+    plt.xlabel('Prediction')
+    plt.ylabel('Target')
+    plt.savefig('./Classification_Confidence_Mean_All.png',dpi = 300)
+
+
+
+
+    # Firebase upload
     config = QuantizationConfig.for_float16()
     model.export(export_dir=model_path, tflite_filename=(model_name+'_f16.tflite'), quantization_config=config)
     model.evaluate_tflite(model_path+'/'+model_name+'_f16.tflite', test_data)

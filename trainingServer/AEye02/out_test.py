@@ -15,8 +15,9 @@ from tflite_model_maker.config import QuantizationConfig
 from tflite_model_maker.image_classifier import DataLoader
 import matplotlib.pyplot as plt
 import pathlib
+from image_maker import image_maker
 
-ORIGIN_IMAGE_PATH = '/home/team1/AEye/data/image/snack_4'
+ORIGIN_IMAGE_PATH = '/home/team1/AEye/data/image/snack_20+5'
 INPUT_IMAGE_PATH = ORIGIN_IMAGE_PATH + '_rota'
 
 image_path = pathlib.Path(INPUT_IMAGE_PATH)
@@ -38,72 +39,71 @@ validation_data, test_data = rest_data.split(0.5)
 # dataset, we will highlight it in red color.
 
 # plt.figure(figsize=(20, 20))
-model = image_classifier.create(train_data, validation_data=validation_data, epochs=5)
-predicts = model.predict_top_k(test_data)
-# for i, (image, label) in enumerate(test_data.gen_dataset().unbatch().take(100)):
-#   ax = plt.subplot(10, 10, i+1)
-#   plt.xticks([])
-#   plt.yticks([])
-#   plt.grid(False)
-#   plt.imshow(image.numpy(), cmap=plt.cm.gray)
-
-#   predict_label = predicts[i][0][0]
-#   color = get_label_color(predict_label,
-#                           test_data.index_to_label[label.numpy()])
-#   ax.xaxis.label.set_color(color)
-#   plt.xlabel('Predicted: %s' % predict_label)
-#   if (i+1)%10 == 0:
-#     print(f'{label.numpy():>2d} ')
-#   else:
-#     print(f'{label.numpy():>2d} ' , end = '')
-# plt.show()
-
-datatype_len = len(test_data.index_to_label)
-
-confuse_matrix = [[0]*datatype_len for i in range(datatype_len)]
-
-# for i in predicts[0:10]:
-#    for j in i:
-#       for k in j:
-#          print(f'{k} ' , end = '')
-#       print()
-
-# for i, (image, label) in enumerate(test_data.gen_dataset().unbatch().take(2)):
-#   predict_label = predicts[i][0][0] # str
-#   for j in predicts[i][0]:
-#    print(j)
+list = image_maker('/home/team1/AEye/data/image/snack_4')
+for idx, value in enumerate(list):
+   print(value)
+   print(list[idx])
 
 
-def findidx(label):
-   idx = -1
-   for i, v in enumerate(test_data.index_to_label):
-      if(label==v):
-         idx = i
-   return idx
+
+# model = image_classifier.create(train_data, validation_data=validation_data, epochs=1)
 
 
-for i, (image, label) in enumerate(test_data.gen_dataset().unbatch().take(-1)):
-  predict_label = findidx(predicts[i][0][0]) # str
-#   target_label = test_data.index_to_label[label.numpy()] # str
-  target_label = label.numpy()
-#   print(f'type : {type(predict_label)}')
-#   print(f'type : {type(target_label)}')
-#   print(f'content : {(predict_label)}')
-#   print(f'content : {(target_label)}')
-  confuse_matrix[int(predict_label)][target_label] += 1
+# label_idx = dict()
+# idx_cnt = 0
+# for i, name in enumerate(test_data.index_to_label):
+#    label_idx[name] = i
 
-  
-# print(confuse_matrix)
 
-for i in range(4):
-   for j in range(4):
-      print(f'{confuse_matrix[i][j]:>3d} ', end ='')
-   print()
+# datatype_len = len(test_data.index_to_label)
+# predicts = model.predict_top_k(test_data, k=datatype_len)
 
-plt.figure(figsize=(10, 8))
-sns.heatmap(confuse_matrix, xticklabels=range(datatype_len), yticklabels=range(datatype_len), 
-          annot=True, fmt='g')
-plt.xlabel('Prediction')
-plt.ylabel('Label')
-plt.show()
+# confuse_matrix_cnt = [[0]*datatype_len for i in range(datatype_len)]
+# confuse_matrix_acc = [[0.0]*datatype_len for i in range(datatype_len)]
+# confuse_matrix_acc_all = [[0.0]*datatype_len for i in range(datatype_len)]
 
+
+# for i, (image, label) in enumerate(test_data.gen_dataset().unbatch().take(-1)):
+#   predict_label = label_idx[predicts[i][0][0]]
+#   target_label = label.numpy()
+#   confuse_matrix_cnt[target_label][predict_label] += 1
+#   confuse_matrix_acc[target_label][predict_label] += predicts[i][0][1]
+#   for j in predicts[i]:
+#      idx = label_idx[j[0]]
+#      confuse_matrix_acc_all[target_label][idx] += j[1]
+
+# for i in range(datatype_len):
+#    sumCnt = 0
+#    for j in range(datatype_len):
+#       sumCnt += confuse_matrix_cnt[i][j]
+
+#    for j in range(datatype_len):
+#       if confuse_matrix_cnt[i][j] != 0:
+#          confuse_matrix_acc[i][j] = round( confuse_matrix_acc[i][j]/confuse_matrix_cnt[i][j],2)
+#       confuse_matrix_cnt[i][j] = round( confuse_matrix_cnt[i][j]/sumCnt,2)
+#       confuse_matrix_acc_all[i][j] = round( confuse_matrix_acc_all[i][j]/sumCnt,2)
+      
+
+# plt.figure(figsize=(16,8))
+# sns.heatmap(confuse_matrix_cnt, xticklabels=range(datatype_len), yticklabels=range(datatype_len), 
+#           annot=True, fmt='g')
+# plt.title('Classification Probability')
+# plt.xlabel('Prediction')
+# plt.ylabel('Target')
+# plt.savefig('./Classification_Probability.png',dpi = 300)
+
+# plt.figure(figsize=(16,8))
+# sns.heatmap(confuse_matrix_acc, xticklabels=range(datatype_len), yticklabels=range(datatype_len), 
+#           annot=True, fmt='g')
+# plt.title('Classification Confidence Mean')
+# plt.xlabel('Prediction')
+# plt.ylabel('Target')
+# plt.savefig('./Classification_Confidence_Mean.png',dpi = 300)
+
+# plt.figure(figsize=(16,8))
+# sns.heatmap(confuse_matrix_acc_all, xticklabels=range(datatype_len), yticklabels=range(datatype_len), 
+#           annot=True, fmt='g')
+# plt.title('Classification Confidence Mean')
+# plt.xlabel('Prediction')
+# plt.ylabel('Target')
+# plt.savefig('./Classification_Confidence_Mean_All.png',dpi = 300)
