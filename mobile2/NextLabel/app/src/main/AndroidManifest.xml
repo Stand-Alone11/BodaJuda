@@ -23,9 +23,6 @@
             android:name=".feature.user.UpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".feature.user.ProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".feature.community.LeaderboardActivity"
             android:exported="false" />
         <activity
