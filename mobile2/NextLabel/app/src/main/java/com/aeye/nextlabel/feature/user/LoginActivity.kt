@@ -3,10 +3,12 @@ package com.aeye.nextlabel.feature.user
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.ActivityLoginBinding
 import com.aeye.nextlabel.feature.common.BaseActivity
 import com.aeye.nextlabel.feature.main.MainActivity
 import com.aeye.nextlabel.model.dto.UserForLogin
+import com.aeye.nextlabel.util.InputValidUtil
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate) {
 
@@ -29,6 +31,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         btnLogin.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+
+            if (checkInputForm()) {
+                login()
+            }
         }
     }
 
@@ -37,5 +43,25 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         val password = binding.password.text.toString()
 
         userViewModel.login(UserForLogin(userId, password))
+    }
+
+    private fun checkInputForm(): Boolean {
+        var result = 1
+        val userId = binding.userId.text.toString()
+        val password = binding.password.text.toString()
+
+        if(!InputValidUtil.isValidUserId(userId)) {
+            result *= 0
+            binding.userId.error = resources.getText(R.string.userIdErrorMessage)
+        }
+        if(!InputValidUtil.isValidPassword(password)) {
+            result *= 0
+            binding.password.error = resources.getText(R.string.passwordErrorMessage)
+        }
+
+        return when(result) {
+            1 -> true
+            else -> false
+        }
     }
 }
