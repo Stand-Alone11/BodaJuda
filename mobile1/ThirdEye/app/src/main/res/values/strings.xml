@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">ThirdEye</string>
+    <string name="app_name" translatable="false">Boda</string>
     <string name="ok" translatable="false">OK</string>
     <string name="permission_camera_rationale" translatable="false">Access to the camera is needed for detection</string>
     <string name="no_camera_permission" translatable="false">카메라 권한이 없기 때문에 이 앱은 실행할 수 없습니다. 앱이 종료됩니다.</string>
