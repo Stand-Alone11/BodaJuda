@@ -101,7 +101,6 @@ public class ImageService{
         imageRepository.save(nowImage);
     }
 
-    @Transactional
     public void rejectImage(int seq) throws Exception{
         Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
 
@@ -109,7 +108,6 @@ public class ImageService{
 
         if(curFile.exists()){
             curFile.delete();
-            System.out.println("파일 삭제");
         }
     }
 }

@@ -141,6 +141,7 @@ public class UserService {
         return leaderBoardDtos;
     }
 
+    @Transactional
     public void updatePassword(Long id, String password){
         User user = userRepository.findById(id).orElse(null);
         if(user == null) return;
@@ -148,14 +149,16 @@ public class UserService {
         userRepository.save(user);
     }
 
-
+    @Transactional
     public void updateUserInfo(Long id, String nickName, String email, String profileImage) {
         User user = userRepository.findById(id).orElse(null);
         if(user == null) return;
         user.setNickName(nickName);
         user.setEmail(email);
         user.setProfileImage(profileImage);
+
         userRepository.save(user);
+
     }
 
     public String getProfileImgUrl(Long id){
