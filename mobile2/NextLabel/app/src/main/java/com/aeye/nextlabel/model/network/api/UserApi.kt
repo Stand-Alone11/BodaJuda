@@ -4,6 +4,7 @@ import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.model.network.response.JoinResponse
 import com.aeye.nextlabel.model.network.response.LoginResponse
+import com.aeye.nextlabel.model.network.response.ProfileResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -29,5 +30,5 @@ interface UserApi {
 
     // 7. 프로필
     @GET("/accounts/info/")
-    suspend fun getProfile(@Query("id") id: Int): Response<LoginResponse>
+    suspend fun getProfile(@Query("id") id: Int): Response<ProfileResponse>
 }
