@@ -3,13 +3,11 @@ package com.aeye.nextlabel.model.network.api
 import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.model.network.response.JoinResponse
+import com.aeye.nextlabel.model.network.response.LeaveResponse
 import com.aeye.nextlabel.model.network.response.LoginResponse
 import com.aeye.nextlabel.model.network.response.ProfileResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface UserApi {
     // 1. Sign Up
@@ -17,6 +15,8 @@ interface UserApi {
     suspend fun join(@Body user: UserForJoin): Response<JoinResponse>
 
     // 2. Sign Out
+    @DELETE("/accounts/signout")
+    suspend fun signout(): Response<LeaveResponse>
 
     // 3. Log In (일반)
     @POST("/accounts/login")
