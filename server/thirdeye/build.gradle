@@ -89,6 +89,10 @@ dependencies {
 
 	implementation group: 'org.qlrm', name: 'qlrm', version: '3.0.4'
 
+	//GCP
+	implementation group: 'com.google.cloud', name: 'spring-cloud-gcp-starter', version: '3.0.0'
+	implementation group: 'com.google.cloud', name: 'spring-cloud-gcp-storage', version: '3.0.0'
+
 
 }
 

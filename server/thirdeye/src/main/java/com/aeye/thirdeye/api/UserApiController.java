@@ -11,6 +11,7 @@ import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.entity.auth.ProviderType;
 import com.aeye.thirdeye.entity.auth.RoleType;
 import com.aeye.thirdeye.repository.UserRepository;
+import com.aeye.thirdeye.service.FileService;
 import com.aeye.thirdeye.service.UserService;
 import com.aeye.thirdeye.service.auth.CustomGoogleUserService;
 import com.aeye.thirdeye.token.JwtTokenProvider;
@@ -26,16 +27,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.attribute.standard.Media;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -58,6 +63,8 @@ public class UserApiController {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final CustomGoogleUserService customGoogleUserService;
+
+    private final FileService fileService;
 
     /**
      * 회원 가입
@@ -272,23 +279,78 @@ public class UserApiController {
 
 
     // 회원 정보 변경
-    @PostMapping("/acoounts/update/userinfo")
+    @PostMapping("/accounts/update/userinfo")
     @ApiOperation(value = "회원 정보 변경", notes = "")
     public ResponseEntity<?> changeUserInfo(@ApiParam(value = "jwt 토큰")@RequestHeader(value = "Authorization") String token,
-                                            @RequestBody ChangeUserInfoRequest changeUserInfoRequest) {
+                                            @RequestPart(value = "image", required = false) MultipartFile file,
+                                            @RequestPart(value = "nickName", required = false) String nickName,
+                                            @RequestPart(value = "email", required = false) String email) {
         if (!jwtTokenProvider.validateToken(token)) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
         }
-        else{
-            Long id = jwtTokenProvider.getId(token);
-            if(changeUserInfoRequest == null || changeUserInfoRequest.getEmail() == null ||
-                    changeUserInfoRequest.getNickName() == null || changeUserInfoRequest.getProfileImage() == null){
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Content is null");
-            }
-            userService.updateUserInfo(id, changeUserInfoRequest.getNickName(), changeUserInfoRequest.getEmail(),changeUserInfoRequest.getProfileImage());
+
+
+        Long id = jwtTokenProvider.getId(token);
+        String image = userService.getProfileImgUrl(id);
+        if(nickName == null || email == null ||
+                nickName == null || file == null){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Content is null");
         }
+        if(file != null){
+            try {
+                image = fileService.imageUploadGCS(file, id);
+            } catch (IOException e) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse(messageSource
+                                .getMessage("error.wrong", null, LocaleContextHolder.getLocale())));
+            }
+        }
+        userService.updateUserInfo(id, nickName, email, image);
+
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    // 회원 정보 변경
+    @PostMapping(value = "/acoounts/update/test")
+    @ApiOperation(value = "회원 정보 변경", notes = "")
+    public ResponseEntity<?> test(@RequestParam(value = "id") Long id,
+                                            @RequestParam(value = "image", required = false) MultipartFile file,
+                                            @RequestParam(value = "nickName", required = false) String nickName,
+                                            @RequestParam(value = "email", required = false) String email) throws IOException{
+//        if (!jwtTokenProvider.validateToken(token)) {
+//            return ResponseEntity
+//                    .status(HttpStatus.BAD_REQUEST)
+//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
+//        }
+
+//        Long id = jwtTokenProvider.getId(token);
+
+        //utf-8 내용 적용해서 DB에 넣기
+//        email = URLDecoder.decode(email, "UTF-8");
+//        nickName = URLDecoder.decode(nickName, "UTF-8");
+
+        String image = userService.getProfileImgUrl(id);
+        if(nickName == null || email == null ||
+                nickName == null || file == null){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Content is null");
+        }
+        if(file != null){
+            try {
+                image = fileService.imageUploadGCS(file, id);
+            } catch (Exception e) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse(messageSource
+                                .getMessage("error.wrong", null, LocaleContextHolder.getLocale())));
+            }
+        }
+        userService.updateUserInfo(id, nickName, email, image);
+
 
 
         return ResponseEntity.status(HttpStatus.OK).body(null);

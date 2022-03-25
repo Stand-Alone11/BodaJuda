@@ -157,4 +157,9 @@ public class UserService {
         user.setProfileImage(profileImage);
         userRepository.save(user);
     }
+
+    public String getProfileImgUrl(Long id){
+        User user = userRepository.findById(id).orElse(null);
+        return user.getProfileImage();
+    }
 }

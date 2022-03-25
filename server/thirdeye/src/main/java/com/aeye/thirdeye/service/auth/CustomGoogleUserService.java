@@ -68,7 +68,7 @@ public class CustomGoogleUserService {
         );
 
         if(payload.get("picture") == null || profileImg.trim().equals("")){
-           // $$$Default profile Img 추가
+            user.setProfileImage("/default/deault_profile.png");
         }
 
         return userRepository.saveAndFlush(user);
