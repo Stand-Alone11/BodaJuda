@@ -38,3 +38,4 @@ out/
 
 ### Configuration File ###
 application.yml
+**/src/main/resources/*.json
