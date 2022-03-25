@@ -124,6 +124,8 @@ public class UserService {
             }
         }
         profileResponseDto.setRank(rank);
+        profileResponseDto.setProfileImgUrl(user.getProfileImage());
+
         return profileResponseDto;
     }
 

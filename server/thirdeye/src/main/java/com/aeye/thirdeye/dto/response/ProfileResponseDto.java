@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProfileResponseDto {
 
+    private String profileImgUrl;
     private String nickName;
     private String email;
 
