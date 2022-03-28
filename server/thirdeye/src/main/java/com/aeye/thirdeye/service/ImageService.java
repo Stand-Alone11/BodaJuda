@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -19,29 +22,63 @@ import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @Service
-public class ImageService{
+public class ImageService {
 
     private final ImageRepository imageRepository;
 
-    
+
     Gson gson = new Gson();
-    @Value("${spring.http.multipart.location}")
+    @Value("${spring.servlet.multipart.location}")
     private String absolutePath;
 
     @Transactional
-    public ImageDto insertImage(MultipartFile file, Image image, User user) throws Exception{
+    public ImageDto insertImage(MultipartFile file, Image image, User user) throws Exception {
+        BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
+        int width = bufferedImage.getWidth();
+        int height = bufferedImage.getHeight();
+        System.out.println(image.getL_X());
+        System.out.println(image.getL_Y());
+        System.out.println(image.getR_X());
+        System.out.println(image.getR_Y());
 
+        int xs = (int) (height * image.getL_X());
+        int xe = (int) (height * image.getR_X());
+        int ys = (int) (width * image.getL_Y());
+        int ye = (int) (width * image.getR_Y());
+
+        int xx = ys;
+        int yy = height - xe;
+        int h = xe - xs;
+        int w = ye - ys;
+
+        BufferedImage cropedImage = bufferedImage.getSubimage(xx, yy, w, h);
+        int nw = cropedImage.getWidth();
+        int nh = cropedImage.getHeight();
+        int nt = cropedImage.getType();
+
+        BufferedImage newImageFromBuffer = new BufferedImage(nh, nw, nt);
+        Graphics2D graphics2D = newImageFromBuffer.createGraphics();
+        graphics2D.rotate(Math.toRadians(90), nw/2, nh/2);
+        if(nw > nh)
+            graphics2D.drawImage(cropedImage, null,-(nh-nw)/2 , (nw-nh)/2);
+        else
+            graphics2D.drawImage(cropedImage, null,(nh-nw)/2 , -(nw-nh)/2);
+
+        System.out.println(width + ", " + height);
         Image savedImage = imageRepository.save(image);
         String fileName = Long.toString(savedImage.getId());
         File folder = new File(absolutePath + "tmpImgs");
 
-        if(!folder.exists()){
+        ImageIO.write(cropedImage, "jpg", new File(folder + File.separator + fileName + "_cropped.jpg"));
+        ImageIO.write(newImageFromBuffer, "jpg", new File(folder + File.separator + fileName + "_rotated.jpg"));
+
+        if (!folder.exists()) {
             folder.mkdirs();
             System.out.println("폴더 생성");
 //            folder.setReadable(true);
 //            folder.setWritable(true);
         }
-        
+
         File newFile = new File(folder + File.separator + fileName + ".jpg");
         file.transferTo(newFile);
 
@@ -53,7 +90,7 @@ public class ImageService{
     }
 
     @Transactional
-    public void approveImage(int seq) throws Exception{
+    public void approveImage(int seq) throws Exception {
         Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
 
         File curFile = new File(nowImage.getImage());
@@ -74,7 +111,7 @@ public class ImageService{
         nowImage.setImage(pathPrefix2 + pathSurfix + fileName + ".jpg");
 
         File folder = new File(pathPrefix + pathSurfix);
-        if(!folder.exists()){
+        if (!folder.exists()) {
             folder.mkdirs();
         }
 
@@ -83,11 +120,11 @@ public class ImageService{
         File jsonFile = new File(folder + File.separator + fileName + ".json");
         jsonFile.createNewFile();
         FileWriter fileWriter = new FileWriter(jsonFile);
-        gson.toJson(nowImage,fileWriter);
+        gson.toJson(nowImage, fileWriter);
         fileWriter.close();
 
         File folder2 = new File(pathPrefix2 + pathSurfix);
-        if(!folder2.exists()){
+        if (!folder2.exists()) {
             folder2.mkdirs();
         }
         File imgFile2 = new File(folder2 + File.separator + fileName + ".jpg");
@@ -101,12 +138,12 @@ public class ImageService{
         imageRepository.save(nowImage);
     }
 
-    public void rejectImage(int seq) throws Exception{
+    public void rejectImage(int seq) throws Exception {
         Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
 
         File curFile = new File(nowImage.getImage());
 
-        if(curFile.exists()){
+        if (curFile.exists()) {
             curFile.delete();
         }
     }
