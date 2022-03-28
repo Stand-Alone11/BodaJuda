@@ -1,11 +1,10 @@
 package com.aeye.nextlabel.model.network.api
 
+import com.aeye.nextlabel.model.dto.Password
 import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.model.dto.UserForLogin
-import com.aeye.nextlabel.model.network.response.JoinResponse
-import com.aeye.nextlabel.model.network.response.LeaveResponse
-import com.aeye.nextlabel.model.network.response.LoginResponse
-import com.aeye.nextlabel.model.network.response.ProfileResponse
+import com.aeye.nextlabel.model.dto.UserForUpdate
+import com.aeye.nextlabel.model.network.response.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -25,10 +24,14 @@ interface UserApi {
     // 4. Log In (소셜)
 
     // 5. 회원정보 수정(without password)
+    @POST("/accounts/update/userinfo")
+    suspend fun update(@Body user: UserForUpdate): Response<UpdateResponse>
 
     // 6. 비밀번호 수정
+    @POST("/accounts/update/password")
+    suspend fun updatePassword(@Body pasword: Password): Response<PasswordResponse>
 
     // 7. 프로필
-    @GET("/accounts/info/")
-    suspend fun getProfile(@Query("id") id: Int): Response<ProfileResponse>
+    @GET("/accounts/info/{id}")
+    suspend fun getProfile(@Path("id") id: Int): Response<ProfileResponse>
 }
