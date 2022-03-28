@@ -13,7 +13,7 @@ interface UserApi {
     @POST("/accounts/signup")
     suspend fun join(@Body user: UserForJoin): Response<JoinResponse>
 
-    // 2. Sign Out
+    // 2. Sign Out <- Postman으로 확인
     @DELETE("/accounts/signout")
     suspend fun signout(): Response<LeaveResponse>
 

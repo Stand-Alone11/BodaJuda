@@ -21,7 +21,7 @@ class UserViewModel: ViewModel() {
     val userRepository = UserRepository()
 
     val joinRequestLiveData = MutableLiveData<Resource<JoinResponse>>()
-//    val leaveRequestLiveData = MutableLiveData<Resource<LeaveResponse>>()
+    val leaveRequestLiveData = MutableLiveData<Resource<LeaveResponse>>()
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse>>()
 //    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
 
@@ -32,12 +32,12 @@ class UserViewModel: ViewModel() {
         }
     }
 
-//    fun signout() = viewModelScope.launch {
-//        leaveRequestLiveData.postValue(Resource.loading(null))
-//        CoroutineScope(Dispatchers.IO).launch {
-//            leaveRequestLiveData.postValue(userRepository.signout())
-//        }
-//    }
+    fun signout() = viewModelScope.launch {
+        leaveRequestLiveData.postValue(Resource.loading(null))
+        withContext(Dispatchers.IO) {
+            leaveRequestLiveData.postValue(userRepository.signout())
+        }
+    }
 
     fun login(user: UserForLogin) = viewModelScope.launch {
         loginRequestLiveData.postValue(Resource.loading(null))

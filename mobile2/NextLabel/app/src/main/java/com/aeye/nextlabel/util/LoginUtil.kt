@@ -2,11 +2,13 @@ package com.aeye.nextlabel.util
 
 import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.model.dto.UserInfo
+import java.util.*
 
 object LoginUtil {
-    val USER_ID = "userId"
-
+    private val USER_ID = "userId"
     private val preferences = ApplicationClass.sSharedPreferences
+
+
 
     fun signOut() {
         preferences.deleteString(ApplicationClass.JWT)
