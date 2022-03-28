@@ -89,6 +89,7 @@ public class ImageAPIController {
      */
     @RequestMapping(value = "/inspect/response", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @ApiOperation(value = "슬랙 응답 api", notes = "")
     public ResponseEntity<?> inspectResponse(@RequestParam String payload){
 
         BlockActionPayload blockActionPayload = slackImageService.makeResponseLayout(payload);

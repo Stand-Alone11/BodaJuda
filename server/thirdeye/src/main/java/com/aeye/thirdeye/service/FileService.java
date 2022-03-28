@@ -32,7 +32,7 @@ public class FileService {
     @SuppressWarnings("deprecation")
     public String imageUploadGCS (MultipartFile file, Long id) throws IOException {
         User user = userRepository.findById(id).orElse(null);
-        if(user == null){
+        if(user == null || file == null || file.getOriginalFilename() == null){
             throw new IOException("이미지 저장/변환 불가 : ");
         }
 
