@@ -39,7 +39,7 @@ public class ImageAPIController {
 
     private Gson gson = new Gson();
 
-    @Value("${spring.http.multipart.location}")
+    @Value("${spring.servlet.multipart.location}")
     private String absolutePath;
 
     @Value("${notification.slack.webhook.url}")
