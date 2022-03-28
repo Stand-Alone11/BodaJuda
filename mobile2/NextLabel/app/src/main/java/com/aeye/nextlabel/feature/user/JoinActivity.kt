@@ -29,11 +29,11 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(ActivityJoinBinding::infl
         }
 
         btnJoin.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-
             if (checkInputForm()) {
                 join()
+
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
         }
     }
@@ -41,15 +41,15 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(ActivityJoinBinding::infl
     private fun join() {
         val userId = binding.userId.text.toString()
         val password = binding.password.text.toString()
-        val passwordConfirmation = binding.passwordConfirmation.text.toString()
         val email = binding.email.text.toString()
         val nickname = binding.nickname.text.toString()
 
-        userViewModel.join(UserForJoin(userId, password, passwordConfirmation, email, nickname))
+        userViewModel.join(UserForJoin(userId, password, email, nickname))
     }
 
     private fun checkInputForm(): Boolean {
         var result = 1
+
         val userId = binding.userId.text.toString()
         val password = binding.password.text.toString()
         val passwordConfirmation = binding.passwordConfirmation.text.toString()
@@ -64,13 +64,9 @@ class JoinActivity : BaseActivity<ActivityJoinBinding>(ActivityJoinBinding::infl
             result *= 0
             binding.password.error = resources.getText(R.string.passwordErrorMessage)
         }
-        if(!InputValidUtil.isValidPassword(passwordConfirmation)) {
-            result *= 0
-            binding.password.error = resources.getText(R.string.passwordErrorMessage)
-        }
         if(password != passwordConfirmation) {
             result *= 0
-            binding.passwordConfirmation.error = resources.getText(R.string.passwordCheckErrorMessage)
+            binding.passwordConfirmation.error = resources.getText(R.string.passwordConfirmErrorMessage)
         }
         if(!InputValidUtil.isValidEmail(email)) {
             result *= 0

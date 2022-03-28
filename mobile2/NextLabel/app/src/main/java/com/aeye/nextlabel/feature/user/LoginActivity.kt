@@ -33,17 +33,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
             startActivity(intent)
 
             if (checkInputForm()) {
-                login()
+//                login()
             }
         }
     }
 
-    private fun login() {
-        val userId = binding.userId.text.toString()
-        val password = binding.password.text.toString()
-
-        userViewModel.login(UserForLogin(userId, password))
-    }
+//    private fun login() {
+//        val userId = binding.userId.text.toString()
+//        val password = binding.password.text.toString()
+//
+//        userViewModel.login(UserForLogin(userId, password))
+//    }
 
     private fun checkInputForm(): Boolean {
         var result = 1

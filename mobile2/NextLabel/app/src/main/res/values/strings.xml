@@ -6,8 +6,9 @@
     <!--  custom  -->
     <!-- 에러 메세지 -->
     <string name="userIdErrorMessage">올바르지 않은 아이디입니다.</string>
-    <string name="emailErrorMessage">올바르지 않은 이메일입니다.</string>
-    <string name="nicknameErrorMessage">올바르지 않은 이름입니다.</string>
     <string name="passwordErrorMessage">올바르지 않은 비밀번호입니다.</string>
-    <string name="passwordCheckErrorMessage">입력한 비밀번호와 다릅니다.</string>
+    <string name="emailErrorMessage">올바르지 않은 이메일입니다.</string>
+    <string name="nicknameErrorMessage">올바르지 않은 닉네임입니다.</string>
+
+    <string name="passwordConfirmErrorMessage">비밀번호가 일치하지 않습니다.</string>
 </resources>
