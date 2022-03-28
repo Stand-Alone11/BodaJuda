@@ -2,6 +2,7 @@ package com.aeye.nextlabel.model.network.api
 
 import com.aeye.nextlabel.model.dto.*
 import com.aeye.nextlabel.model.network.response.*
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -10,7 +11,7 @@ interface UserApi {
     @POST("/accounts/signup")
     suspend fun join(@Body user: UserForJoin): Response<JoinResponse>
 
-    // 2. Sign Out
+    // 2. Sign Out <- Postman으로 확인
     @DELETE("/accounts/signout")
     suspend fun signout(): Response<LeaveResponse>
 
@@ -21,12 +22,15 @@ interface UserApi {
     // 4. Log In (소셜)
 
     // 5. 회원정보 수정(without password)
+    @Multipart
     @POST("/accounts/update/userinfo")
-    suspend fun update(@Body user: UserForUpdate): Response<UpdateResponse>
+    suspend fun update(@Part email: MultipartBody.Part,
+                       @Part nickName: MultipartBody.Part,
+                       @Part image: MultipartBody.Part): Response<UpdateResponse>
 
     // 6. 비밀번호 수정
     @POST("/accounts/update/password")
-    suspend fun updatePassword(@Body pasword: Password): Response<PasswordResponse>
+    suspend fun updatePassword(@Body password: Password): Response<PasswordResponse>
 
     // 7. 프로필
     @GET("/accounts/info/{id}")
