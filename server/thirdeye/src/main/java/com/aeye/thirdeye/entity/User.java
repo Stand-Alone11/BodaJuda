@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @Size(max = 30)
     private String userId;
 
-    @Size(max = 20)
+    @Size(max = 255)
     private String password;
 
     private String email;
@@ -60,6 +60,8 @@ public class User implements UserDetails {
     private RoleType roleType;
 
     private String UUID;
+
+    private String profileImage;
 
     @OneToMany(mappedBy = "user")
     private List<Image> imageList = new ArrayList<>();
@@ -109,21 +111,23 @@ public class User implements UserDetails {
             @Size(max = 64) String userId,
             @NotNull @Size(max = 100) String nickName,
             @NotNull @Size(max = 512) String email,
-//            @Size(max = 512) String profileImageUrl,
+            @Size(max = 512) String profileImage,
             ProviderType providerType,
             RoleType roleType,
             LocalDateTime createdAt,
-            LocalDateTime modifiedAt
+            LocalDateTime modifiedAt,
+            String uuid
             ) {
         this.userId = userId;
         this.nickName = nickName;
         this.password = "NO_PASS";
         this.email = email != null ? email : "NO_EMAIL";
-//        this.profileImage = profileImage != null ? profileImage : "";
+        this.profileImage = profileImage != null ? profileImage : "";
         this.providerType = providerType != null ? providerType : ProviderType.LOCAL;
         this.roleType = roleType != null ? roleType : RoleType.USER;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
+        this.UUID = uuid;
     }
 
     @Transactional

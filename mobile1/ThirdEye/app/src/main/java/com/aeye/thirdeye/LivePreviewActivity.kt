@@ -18,11 +18,15 @@ package com.aeye.thirdeye
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.*
+import androidx.appcompat.app.ActionBar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.aeye.thirdeye.objectdetector.ObjectDetectorProcessor
@@ -56,6 +60,7 @@ class LivePreviewActivity :
     lateinit var resultTextView: TextView
     private var resultLast = ""
     lateinit var tsUtil: TextToSpeechUtil
+    lateinit var actionBar: ActionBar
 
     // firebase 관련 변수들
     lateinit var remoteConfig: FirebaseRemoteConfig
@@ -86,6 +91,9 @@ class LivePreviewActivity :
 
     private fun init() {
         tsUtil = TextToSpeechUtil(this)
+        supportActionBar?.let {
+            actionBar = it
+        }
 
         preview = findViewById(R.id.preview_view)
         if (preview == null) {
@@ -465,4 +473,22 @@ class LivePreviewActivity :
         }
         return sb.toString()
     }
+
+    // actionbar 메뉴 세팅
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.actionbar_actions, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_more -> {
+                startActivity(Intent(this, LicenseActivity::class.java))
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
 }

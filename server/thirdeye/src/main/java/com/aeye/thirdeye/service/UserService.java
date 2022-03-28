@@ -1,6 +1,7 @@
 package com.aeye.thirdeye.service;
 
 import com.aeye.thirdeye.dto.LeaderBoardDto;
+import com.aeye.thirdeye.dto.request.ChangeUserInfoRequest;
 import com.aeye.thirdeye.dto.response.ProfileResponseDto;
 import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.repository.ImageRepository;
@@ -42,15 +43,14 @@ public class UserService {
         validateDuplicateUser(user);
         user.setPassword(user.getPassword());
         user.encodePassword(passwordEncoder);
-//        int randNum = (int)(Math.random()*20) + 1;
-//        user.setProfileImage("#" + randNum);
+        System.out.println(user.getNickName());
         userRepository.save(user);
         return user.getId();
     }
 
     @Transactional
     public void deleteUser(Long id) {
-
+        imageRepository.deleteAllByUser(id);
         userRepository.deleteById(id);
     }
 
@@ -61,11 +61,11 @@ public class UserService {
         }
     }
 
-    public GoogleIdToken.Payload testestset(String idTokenString) throws IOException, GeneralSecurityException {
+    public GoogleIdToken.Payload googleLogin(String idTokenString) throws IOException, GeneralSecurityException {
 
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 // Specify the CLIENT_ID of the app that accesses the backend:
-                .setAudience(Collections.singletonList("81325643619-fdkkdvqs02u0cuj8hmij4gc7pqu6livj.apps.googleusercontent.com"))
+                .setAudience(Collections.singletonList("81325643619-id2cv0v6ulnggm10an4r8s1a6sudrh0k.apps.googleusercontent.com"))
                 // Or, if multiple clients access the backend:
                 //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
                 .build();
@@ -129,8 +129,8 @@ public class UserService {
     public List<LeaderBoardDto> getLeaderBoard(int page, int size){
         int pageStart = page * size;
 
-        String query = "SELECT u.id, u.nick_name, ranked.rank, ranked.total " +
-                "FROM (SELECT i.user_id, rank() over(order by count(*) DESC) AS RANK, " +
+        String query = "SELECT u.id, u.nick_name, ranked.ranking, ranked.total " +
+                "FROM (SELECT i.user_id, rank() over(order by count(*) DESC) AS RANKING, " +
                 "COUNT(*) total from Image i group by i.user_id ) ranked, user u " +
                 "WHERE ranked.user_id = u.id limit " + pageStart + " ," + size;
 
@@ -140,4 +140,28 @@ public class UserService {
         return leaderBoardDtos;
     }
 
+    @Transactional
+    public void updatePassword(Long id, String password){
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null) return;
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void updateUserInfo(Long id, String nickName, String email, String profileImage) {
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null) return;
+        user.setNickName(nickName);
+        user.setEmail(email);
+        user.setProfileImage(profileImage);
+
+        userRepository.save(user);
+
+    }
+
+    public String getProfileImgUrl(Long id){
+        User user = userRepository.findById(id).orElse(null);
+        return user.getProfileImage();
+    }
 }

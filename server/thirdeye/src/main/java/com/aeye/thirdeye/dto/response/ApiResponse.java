@@ -16,6 +16,7 @@ public class ApiResponse<T> {
 
     private final static int SUCCESS = 200;
     private final static int NOT_FOUND = 400;
+    private final static int BAD_REQUEST = 400;
     private final static int FAILED = 500;
     private final static String SUCCESS_MESSAGE = "SUCCESS";
     private final static String NOT_FOUND_MESSAGE = "NOT FOUND";
@@ -39,7 +40,7 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> invalidAccessToken() {
-        return new ApiResponse(new ApiResponseHeader(FAILED, INVALID_ACCESS_TOKEN), null);
+        return new ApiResponse(new ApiResponseHeader(BAD_REQUEST, INVALID_ACCESS_TOKEN), null);
     }
 
     public static <T> ApiResponse<T> invalidRefreshToken() {

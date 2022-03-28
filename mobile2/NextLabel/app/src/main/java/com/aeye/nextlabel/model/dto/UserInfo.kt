@@ -6,10 +6,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class UserInfo(
-    @SerializedName("id")
-    val id: String,
-    @SerializedName("email")
-    val email: String,
-    @SerializedName("nickname")
-    val nickname: String
+    @SerializedName("userId")
+    val userId: String
 ): Parcelable

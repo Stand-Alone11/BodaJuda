@@ -68,10 +68,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 userInfo.getEmail(),
                 userInfo.getName(),
                 userInfo.getEmail(),
+                userInfo.getImageUrl(),
                 providerType,
                 RoleType.USER,
                 now,
-                now
+                now,
+                "zzzz"
         );
         // 프로필 이미지 쓰면 추가
 //        if(user.getProfileImage() == null || user.getProfileImage().trim() == ""){

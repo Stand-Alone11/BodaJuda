@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!--  API  -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".global.ApplicationClass"
         android:allowBackup="true"
@@ -15,15 +18,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NextLabel">
+        android:theme="@style/Theme.NextLabel"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".feature.user.PasswordUpdateActivity"
             android:exported="false" />
         <activity
             android:name=".feature.user.UpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".feature.user.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".feature.community.LeaderboardActivity"

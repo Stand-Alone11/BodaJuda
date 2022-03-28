@@ -2,10 +2,10 @@ package com.aeye.thirdeye.service;
 
 import com.aeye.thirdeye.dto.ImageDto;
 import com.aeye.thirdeye.entity.Image;
+import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.repository.ImageRepository;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class ImageService{
     private String absolutePath;
 
     @Transactional
-    public ImageDto insertImage(MultipartFile file, Image image) throws Exception{
+    public ImageDto insertImage(MultipartFile file, Image image, User user) throws Exception{
 
         Image savedImage = imageRepository.save(image);
         String fileName = Long.toString(savedImage.getId());
@@ -47,9 +46,8 @@ public class ImageService{
         file.transferTo(newFile);
 
         savedImage.setImage(newFile.getAbsolutePath());
+        savedImage.setUser(user);
         imageRepository.save(savedImage);
-
-        savedImage.setImage(newFile.getAbsolutePath());
 
         return new ImageDto(savedImage);
     }
@@ -103,7 +101,6 @@ public class ImageService{
         imageRepository.save(nowImage);
     }
 
-    @Transactional
     public void rejectImage(int seq) throws Exception{
         Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
 
@@ -111,7 +108,6 @@ public class ImageService{
 
         if(curFile.exists()){
             curFile.delete();
-            System.out.println("파일 삭제");
         }
     }
 }
