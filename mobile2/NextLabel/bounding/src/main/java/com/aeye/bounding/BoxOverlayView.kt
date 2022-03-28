@@ -1,6 +1,7 @@
 package com.aeye.bounding
 
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
@@ -68,6 +69,7 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
     private fun onActionDown(eventX: Float, eventY: Float) {
         mBoxHandler.onTouchDown(eventX, eventY)?.let {
             mRect = it
+            invalidate()
         }
     }
 
@@ -78,6 +80,7 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
     private fun onActionMove(eventX: Float, eventY: Float) {
         mBoxHandler.onTouchMove(eventX, eventY)?.let {
             mRect = it
+            invalidate()
         }
     }
 
@@ -98,6 +101,27 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
                 .toInt()
         }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+
+        canvas?.let {
+            drawBackGround(canvas)
+            drawBox(canvas)
+        }
+    }
+
+    /** 긴 상단, 박스 좌측, 박스 우측, 긴 하단 */
+    private fun drawBackGround(canvas: Canvas) {
+        canvas.drawRect(mLeftLimit.toFloat(), mTopLimit.toFloat(), mRightLimit.toFloat(), mRect.top, mBackgroundPaint)
+        canvas.drawRect(mLeftLimit.toFloat(), mRect.top, mRect.left, mRect.bottom, mBackgroundPaint)
+        canvas.drawRect(mRect.right, mRect.top, mRightLimit.toFloat(), mRect.bottom, mBackgroundPaint)
+        canvas.drawRect(mLeftLimit.toFloat(), mRect.bottom, mRightLimit.toFloat(), mRect.bottom, mBackgroundPaint)
+    }
+
+    private fun drawBox(canvas: Canvas) {
+        canvas.drawRect(mRect, mBoxPaint)
+    }
 
     interface BoxChangedListener {
         fun onChanged()
