@@ -37,8 +37,7 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
     }
 
     private val mBackgroundPaint: Paint = Paint().apply {
-        // TODO: 반투명 블랙으로 바꾸기 
-        color = Color.WHITE
+        color = Color.argb(119, 0, 0, 0)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
