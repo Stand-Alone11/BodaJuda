@@ -109,18 +109,27 @@ public class UserService {
         profileResponseDto.setEmail(user.getEmail());
         profileResponseDto.setNickName(user.getNickName());
 
-        int[] counts = imageRepository.getCategoryUpload(id);
+        String[] counts = imageRepository.getCategoryUpload(id);
         int total = imageRepository.getTotalUpload(id);
         int rank = imageRepository.getRank(id).orElse(0);
         profileResponseDto.setImageTotal(total);
         if(counts != null && counts.length > 0) {
-            profileResponseDto.setImageDeny(counts[0]);
-            if(counts.length > 1) {
-                profileResponseDto.setImageWait(counts[1]);
-                if(counts.length > 2) {
-                    profileResponseDto.setImageAccept(counts[2]);
+            for (String s: counts){
+                if(s.endsWith("N")){
+                    profileResponseDto.setImageDeny(Integer.parseInt(s.substring(0,s.length()-1)));
+                }else if(s.endsWith("W")){
+                    profileResponseDto.setImageWait(Integer.parseInt(s.substring(0,s.length()-1)));
+                }else if(s.endsWith("Y")){
+                    profileResponseDto.setImageAccept(Integer.parseInt(s.substring(0,s.length()-1)));
                 }
             }
+//            profileResponseDto.setImageDeny(counts[0]);
+//            if(counts.length > 1) {
+//                profileResponseDto.setImageWait(counts[1]);
+//                if(counts.length > 2) {
+//                    profileResponseDto.setImageAccept(counts[2]);
+//                }
+//            }
         }
         profileResponseDto.setRank(rank);
         return profileResponseDto;
@@ -132,7 +141,7 @@ public class UserService {
         String query = "SELECT u.id, u.nick_name, ranked.ranking, ranked.total " +
                 "FROM (SELECT i.user_id, rank() over(order by count(*) DESC) AS RANKING, " +
                 "COUNT(*) total from Image i group by i.user_id ) ranked, user u " +
-                "WHERE ranked.user_id = u.id limit " + pageStart + " ," + size;
+                "WHERE ranked.user_id = u.id order by ranked.ranking asc limit " + pageStart + " ," + size;
 
         JpaResultMapper result = new JpaResultMapper();
         Query resultQuery = em.createNativeQuery(query);
