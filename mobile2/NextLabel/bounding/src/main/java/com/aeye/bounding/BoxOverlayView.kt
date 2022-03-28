@@ -124,6 +124,8 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
         canvas.drawRect(mRect, mBoxPaint)
     }
 
+    fun getRect() = mRect
+
     interface BoxChangedListener {
         fun onChanged()
     }

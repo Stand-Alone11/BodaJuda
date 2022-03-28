@@ -17,7 +17,6 @@ class LabelFragment : BaseFragment<FragmentLabelBinding>(FragmentLabelBinding::b
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         init()
     }
 
@@ -25,5 +24,15 @@ class LabelFragment : BaseFragment<FragmentLabelBinding>(FragmentLabelBinding::b
         viewModel.imageSavedUri?.let{
             binding.boxImageViewLabelF.setImage(it)
         }
+
+        binding.buttonLabelFSubmit.setOnClickListener {
+            val ltrb = setBoundingBoxCoor()
+            binding.editTextLabelFProductName.text.toString()
+            binding.editTextLabelFManufacturer.text.toString()
+        }
+    }
+
+    private fun setBoundingBox(): Array<Float> {
+        binding.boxImageViewLabelF.
     }
 }
