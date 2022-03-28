@@ -1,6 +1,7 @@
 package com.aeye.bounding
 
 import android.graphics.RectF
+import android.util.Log
 
 /**
  * 바운딩 박스를 다루는 핸들러
@@ -10,6 +11,7 @@ import android.graphics.RectF
  * @param rectF 바운딩 박스
  */
 class BoxHandler(rectF: RectF, private val radius: Int) {
+    private val TAG = "BoxHandler_debuk"
 
     /** mRect는 항상 최신 Rect로 유지 */
     private var mRect = rectF
@@ -23,6 +25,10 @@ class BoxHandler(rectF: RectF, private val radius: Int) {
     private var mTopLimit: Int = -1
     private var mRightLimit: Int = -1
     private var mBottomLimit: Int = -1
+
+    /** RectF의 최소 크기 */
+    private var mMinWidth = 60
+    private var mMinHeight = 60
 
     /** onTouchDown에서 touchEvent의 유효성을 나타내는 Boolean */
     private var isValidTouchEvent = true
@@ -47,10 +53,87 @@ class BoxHandler(rectF: RectF, private val radius: Int) {
         if(isValidTouchEvent) {
             updateTouchCoor(tX, tY)
             setTypeByTouchPointAndRect()
+            Log.d(TAG, "onTouchDown: type ${mType.name}")
             return mRect
         }
         return null
     }
+
+    /**
+     * 새로운 Rect를 반환하기 위한 함수
+     * BoxOverlayView에서 Touch가 이동할 때 호출되는 함수
+     * isValidTouchEvent 와 mType으로 새로운 Rect 반환
+     */
+
+    fun onTouchMove(tX: Float, tY: Float): RectF? {
+        if(isValidTouchEvent) {
+            val dx = tX - mTouchX
+            val dy = tY - mTouchY
+            mRect = when(mType) {
+                // 네 꼭짓점이 boundary를 벗어나지 않을 때만 drag 가능
+                Type.DRAG -> {
+                    return if(mRect.left + dx > mLeftLimit && mRect.right + dx < mRightLimit && mRect.top + dy > mTopLimit && mRect.bottom + dy < mBottomLimit) {
+                        RectF(mRect.left + dx, mRect.top + dy, mRect.right + dx, mRect.bottom + dy)
+                    } else {
+                        mRect
+                    }
+                }
+                Type.ADJUST_LEFT -> {
+                    return if(isInLeftLimit(dx) && isInMinWidthOnLeft(dx)) {
+                        RectF(mRect.left + dx, mRect.top, mRect.right, mRect.bottom)
+                    } else {
+                        mRect
+                    }
+                }
+                Type.ADJUST_TOP -> {
+                    return if(isInTopLimit(dy) && isInMinHeightOnTop(dy)) {
+                        RectF(mRect.left, mRect.top + dy, mRect.right, mRect.bottom)
+                    } else {
+                        mRect
+                    }
+                }
+                Type.ADJUST_RIGHT -> {
+                    return if(isInRightLimit(dx) && isInMinWidthOnRight(dx)) {
+                        RectF(mRect.left, mRect.top, mRect.right + dx, mRect.bottom)
+                    } else {
+                        mRect
+                    }
+                }
+                Type.ADJUST_BOTTOM -> {
+                    return if(isInBottomLimit(dy) && isInMinHeightOnBottom(dy)) {
+                        RectF(mRect.left, mRect.top, mRect.right, mRect.bottom + dy)
+                    } else {
+                        mRect
+                    }
+                }
+//                Type.ADJUST_TL -> {
+//                    mRect
+//                }
+//                Type.ADJUST_TR ->{
+//                    mRect
+//                }
+//                Type.ADJUST_BR -> {
+//                    mRect
+//                }
+//                Type.ADJUST_BL -> {
+//                    mRect
+//                }
+            }
+            updateTouchCoor(tX, tY)
+            return mRect
+        }
+        return null
+    }
+
+    private fun isInLeftLimit(dx: Float): Boolean = (mRect.left + dx > mLeftLimit)
+    private fun isInTopLimit(dy: Float): Boolean = (mRect.top + dy > mTopLimit)
+    private fun isInRightLimit(dx: Float): Boolean = (mRect.right + dx < mRightLimit)
+    private fun isInBottomLimit(dy: Float): Boolean = (mRect.bottom + dy < mBottomLimit)
+
+    private fun isInMinWidthOnLeft(dx: Float): Boolean = (mRect.left + dx < mRect.right - mMinWidth)
+    private fun isInMinHeightOnTop(dy: Float): Boolean = (mRect.top + dy < mRect.bottom - mMinHeight)
+    private fun isInMinWidthOnRight(dx: Float): Boolean = (mRect.right + dx > mRect.left + mMinWidth)
+    private fun isInMinHeightOnBottom(dy: Float): Boolean = (mRect.bottom + dy > mRect.top + mMinHeight)
 
     /** 최신 정보인 mRect와 touchEvent 좌표, radius를 가지고 유효한 touchEvent인지 판단 */
     private fun isValidEvent(tX: Float, tY: Float): Boolean {
