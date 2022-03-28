@@ -1,8 +1,10 @@
 package com.aeye.bounding
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -15,12 +17,29 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
     private val TAG = "BoxOverlayView_debuk"
 
     /** 부모를 기준으로한 한계 좌표 */
-    private var leftLimit = 0
-    private var topLimit = 0
-    private var rightLimit = 0
-    private var bottomLimit = 0
+    private var mLeftLimit = 0
+    private var mTopLimit = 0
+    private var mRightLimit = 0
+    private var mBottomLimit = 0
 
+    /** 박스영역 */
+    private var mRect = RectF()
 
+    /** 박스 영역을 다루는 Handler */
+    private val mBoxHandler = BoxHandler(mRect, radius)
+
+    /** draw */
+    private val mBoxPaint: Paint = Paint().apply {
+        strokeWidth = 2f
+        color = Color.WHITE
+        style = Paint.Style.STROKE
+        isAntiAlias = true
+    }
+
+    private val mBackgroundPaint: Paint = Paint().apply {
+        // TODO: 반투명 블랙으로 바꾸기 
+        color = Color.WHITE
+    }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return if (isEnabled) {
@@ -46,6 +65,7 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
         }
     }
 
+    /** mRect와 radius를 mBoxHandler에 전달하여 터치 이벤트 시작 */
     private fun onActionDown(eventX: Float, eventY: Float) {
 
     }
@@ -60,10 +80,12 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
 
     /** 부모를 기준으로 한 한계좌표 set */
     fun setLimits(left: Int, top: Int, right: Int ,bottom: Int) {
-        leftLimit = left
-        topLimit = top
-        rightLimit = right
-        bottomLimit = bottom
+        mLeftLimit = left
+        mTopLimit = top
+        mRightLimit = right
+        mBottomLimit = bottom
+
+        mBoxHandler.setLimit(mLeftLimit, mTopLimit, mRightLimit, mBottomLimit)
     }
 
     /** dp to pixel */
@@ -73,4 +95,8 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
                 .toInt()
         }
+
+    interface BoxChangedListener {
+        fun onChanged()
+    }
 }
