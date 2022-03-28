@@ -9,7 +9,7 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface UserApi {
-    // 1. Sign Up
+    // 1. Sign Up <- 동작 확인
     @POST("/accounts/signup")
     suspend fun join(@Body user: UserForJoin): Response<JoinResponse>
 

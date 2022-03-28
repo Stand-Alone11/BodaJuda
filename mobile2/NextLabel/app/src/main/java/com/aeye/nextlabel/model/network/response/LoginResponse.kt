@@ -1,7 +1,9 @@
 package com.aeye.nextlabel.model.network.response
 
 import com.aeye.nextlabel.feature.common.BaseResponse
+import com.google.gson.annotations.SerializedName
 
 class LoginResponse: BaseResponse() {
-    // TODO: Token에 id가 포함되어 있음
+    @SerializedName("token")
+    val token: String? = null
 }

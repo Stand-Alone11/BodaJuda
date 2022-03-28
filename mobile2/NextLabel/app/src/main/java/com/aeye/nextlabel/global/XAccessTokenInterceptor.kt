@@ -1,6 +1,5 @@
-package com.aeye.nextlabel.feature.common
+package com.aeye.nextlabel.global
 
-import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.global.ApplicationClass.Companion.X_AUTH_TOKEN
 import com.aeye.nextlabel.global.ApplicationClass.Companion.sSharedPreferences
 import okhttp3.Interceptor
