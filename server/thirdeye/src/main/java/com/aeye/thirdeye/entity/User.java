@@ -3,6 +3,7 @@ package com.aeye.thirdeye.entity;
 import com.aeye.thirdeye.entity.auth.ProviderType;
 import com.aeye.thirdeye.entity.auth.RoleType;
 import lombok.*;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +37,7 @@ public class User implements UserDetails {
     @Size(max = 255)
     private String password;
 
+    @Unique
     private String email;
 
     @Size(max = 20)

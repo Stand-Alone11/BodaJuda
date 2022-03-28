@@ -105,7 +105,7 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         // 이메일이 들어가야 함
 //        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUser(token).getEmail());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUser(token).getId().toString());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
