@@ -18,6 +18,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponses;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -72,6 +73,10 @@ public class UserApiController {
      */
     @PostMapping("/accounts/signup")
     @ApiOperation(value = "회원가입", notes = "")
+    @ApiResponses({
+            @io.swagger.annotations.ApiResponse(code = 201, message = "회원가입 성공"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "validation 에러")
+    })
     public ResponseEntity<?> signup(@Validated @RequestBody CreateUserRequest request,
                                  BindingResult bindingResult) {
 
@@ -135,6 +140,10 @@ public class UserApiController {
      */
     @DeleteMapping("/accounts/signout")
     @ApiOperation(value = "회원탈퇴", notes = "")
+    @ApiResponses({
+            @io.swagger.annotations.ApiResponse(code = 200, message = "회원 탈퇴 성공"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "token 인증 실패")
+    })
     public ResponseEntity<?> signout(@ApiParam(value = "jwt 토큰")@RequestHeader(value = "Authorization") String token) {
         if (!jwtTokenProvider.validateToken(token)) {
             return ResponseEntity
@@ -157,6 +166,11 @@ public class UserApiController {
      */
     @PostMapping("/accounts/login")
     @ApiOperation(value = "일반 로그인", notes = "")
+    @ApiResponses({
+            @io.swagger.annotations.ApiResponse(code = 200, message = "로그인 성공", response = LoginUserResponse.class),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "비밀번호 미일치"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "해당 유저 없음")
+    })
     public ResponseEntity<?> login(@ApiParam(value = "id, Password")@RequestBody LoginRequest loginRequest) {
         User user = userRepository.findByUserId(loginRequest.getUserId());
         if (user == null) {
@@ -191,6 +205,10 @@ public class UserApiController {
      */
     @GetMapping("/accounts/info/{id}")
     @ApiOperation(value = "프로필 조회", notes = "")
+    @ApiResponses({
+            @io.swagger.annotations.ApiResponse(code = 200, message = "", response = ProfileResponseDto.class),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "해당 유저 없음")
+    })
     public ResponseEntity<?> getProfile(@ApiParam(value = "user 시퀀스 값") @PathVariable("id") Long id){
         ProfileResponseDto profileResponseDto = userService.getProfile(id);
         if(profileResponseDto == null){
@@ -208,6 +226,10 @@ public class UserApiController {
      */
     @GetMapping("/accounts/rank")
     @ApiOperation(value = "리더보드 순위 API", notes = "")
+    @ApiResponses({
+            @io.swagger.annotations.ApiResponse(code = 200, message = "조회 성공", response = LeaderBoardDto.class, responseContainer = "List"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "해당 유저 없음")
+    })
     public ResponseEntity<?> getLeaderBoard(@ApiParam(value = "page (0부터 시작)")
                                             @RequestParam(value = "page") int page,
                                             @ApiParam(value = "size (페이지 당 size)")
@@ -228,6 +250,10 @@ public class UserApiController {
      */
     @PostMapping("/acoounts/auth/login")
     @ApiOperation(value = "구글 로그인", notes = "")
+    @ApiResponses({
+            @io.swagger.annotations.ApiResponse(code = 200, message = "로그인 성공", response = LoginUserResponse.class),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "비밀번호 미일치")
+    })
     public ApiResponse<?> googleLogin(@ApiParam(value = "구글 토큰")
                                        @RequestHeader(value = "Authorization") String token) {
         GoogleIdToken.Payload payload = null;
@@ -259,6 +285,11 @@ public class UserApiController {
      */
     @PostMapping("/accounts/update/password")
     @ApiOperation(value = "패스워드 변경", notes = "")
+    @ApiResponses({
+            @io.swagger.annotations.ApiResponse(code = 200, message = "변경 성공"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "토큰 인증 실패"),
+            @io.swagger.annotations.ApiResponse(code = 406, message = "비밀번호 validation 에러")
+    })
     public ResponseEntity<?> changePassword(@ApiParam(value = "Jwt 토큰")
                                                 @RequestHeader(value = "Authorization") String token,
                                             @ApiParam(value = "Password") @RequestBody ChangePasswordRequest changePasswordRequest) {
@@ -291,6 +322,11 @@ public class UserApiController {
      */
     @PostMapping("/accounts/update/userinfo")
     @ApiOperation(value = "회원 정보 변경", notes = "")
+    @ApiResponses({
+            @io.swagger.annotations.ApiResponse(code = 200, message = "변경 성공"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "validation 에러"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "토큰 인증 실패")
+    })
     public ResponseEntity<?> changeUserInfo(@ApiParam(value = "jwt 토큰")@RequestHeader(value = "Authorization") String token,
                                             @RequestPart(value = "image", required = false) MultipartFile file,
                                             @RequestPart(value = "nickName", required = false) String nickName,

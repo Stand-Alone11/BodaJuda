@@ -11,9 +11,7 @@ import com.slack.api.Slack;
 import com.slack.api.app_backend.interactive_components.ActionResponseSender;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
 import com.slack.api.app_backend.interactive_components.response.ActionResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,6 +55,11 @@ public class ImageAPIController {
      */
     @PostMapping
     @ApiOperation(value = "사진 및 라벨링 데이터 전송", notes = "")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "token 인증 실패"),
+            @ApiResponse(code = 406, message = "입력값 에러")
+    })
     public ResponseEntity<?> insertImage(@ApiParam(value = "사진 파일") @RequestPart(value = "file", required = false) MultipartFile file,
                                          @ApiParam(value = "title, provider, l_X, l_Y, R_X, R_Y") @RequestPart(value="label") String image,
                                          HttpServletRequest request){
