@@ -1,6 +1,7 @@
 package com.aeye.nextlabel.repository
 
 import com.aeye.nextlabel.global.ApplicationClass
+import com.aeye.nextlabel.model.dto.Password
 import com.aeye.nextlabel.util.Resource
 import com.aeye.nextlabel.model.network.api.UserApi
 import com.aeye.nextlabel.model.dto.UserForJoin
@@ -71,6 +72,23 @@ class UserRepository {
             val nickname = getBody("nickname", user.nickname)
             val response = userApi.update(email=email, nickName=nickname, image=image)
 
+            if (response.isSuccessful) {
+                return if(response.code() == 200) {
+                    Resource.success(response.body()!!)
+                } else {
+                    Resource.error(null, "message 1")
+                }
+            } else {
+                Resource.error(null, "message 2")
+            }
+        } catch (e: Exception) {
+            Resource.error(null, "message 3")
+        }
+    }
+
+    suspend fun updatePassword(password: Password): Resource<PasswordResponse> {
+        return try {
+            val response = userApi.updatePassword(password)
             if (response.isSuccessful) {
                 return if(response.code() == 200) {
                     Resource.success(response.body()!!)

@@ -33,7 +33,7 @@ interface UserApi {
 
     // 6. 비밀번호 수정
     @POST("/accounts/update/password")
-    suspend fun updatePassword(@Body pasword: Password): Response<PasswordResponse>
+    suspend fun updatePassword(@Body password: Password): Response<PasswordResponse>
 
     // 7. 프로필
 //    @GET("/accounts/info/{id}")

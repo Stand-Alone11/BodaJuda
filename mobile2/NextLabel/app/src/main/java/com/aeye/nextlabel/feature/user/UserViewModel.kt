@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aeye.nextlabel.global.ApplicationClass.Companion.JWT
 import com.aeye.nextlabel.global.ApplicationClass.Companion.sSharedPreferences
+import com.aeye.nextlabel.model.dto.Password
 import com.aeye.nextlabel.util.Resource
 import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.model.dto.UserForLogin
@@ -27,9 +28,9 @@ class UserViewModel: ViewModel() {
     val leaveRequestLiveData = MutableLiveData<Resource<LeaveResponse>>()
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse>>()
     val updateRequestLiveData = MutableLiveData<Resource<UpdateResponse>>()
+    val passwordRequestLiveData = MutableLiveData<Resource<PasswordResponse>>()
 //    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
 
-    var imgUri: Uri? = null
     var absoluteImgPath: String? = null
 
     fun join(user: UserForJoin) = viewModelScope.launch {
@@ -61,6 +62,13 @@ class UserViewModel: ViewModel() {
         updateRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             updateRequestLiveData.postValue(userRepository.update(user, makeMultiPart(this@UserViewModel.absoluteImgPath!!)))
+        }
+    }
+
+    fun updatePassword(password: Password) = viewModelScope.launch {
+        passwordRequestLiveData.postValue(Resource.loading(null))
+        CoroutineScope(Dispatchers.IO).launch {
+            passwordRequestLiveData.postValue(userRepository.updatePassword(password))
         }
     }
 
