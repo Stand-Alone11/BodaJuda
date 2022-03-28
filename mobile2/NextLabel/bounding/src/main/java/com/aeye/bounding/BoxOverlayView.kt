@@ -1,11 +1,9 @@
 package com.aeye.bounding
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -27,7 +25,7 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
     private var mRect = RectF()
 
     /** 박스 영역을 다루는 Handler */
-    private val mBoxHandler = BoxHandler(mRect, radius)
+    private lateinit var mBoxHandler: BoxHandler
 
     /** draw */
     private val mBoxPaint: Paint = Paint().apply {
@@ -67,6 +65,7 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
 
     /** mRect와 radius를 mBoxHandler에 전달하여 터치 이벤트 시작 */
     private fun onActionDown(eventX: Float, eventY: Float) {
+        Log.d(TAG, "onActionDown: ${eventX} ${eventY}")
         mBoxHandler.onTouchDown(eventX, eventY)?.let {
             mRect = it
             invalidate()
@@ -91,6 +90,8 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
         mRightLimit = right
         mBottomLimit = bottom
 
+        mRect = RectF(left.toFloat() + 100f, top.toFloat() + 100f, right.toFloat() - 100f, bottom.toFloat() - 100f)
+        mBoxHandler = BoxHandler(mRect, radius.dp)
         mBoxHandler.setLimit(mLeftLimit, mTopLimit, mRightLimit, mBottomLimit)
     }
 
@@ -116,7 +117,7 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
         canvas.drawRect(mLeftLimit.toFloat(), mTopLimit.toFloat(), mRightLimit.toFloat(), mRect.top, mBackgroundPaint)
         canvas.drawRect(mLeftLimit.toFloat(), mRect.top, mRect.left, mRect.bottom, mBackgroundPaint)
         canvas.drawRect(mRect.right, mRect.top, mRightLimit.toFloat(), mRect.bottom, mBackgroundPaint)
-        canvas.drawRect(mLeftLimit.toFloat(), mRect.bottom, mRightLimit.toFloat(), mRect.bottom, mBackgroundPaint)
+        canvas.drawRect(mLeftLimit.toFloat(), mRect.bottom, mRightLimit.toFloat(), mBottomLimit.toFloat(), mBackgroundPaint)
     }
 
     private fun drawBox(canvas: Canvas) {
