@@ -1,8 +1,7 @@
 package com.aeye.nextlabel.model.network.response
 
-import com.aeye.nextlabel.model.dto.UserForLeaderBoard
+import com.aeye.nextlabel.feature.common.BaseResponse
 
-class LeaderBoardResponse {
+class LeaderBoardResponse: BaseResponse() {
 
-    val leaderBoardList: List<UserForLeaderBoard> = emptyList()
 }
