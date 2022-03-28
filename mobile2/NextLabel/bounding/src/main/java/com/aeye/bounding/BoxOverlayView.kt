@@ -67,7 +67,9 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
 
     /** mRect와 radius를 mBoxHandler에 전달하여 터치 이벤트 시작 */
     private fun onActionDown(eventX: Float, eventY: Float) {
-
+        mBoxHandler.onTouchDown(eventX, eventY)?.let {
+            mRect = it
+        }
     }
 
     private fun onActionUp() {
@@ -75,7 +77,9 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
     }
 
     private fun onActionMove(eventX: Float, eventY: Float) {
-
+        mBoxHandler.onTouchMove(eventX, eventY)?.let {
+            mRect = it
+        }
     }
 
     /** 부모를 기준으로 한 한계좌표 set */
