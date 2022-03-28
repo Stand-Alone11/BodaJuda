@@ -37,7 +37,7 @@ slack.chat_postMessage(
 			"type": "header",
 			"text": {
 				"type": "plain_text",
-				"text": f"{x.year}년 {x.month}월 {x.day}일 {x.hour - 9}시 {x.minute}분",
+				"text": f"{x.year}년 {x.month}월 {x.day}일 {x.hour}시 {x.minute}분",
 				"emoji": True
 			}
 		}
@@ -80,7 +80,7 @@ slack.chat_postMessage(
 			"type": "section",
 			"text": {
 				"type": "plain_text",
-				"text": f"{x.hour - 9}시 {x.minute}분 이미지 전처리 시작",
+				"text": f"{x.hour }시 {x.minute}분 이미지 전처리 시작",
 				"emoji": True
 			}
 		}
@@ -119,7 +119,7 @@ slack.chat_postMessage(
 			"type": "section",
 			"text": {
 				"type": "plain_text",
-				"text": f"{x.hour - 9}시 {x.minute}분 이미지 전처리 완료",
+				"text": f"{x.hour}시 {x.minute}분 이미지 전처리 완료",
 				"emoji": True
 			}
 		}
@@ -139,7 +139,7 @@ slack.chat_postMessage(
 			"type": "section",
 			"text": {
 				"type": "plain_text",
-				"text": f"{x.hour - 9}시 {x.minute}분 {model_name} 학습 완료",
+				"text": f"{x.hour}시 {x.minute}분 {model_name} 학습 완료",
 				"emoji": True
 			}
 		}
@@ -170,7 +170,7 @@ slack.chat_postMessage(
 			"type": "section",
 			"text": {
 				"type": "plain_text",
-				"text": f"{x.hour - 9}시 {x.minute}분 {model_name} 업로드 완료",
+				"text": f"{x.hour}시 {x.minute}분 {model_name} 업로드 완료",
 				"emoji": True
 			}
 		}

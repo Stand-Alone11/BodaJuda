@@ -33,23 +33,24 @@ def snack_model_maker(model_name, image_path, model_path, key_path, key_name):
 
     # https://www.tensorflow.org/lite/api_docs/python/tflite_model_maker/image_classifier/create 파라미터
     # model = image_classifier.create(train_data, validation_data=validation_data, epochs=10, dropout_rate=0.2, batch_size=1024, learning_rate = 0.001)
-    model = image_classifier.create(
-    train_data,
-    model_spec='mobilenet_v2',
-    validation_data=validation,
-    batch_size=None,
-    epochs=10,
-    steps_per_epoch=None,
-    train_whole_model=True,
-    dropout_rate=0.2,
-    learning_rate=None,
-    momentum=None,
-    shuffle=True,
-    use_augmentation=False,
-    use_hub_library=True,
-    warmup_steps=None,
-    model_dir=None,
-    do_train=True)
+    model = image_classifier.create(train_data, validation_data=validation, epochs=10)
+    # model = image_classifier.create(
+    # train_data,
+    # model_spec='mobilenet_v2',
+    # validation_data=validation,
+    # batch_size=None,
+    # epochs=15,
+    # steps_per_epoch=None,
+    # train_whole_model=True,
+    # dropout_rate=0.3,
+    # learning_rate=None,
+    # momentum=None,
+    # shuffle=False,
+    # use_augmentation=False,
+    # use_hub_library=True,
+    # warmup_steps=None,
+    # model_dir=None,
+    # do_train=True)
     
     # model.summary()
     loss, accuracy = model.evaluate(test_data)
