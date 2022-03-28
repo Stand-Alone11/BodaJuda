@@ -1,6 +1,5 @@
 package com.aeye.nextlabel.feature.user
 
-import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
