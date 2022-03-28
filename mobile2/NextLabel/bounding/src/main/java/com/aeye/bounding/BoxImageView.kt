@@ -58,8 +58,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         mBoxOverlayView.setLimits(left, top, right, bottom)
     }
 
-    fun getRectCoor() {
-        mBoxOverlayView.getRect()
+    fun getRectCoor(): Array<Float> {
+        val rect = mBoxOverlayView.getRect()
+        return arrayOf(rect.left, rect.top, rect.right, rect.bottom)
     }
 
 
