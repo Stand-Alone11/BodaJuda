@@ -29,24 +29,25 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         }
 
         btnLogin.setOnClickListener {
+            if (checkInputForm()) {
+                login()
+            }
+
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-
-            if (checkInputForm()) {
-//                login()
-            }
         }
     }
 
-//    private fun login() {
-//        val userId = binding.userId.text.toString()
-//        val password = binding.password.text.toString()
-//
-//        userViewModel.login(UserForLogin(userId, password))
-//    }
+    private fun login() {
+        val userId = binding.userId.text.toString()
+        val password = binding.password.text.toString()
+
+        userViewModel.login(UserForLogin(userId, password))
+    }
 
     private fun checkInputForm(): Boolean {
         var result = 1
+
         val userId = binding.userId.text.toString()
         val password = binding.password.text.toString()
 

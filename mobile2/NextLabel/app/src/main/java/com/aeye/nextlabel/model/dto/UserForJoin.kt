@@ -3,7 +3,6 @@ package com.aeye.nextlabel.model.dto
 import com.google.gson.annotations.SerializedName
 
 data class UserForJoin(
-
     @SerializedName("userId")
     val userId: String,
 
