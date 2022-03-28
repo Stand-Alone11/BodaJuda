@@ -28,6 +28,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     /** image width */
     var imageWidth: Int? = null
 
+    /** overlayViewWidth */
+    private val mLimitLTRB = IntArray(4, {-1})
+    val limitTRB: IntArray
+        get() = mLimitLTRB
+
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private val v: View = inflater.inflate(R.layout.box_image_view, this, true)
     private var imageView: ImageView = v.findViewById(R.id.imageView_bound)
@@ -55,8 +60,19 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         super.onLayout(changed, left, top, right, bottom)
         Log.d(TAG, "onLayout: $left, $top, $right, $bottom")
 
+        setLimitArray(left, top, right, bottom)
         mBoxOverlayView.setLimits(left, top, right, bottom)
     }
 
+    fun getRectCoor(): Array<Float> {
+        val rect = mBoxOverlayView.getRect()
+        return arrayOf(rect.left, rect.top, rect.right, rect.bottom)
+    }
 
+    private fun setLimitArray(left: Int, top: Int, right: Int, bottom: Int) {
+        mLimitLTRB[0] = left
+        mLimitLTRB[1] = top
+        mLimitLTRB[2] = right
+        mLimitLTRB[3] = bottom
+    }
 }
