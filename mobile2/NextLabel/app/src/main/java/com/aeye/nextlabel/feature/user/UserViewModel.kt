@@ -29,6 +29,7 @@ class UserViewModel: ViewModel() {
     val updateRequestLiveData = MutableLiveData<Resource<UpdateResponse>>()
     val passwordRequestLiveData = MutableLiveData<Resource<PasswordResponse>>()
 //    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
+    val leaderBoardLiveData = MutableLiveData<Resource<LeaderBoardResponse>>()
 
     var absoluteImgPath: String? = null
 
@@ -81,5 +82,11 @@ class UserViewModel: ViewModel() {
     private fun makeMultiPart(path: String): MultipartBody.Part {
         val imgFile = File(path)
         return MultipartBody.Part.createFormData("image", imgFile.name, imgFile.asRequestBody("image/*".toMediaType()))
+
+    fun getLeaderBoard(page: Int, size: Int) = viewModelScope.launch {
+        leaderBoardLiveData.postValue(Resource.loading(null))
+        withContext(Dispatchers.IO) {
+            leaderBoardLiveData.postValue(userRepository.getLeaderBoard(page, size))
+        }
     }
 }

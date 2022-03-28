@@ -1,9 +1,6 @@
 package com.aeye.nextlabel.model.network.api
 
-import com.aeye.nextlabel.model.dto.Password
-import com.aeye.nextlabel.model.dto.UserForJoin
-import com.aeye.nextlabel.model.dto.UserForLogin
-import com.aeye.nextlabel.model.dto.UserForUpdate
+import com.aeye.nextlabel.model.dto.*
 import com.aeye.nextlabel.model.network.response.*
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -36,6 +33,10 @@ interface UserApi {
     suspend fun updatePassword(@Body password: Password): Response<PasswordResponse>
 
     // 7. 프로필
-//    @GET("/accounts/info/{id}")
-//    suspend fun getProfile(@Path("id") id: Int): Response<ProfileResponse>
+    @GET("/accounts/info/{id}")
+    suspend fun getProfile(@Path("id") id: Int): Response<ProfileResponse>
+
+    // 8. 리더보드
+    @GET("/accounts/rank")
+    suspend fun getLeaderBoard(@Query("page") page: Int, @Query("size") size: Int): Response<LeaderBoardResponse>
 }
