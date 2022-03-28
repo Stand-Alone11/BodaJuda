@@ -1,6 +1,7 @@
 package com.aeye.bounding
 
 import android.content.Context
+import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
@@ -15,12 +16,28 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
     private val TAG = "BoxOverlayView_debuk"
 
     /** 부모를 기준으로한 한계 좌표 */
-    private var leftLimit = 0
-    private var topLimit = 0
-    private var rightLimit = 0
-    private var bottomLimit = 0
+    private var mLeftLimit = 0
+    private var mTopLimit = 0
+    private var mRightLimit = 0
+    private var mBottomLimit = 0
 
+    /** 박스영역 */
+    private var mRect = RectF()
 
+    /** 박스 영역을 다루는 Handler */
+    private lateinit var mBoxHandler: BoxHandler
+
+    /** draw */
+    private val mBoxPaint: Paint = Paint().apply {
+        strokeWidth = 2f
+        color = Color.WHITE
+        style = Paint.Style.STROKE
+        isAntiAlias = true
+    }
+
+    private val mBackgroundPaint: Paint = Paint().apply {
+        color = Color.argb(119, 0, 0, 0)
+    }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return if (isEnabled) {
@@ -46,8 +63,13 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
         }
     }
 
+    /** mRect와 radius를 mBoxHandler에 전달하여 터치 이벤트 시작 */
     private fun onActionDown(eventX: Float, eventY: Float) {
-
+        Log.d(TAG, "onActionDown: ${eventX} ${eventY}")
+        mBoxHandler.onTouchDown(eventX, eventY)?.let {
+            mRect = it
+            invalidate()
+        }
     }
 
     private fun onActionUp() {
@@ -55,15 +77,22 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
     }
 
     private fun onActionMove(eventX: Float, eventY: Float) {
-
+        mBoxHandler.onTouchMove(eventX, eventY)?.let {
+            mRect = it
+            invalidate()
+        }
     }
 
     /** 부모를 기준으로 한 한계좌표 set */
     fun setLimits(left: Int, top: Int, right: Int ,bottom: Int) {
-        leftLimit = left
-        topLimit = top
-        rightLimit = right
-        bottomLimit = bottom
+        mLeftLimit = left
+        mTopLimit = top
+        mRightLimit = right
+        mBottomLimit = bottom
+
+        mRect = RectF(left.toFloat() + 100f, top.toFloat() + 100f, right.toFloat() - 100f, bottom.toFloat() - 100f)
+        mBoxHandler = BoxHandler(mRect, radius.dp)
+        mBoxHandler.setLimit(mLeftLimit, mTopLimit, mRightLimit, mBottomLimit)
     }
 
     /** dp to pixel */
@@ -73,4 +102,29 @@ class BoxOverlayView @JvmOverloads constructor(context: Context, attributeSet: A
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics)
                 .toInt()
         }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+
+        canvas?.let {
+            drawBackGround(canvas)
+            drawBox(canvas)
+        }
+    }
+
+    /** 긴 상단, 박스 좌측, 박스 우측, 긴 하단 */
+    private fun drawBackGround(canvas: Canvas) {
+        canvas.drawRect(mLeftLimit.toFloat(), mTopLimit.toFloat(), mRightLimit.toFloat(), mRect.top, mBackgroundPaint)
+        canvas.drawRect(mLeftLimit.toFloat(), mRect.top, mRect.left, mRect.bottom, mBackgroundPaint)
+        canvas.drawRect(mRect.right, mRect.top, mRightLimit.toFloat(), mRect.bottom, mBackgroundPaint)
+        canvas.drawRect(mLeftLimit.toFloat(), mRect.bottom, mRightLimit.toFloat(), mBottomLimit.toFloat(), mBackgroundPaint)
+    }
+
+    private fun drawBox(canvas: Canvas) {
+        canvas.drawRect(mRect, mBoxPaint)
+    }
+
+    interface BoxChangedListener {
+        fun onChanged()
+    }
 }
