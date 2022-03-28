@@ -91,6 +91,7 @@ public class UserApiController {
         user.setProviderType(ProviderType.LOCAL);
         user.setCreatedAt(LocalDateTime.now());
         user.setModifiedAt(LocalDateTime.now());
+        user.setUserId(request.getUserId());
         user.setRoleType(RoleType.USER);
         user.setProfileImage("/default/default_profile.png");
 
