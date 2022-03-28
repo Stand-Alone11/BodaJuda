@@ -27,7 +27,7 @@ object InputValidUtil {
 
     fun isValidPassword(password: String): Boolean {
         for(passRegex in passRegexes) {
-            if(password.matches(passRegex))
+            if (password.matches(passRegex))
                 return true
         }
         return false

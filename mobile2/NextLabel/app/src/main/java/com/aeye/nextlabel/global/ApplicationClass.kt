@@ -44,13 +44,13 @@ class ApplicationClass: Application() {
         val client: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
             .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-            // 로그캣에 okhttp.OkHttpClient로 검색하면 http 통신 내용 로깅.
+            // Logcat에 'okhttp.OkHttpClient'로 검색하면 http 통신 내용 확인 가능
             .addInterceptor(
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS).setLevel(HttpLoggingInterceptor.Level.BODY)
             )
-            .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송(추가한 부분)
+            .addNetworkInterceptor(XAccessTokenInterceptor())  // JWT 헤더 전송(추가한 부분)
             .addInterceptor(AddCookiesInterceptor())  // 쿠키 전송(추가한 부분)
-            .addInterceptor(ReceivedCookiesInterceptor()) // 쿠키 추출(추가한 부분)
+            .addInterceptor(ReceivedCookiesInterceptor())  // 쿠키 추출(추가한 부분)
             .build()
 
         sRetrofit = Retrofit.Builder().baseUrl(BASE_URL)
