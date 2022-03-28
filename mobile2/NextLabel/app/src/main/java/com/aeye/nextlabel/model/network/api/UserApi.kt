@@ -17,7 +17,7 @@ interface UserApi {
     @DELETE("/accounts/signout")
     suspend fun signout(): Response<LeaveResponse>
 
-    // 3. Log In (일반)
+    // 3. Log In (일반) <- 동작 확인
     @POST("/accounts/login")
     suspend fun login(@Body user: UserForLogin): Response<LoginResponse>
 

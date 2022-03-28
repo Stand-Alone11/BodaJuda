@@ -8,17 +8,9 @@ object LoginUtil {
 
     private val preferences = ApplicationClass.sSharedPreferences
 
-    fun isAutoLogin(): Boolean {
-        return preferences.getAutoLoginFlag()
-    }
-
     fun signOut() {
         preferences.deleteString(ApplicationClass.JWT)
         deleteUserInfo()
-    }
-
-    fun setAutoLogin(flag: Boolean) {
-        preferences.setAutoLogin(flag)
     }
 
     fun isTokenExisted(): Boolean {

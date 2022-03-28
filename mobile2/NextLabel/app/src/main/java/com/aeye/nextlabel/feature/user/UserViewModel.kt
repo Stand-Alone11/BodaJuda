@@ -44,6 +44,7 @@ class UserViewModel: ViewModel() {
         withContext(Dispatchers.IO) {
             val resource = userRepository.login(user)
 
+            // token 저장
             sSharedPreferences.setString(JWT, resource.data?.token.toString())
             loginRequestLiveData.postValue(resource)
         }
