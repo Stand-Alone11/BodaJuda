@@ -1,11 +1,7 @@
 package com.aeye.nextlabel.feature.main
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentLabelBinding
@@ -29,7 +25,6 @@ class LabelFragment : BaseFragment<FragmentLabelBinding>(FragmentLabelBinding::b
 
         binding.buttonLabelFSubmit.setOnClickListener {
             val boundingBoxCoor = setBoundingBox()
-            Log.d(TAG, "init: ${boundingBoxCoor}")
             val name = binding.editTextLabelFProductName.text.toString()
             val manufacturer = binding.editTextLabelFManufacturer.text.toString()
         }
