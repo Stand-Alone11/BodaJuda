@@ -2,7 +2,6 @@ package com.aeye.thirdeye.api;
 
 import com.aeye.thirdeye.dto.LeaderBoardDto;
 import com.aeye.thirdeye.dto.request.ChangePasswordRequest;
-import com.aeye.thirdeye.dto.request.ChangeUserInfoRequest;
 import com.aeye.thirdeye.dto.request.LoginRequest;
 import com.aeye.thirdeye.dto.response.ApiResponse;
 import com.aeye.thirdeye.dto.response.ErrorResponse;
@@ -24,10 +23,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,11 +35,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.attribute.standard.Media;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,7 +52,6 @@ public class UserApiController {
     private final UserRepository userRepository;
 
     private final UserService userService;
-//    private final UserSettingService userSettingService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -75,7 +72,7 @@ public class UserApiController {
      */
     @PostMapping("/accounts/signup")
     @ApiOperation(value = "회원가입", notes = "")
-    public ResponseEntity signup(@Validated @RequestBody CreateUserRequest request,
+    public ResponseEntity<?> signup(@Validated @RequestBody CreateUserRequest request,
                                  BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -84,6 +81,9 @@ public class UserApiController {
                     .body(new ErrorResponse(bindingResult.getAllErrors().get(0).getDefaultMessage()));
         }
 
+        System.out.println(request.getEmail());
+        System.out.println(request.getPassword());
+        System.out.println(request.getNickname());
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
@@ -109,33 +109,35 @@ public class UserApiController {
     @Data
     static class CreateUserRequest {
         // email validation 설정
-//        @Email(message = "{error.format.email}", regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
+        @Email(message = "{error.format.email}", regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
         @NotNull(message = "{email.notempty}")
         private String email;
+        @Size(min=2, max=20, message = "{error.size.nickName}")
         private String nickname;
         // password validation 설정
-//        @Size(min=4, max=12, message = "{error.size.password}")
+        @Size(min=8, max=14, message = "{error.size.password}")
 //        @Length(min=3, max=128, message = "비밀번호 길이 불일치")
         private String password;
-        @Size(max = 64) String userId;
+        @Size(min=2, max=20, message = "{error.size.userId}") String userId;
 //        @Size(max = 512) String profileImage;
 //        ProviderType providerType;
 //        RoleType roleType;
-        LocalDateTime createdAt;
-        LocalDateTime modifiedAt;
+//        LocalDateTime createdAt;
+//        LocalDateTime modifiedAt;
     }
 
     /**
      * 회원 탈퇴
      * @param token
      * @return
+     * 반환 코드 : 200 / 401
      */
     @DeleteMapping("/accounts/signout")
     @ApiOperation(value = "회원탈퇴", notes = "")
     public ResponseEntity<?> signout(@ApiParam(value = "jwt 토큰")@RequestHeader(value = "Authorization") String token) {
         if (!jwtTokenProvider.validateToken(token)) {
             return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
         }
         Long id = jwtTokenProvider.getId(token);
@@ -143,13 +145,14 @@ public class UserApiController {
         userService.deleteUser(id);
 
         SecurityContextHolder.clearContext();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     /**
      * 로그인 JWT 발급
      * @param loginRequest // {id , password}
      * @return
+     * 반환 코드 : 200 / 401 / 404
      */
     @PostMapping("/accounts/login")
     @ApiOperation(value = "일반 로그인", notes = "")
@@ -161,7 +164,7 @@ public class UserApiController {
         }
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponse(messageSource.getMessage("error.wrong.password", null, LocaleContextHolder.getLocale())));
         }
 
@@ -220,11 +223,11 @@ public class UserApiController {
      * 구글 로그인 API
      * @param token
      * @return
-     * 반환 코드 : 200
+     * 반환 코드 : 200 / 401
      */
     @PostMapping("/acoounts/auth/login")
     @ApiOperation(value = "구글 로그인", notes = "")
-    public ApiResponse googleLogin(@ApiParam(value = "구글 토큰")
+    public ApiResponse<?> googleLogin(@ApiParam(value = "구글 토큰")
                                        @RequestHeader(value = "Authorization") String token) {
         GoogleIdToken.Payload payload = null;
         String tokenResult = "";
@@ -238,10 +241,9 @@ public class UserApiController {
             tokenResult = jwtTokenProvider.createToken(user.getNickName(), user.getId());
 
             // Token return
-        } catch (IOException e) {
+        } catch (IOException | GeneralSecurityException e) {
             e.printStackTrace();
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            return ApiResponse.invalidAccessToken();
         }
 
         return ApiResponse.success("token", tokenResult);
@@ -252,16 +254,16 @@ public class UserApiController {
      * @param token
      * @param changePasswordRequest // {paswword, passwordConfirm}
      * @return
-     * 반환 코드 : 200 / 403 / 406
+     * 반환 코드 : 200 / 401 / 406
      */
-    @PostMapping("/acoounts/update/password")
+    @PostMapping("/accounts/update/password")
     @ApiOperation(value = "패스워드 변경", notes = "")
     public ResponseEntity<?> changePassword(@ApiParam(value = "Jwt 토큰")
                                                 @RequestHeader(value = "Authorization") String token,
                                             @ApiParam(value = "Password") @RequestBody ChangePasswordRequest changePasswordRequest) {
         if (!jwtTokenProvider.validateToken(token)) {
             return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
         }
         else{
@@ -277,8 +279,15 @@ public class UserApiController {
     }
 
 
-
-    // 회원 정보 변경
+    /**
+     * 회원 정보 변경
+     * @param token
+     * @param file
+     * @param nickName
+     * @param email
+     * @return
+     * 반환 코드 200 / 400 / 401
+     */
     @PostMapping("/accounts/update/userinfo")
     @ApiOperation(value = "회원 정보 변경", notes = "")
     public ResponseEntity<?> changeUserInfo(@ApiParam(value = "jwt 토큰")@RequestHeader(value = "Authorization") String token,
@@ -287,27 +296,26 @@ public class UserApiController {
                                             @RequestPart(value = "email", required = false) String email) {
         if (!jwtTokenProvider.validateToken(token)) {
             return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
         }
 
 
         Long id = jwtTokenProvider.getId(token);
         String image = userService.getProfileImgUrl(id);
-        if(nickName == null || email == null ||
-                nickName == null || file == null){
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Content is null");
+        if(nickName == null || email == null || file == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Content is null");
         }
-        if(file != null){
-            try {
-                image = fileService.imageUploadGCS(file, id);
-            } catch (IOException e) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new ErrorResponse(messageSource
-                                .getMessage("error.wrong", null, LocaleContextHolder.getLocale())));
-            }
+
+        try {
+            image = fileService.imageUploadGCS(file, id);
+        } catch (IOException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(messageSource
+                            .getMessage("error.wrong", null, LocaleContextHolder.getLocale())));
         }
+
         userService.updateUserInfo(id, nickName, email, image);
 
 
@@ -315,8 +323,8 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    // 회원 정보 변경
-    @PostMapping(value = "/acoounts/update/test")
+    // 회원 정보 변경 테스트
+    @PostMapping(value = "/accounts/update/test")
     @ApiOperation(value = "회원 정보 변경", notes = "")
     public ResponseEntity<?> test(@RequestParam(value = "id") Long id,
                                             @RequestParam(value = "image", required = false) MultipartFile file,
@@ -336,7 +344,7 @@ public class UserApiController {
 
         String image = userService.getProfileImgUrl(id);
         if(nickName == null || email == null ||
-                nickName == null || file == null){
+                file == null){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Content is null");
         }
         if(file != null){

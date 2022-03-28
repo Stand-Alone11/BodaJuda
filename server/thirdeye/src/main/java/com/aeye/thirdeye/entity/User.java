@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @Size(max = 30)
     private String userId;
 
-    @Size(max = 20)
+    @Size(max = 255)
     private String password;
 
     private String email;

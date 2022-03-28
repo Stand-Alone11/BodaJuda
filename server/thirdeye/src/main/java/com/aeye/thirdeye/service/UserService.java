@@ -43,8 +43,7 @@ public class UserService {
         validateDuplicateUser(user);
         user.setPassword(user.getPassword());
         user.encodePassword(passwordEncoder);
-//        int randNum = (int)(Math.random()*20) + 1;
-//        user.setProfileImage("#" + randNum);
+        System.out.println(user.getNickName());
         userRepository.save(user);
         return user.getId();
     }
