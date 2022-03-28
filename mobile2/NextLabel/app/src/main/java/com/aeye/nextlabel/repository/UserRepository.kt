@@ -5,10 +5,7 @@ import com.aeye.nextlabel.util.Resource
 import com.aeye.nextlabel.model.network.api.UserApi
 import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.model.dto.UserForLogin
-import com.aeye.nextlabel.model.network.response.JoinResponse
-import com.aeye.nextlabel.model.network.response.LeaveResponse
-import com.aeye.nextlabel.model.network.response.LoginResponse
-import com.aeye.nextlabel.model.network.response.ProfileResponse
+import com.aeye.nextlabel.model.network.response.*
 import java.lang.Exception
 
 class UserRepository {
@@ -82,4 +79,21 @@ class UserRepository {
 //            Resource.error(null, "서버와 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.")
 //        }
 //    }
+
+    suspend fun getLeaderBoard(page: Int, size: Int): Resource<LeaderBoardResponse> {
+        return try {
+            val response = userApi.getLeaderBoard(page, size)
+            if (response.isSuccessful) {
+                return if(response.code() == 201) {
+                    Resource.success(response.body()!!)
+                } else {
+                    Resource.error(null, "message 1")
+                }
+            } else {
+                Resource.error(null, "message 2")
+            }
+        } catch (e: Exception) {
+            Resource.error(null, "message 3")
+        }
+    }
 }

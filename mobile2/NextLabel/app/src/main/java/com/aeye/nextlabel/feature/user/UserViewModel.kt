@@ -8,11 +8,8 @@ import com.aeye.nextlabel.global.ApplicationClass.Companion.sSharedPreferences
 import com.aeye.nextlabel.util.Resource
 import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.model.dto.UserForLogin
+import com.aeye.nextlabel.model.network.response.*
 import com.aeye.nextlabel.repository.UserRepository
-import com.aeye.nextlabel.model.network.response.JoinResponse
-import com.aeye.nextlabel.model.network.response.LeaveResponse
-import com.aeye.nextlabel.model.network.response.LoginResponse
-import com.aeye.nextlabel.model.network.response.ProfileResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,6 +21,7 @@ class UserViewModel: ViewModel() {
 //    val leaveRequestLiveData = MutableLiveData<Resource<LeaveResponse>>()
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse>>()
 //    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
+    val leaderBoardLiveData = MutableLiveData<Resource<LeaderBoardResponse>>()
 
     fun join(user: UserForJoin) = viewModelScope.launch {
         joinRequestLiveData.postValue(Resource.loading(null))
@@ -56,4 +54,11 @@ class UserViewModel: ViewModel() {
 //            profileRequestLiveData.postValue(userRepository.getProfile(userId))
 //        }
 //    }
+
+    fun getLeaderBoard(page: Int, size: Int) = viewModelScope.launch {
+        leaderBoardLiveData.postValue(Resource.loading(null))
+        withContext(Dispatchers.IO) {
+            leaderBoardLiveData.postValue(userRepository.getLeaderBoard(page, size))
+        }
+    }
 }

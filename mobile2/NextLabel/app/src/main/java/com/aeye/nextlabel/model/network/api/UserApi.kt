@@ -1,9 +1,6 @@
 package com.aeye.nextlabel.model.network.api
 
-import com.aeye.nextlabel.model.dto.Password
-import com.aeye.nextlabel.model.dto.UserForJoin
-import com.aeye.nextlabel.model.dto.UserForLogin
-import com.aeye.nextlabel.model.dto.UserForUpdate
+import com.aeye.nextlabel.model.dto.*
 import com.aeye.nextlabel.model.network.response.*
 import retrofit2.Response
 import retrofit2.http.*
@@ -34,4 +31,8 @@ interface UserApi {
     // 7. 프로필
     @GET("/accounts/info/{id}")
     suspend fun getProfile(@Path("id") id: Int): Response<ProfileResponse>
+
+    // 8. 리더보드
+    @GET("/accounts/rank")
+    suspend fun getLeaderBoard(@Query("page") page: Int, @Query("size") size: Int): Response<LeaderBoardResponse>
 }
