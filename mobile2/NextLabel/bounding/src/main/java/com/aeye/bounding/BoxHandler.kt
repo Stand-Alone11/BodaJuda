@@ -72,35 +72,35 @@ class BoxHandler(rectF: RectF, private val radius: Int) {
             mRect = when(mType) {
                 // 네 꼭짓점이 boundary를 벗어나지 않을 때만 drag 가능
                 Type.DRAG -> {
-                    return if(mRect.left + dx > mLeftLimit && mRect.right + dx < mRightLimit && mRect.top + dy > mTopLimit && mRect.bottom + dy < mBottomLimit) {
+                    if(mRect.left + dx > mLeftLimit && mRect.right + dx < mRightLimit && mRect.top + dy > mTopLimit && mRect.bottom + dy < mBottomLimit) {
                         RectF(mRect.left + dx, mRect.top + dy, mRect.right + dx, mRect.bottom + dy)
                     } else {
                         mRect
                     }
                 }
                 Type.ADJUST_LEFT -> {
-                    return if(isInLeftLimit(dx) && isInMinWidthOnLeft(dx)) {
+                    if(isInLeftLimit(dx) && isInMinWidthOnLeft(dx)) {
                         RectF(mRect.left + dx, mRect.top, mRect.right, mRect.bottom)
                     } else {
                         mRect
                     }
                 }
                 Type.ADJUST_TOP -> {
-                    return if(isInTopLimit(dy) && isInMinHeightOnTop(dy)) {
+                    if(isInTopLimit(dy) && isInMinHeightOnTop(dy)) {
                         RectF(mRect.left, mRect.top + dy, mRect.right, mRect.bottom)
                     } else {
                         mRect
                     }
                 }
                 Type.ADJUST_RIGHT -> {
-                    return if(isInRightLimit(dx) && isInMinWidthOnRight(dx)) {
+                    if(isInRightLimit(dx) && isInMinWidthOnRight(dx)) {
                         RectF(mRect.left, mRect.top, mRect.right + dx, mRect.bottom)
                     } else {
                         mRect
                     }
                 }
                 Type.ADJUST_BOTTOM -> {
-                    return if(isInBottomLimit(dy) && isInMinHeightOnBottom(dy)) {
+                    if(isInBottomLimit(dy) && isInMinHeightOnBottom(dy)) {
                         RectF(mRect.left, mRect.top, mRect.right, mRect.bottom + dy)
                     } else {
                         mRect
@@ -118,6 +118,7 @@ class BoxHandler(rectF: RectF, private val radius: Int) {
 //                Type.ADJUST_BL -> {
 //                    mRect
 //                }
+                else -> mRect
             }
             updateTouchCoor(tX, tY)
             return mRect
@@ -137,7 +138,7 @@ class BoxHandler(rectF: RectF, private val radius: Int) {
 
     /** 최신 정보인 mRect와 touchEvent 좌표, radius를 가지고 유효한 touchEvent인지 판단 */
     private fun isValidEvent(tX: Float, tY: Float): Boolean {
-        return (tX >= mRect.left - radius && tX < mRect.right && tY >= mRect.top - radius && tY < mRect.bottom - radius)
+        return (tX >= mRect.left - radius && tX < mRect.right + radius && tY >= mRect.top - radius && tY < mRect.bottom + radius)
     }
 
     private fun updateTouchCoor(tX: Float, tY: Float) {
@@ -151,11 +152,11 @@ class BoxHandler(rectF: RectF, private val radius: Int) {
      * 3. drag
      *
      * |------------------|
-     * |                  |
+     * |  c     t      c  |
      * |    |-------|     |
-     * |    |       |     |
+     * |  l |   d   |  r  |
      * |    |-------|     |
-     * |                  |
+     * |  c     b      c  |
      * |------------------|
      */
 
@@ -203,7 +204,7 @@ class BoxHandler(rectF: RectF, private val radius: Int) {
 
     // 0:TL 1:TR 2:BR 3:BL
     private fun isInRadius(xMin: Float, xMax: Float, yMin: Float, yMax: Float): Boolean {
-        return (mTouchX >= xMin && mTouchX < xMax && mTouchY >= yMin && mTouchY < yMin)
+        return (mTouchX >= xMin && mTouchX < xMax && mTouchY >= yMin && mTouchY < yMax)
     }
 
     enum class Type {
