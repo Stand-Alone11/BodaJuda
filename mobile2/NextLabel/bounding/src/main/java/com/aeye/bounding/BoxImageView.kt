@@ -29,8 +29,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     var imageWidth: Int? = null
 
     /** overlayViewWidth */
-    private val mLimitLTRB = emptyArray<Int>()
-    val limitTRB: Array<Int>
+    private val mLimitLTRB = IntArray(4, {-1})
+    val limitTRB: IntArray
         get() = mLimitLTRB
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
