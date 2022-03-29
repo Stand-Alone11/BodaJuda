@@ -36,10 +36,10 @@ public class ImageService {
         BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
-        System.out.println(image.getL_X());
-        System.out.println(image.getL_Y());
-        System.out.println(image.getR_X());
-        System.out.println(image.getR_Y());
+//        System.out.println(image.getL_X());
+//        System.out.println(image.getL_Y());
+//        System.out.println(image.getR_X());
+//        System.out.println(image.getR_Y());
 
         int xs = (int) (height * image.getL_X());
         int xe = (int) (height * image.getR_X());
@@ -64,19 +64,17 @@ public class ImageService {
         else
             graphics2D.drawImage(cropedImage, null,(nh-nw)/2 , -(nw-nh)/2);
 
-        System.out.println(width + ", " + height);
+//        System.out.println(width + ", " + height);
         Image savedImage = imageRepository.save(image);
         String fileName = Long.toString(savedImage.getId());
         File folder = new File(absolutePath + "tmpImgs");
 
-        ImageIO.write(cropedImage, "jpg", new File(folder + File.separator + fileName + "_cropped.jpg"));
-        ImageIO.write(newImageFromBuffer, "jpg", new File(folder + File.separator + fileName + "_rotated.jpg"));
+//        ImageIO.write(cropedImage, "jpg", new File(folder + File.separator + fileName + "_cropped.jpg"));
+        ImageIO.write(newImageFromBuffer, "jpg", new File(folder + File.separator + fileName + "_cropped.jpg"));
 
         if (!folder.exists()) {
             folder.mkdirs();
-            System.out.println("폴더 생성");
-//            folder.setReadable(true);
-//            folder.setWritable(true);
+//            System.out.println("폴더 생성");
         }
 
         File newFile = new File(folder + File.separator + fileName + ".jpg");
@@ -86,6 +84,7 @@ public class ImageService {
         savedImage.setUser(user);
         imageRepository.save(savedImage);
 
+        savedImage.setImage(folder + File.separator + fileName + "_cropped.jpg");
         return new ImageDto(savedImage);
     }
 
@@ -93,7 +92,9 @@ public class ImageService {
     public void approveImage(int seq) throws Exception {
         Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
 
-        File curFile = new File(nowImage.getImage());
+        String croppedImagePath = nowImage.getImage().substring(0,nowImage.getImage().length()-4) + "cropped.jpg";
+        File curFile = new File(croppedImagePath);
+        File curFile2 = new File(nowImage.getImage());
         String pathPrefix = absolutePath + "gpuImgs/";
         String pathPrefix2 = absolutePath + "savedImgs/";
         String pathSurfix = nowImage.getTypeA() + "/"
@@ -105,7 +106,7 @@ public class ImageService {
 
         LocalDate now = LocalDate.now();
 
-        String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + System.nanoTime();
+        String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_" + System.nanoTime();
 
 
         nowImage.setImage(pathPrefix2 + pathSurfix + fileName + ".jpg");
@@ -117,22 +118,17 @@ public class ImageService {
 
         File imgFile = new File(folder + File.separator + fileName + ".jpg");
         curFile.renameTo(imgFile);
-        File jsonFile = new File(folder + File.separator + fileName + ".json");
-        jsonFile.createNewFile();
-        FileWriter fileWriter = new FileWriter(jsonFile);
-        gson.toJson(nowImage, fileWriter);
-        fileWriter.close();
 
         File folder2 = new File(pathPrefix2 + pathSurfix);
         if (!folder2.exists()) {
             folder2.mkdirs();
         }
         File imgFile2 = new File(folder2 + File.separator + fileName + ".jpg");
-
-        Files.copy(imgFile.toPath(), imgFile2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        curFile.renameTo(imgFile);
+        curFile2.renameTo(imgFile2);
         File jsonFile2 = new File(folder2 + File.separator + fileName + ".json");
-        Files.copy(jsonFile.toPath(), jsonFile2.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        FileWriter fileWriter = new FileWriter(jsonFile2);
+        gson.toJson(nowImage, fileWriter);
+        fileWriter.close();
 
 
         imageRepository.save(nowImage);
@@ -141,10 +137,15 @@ public class ImageService {
     public void rejectImage(int seq) throws Exception {
         Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
 
-        File curFile = new File(nowImage.getImage());
+        String croppedImagePath = nowImage.getImage().substring(0,nowImage.getImage().length()-4) + "cropped.jpg";
+        File curFile = new File(croppedImagePath);
+        File curFile2 = new File(nowImage.getImage());
 
         if (curFile.exists()) {
             curFile.delete();
+        }
+        if(curFile2.exists()){
+            curFile2.delete();
         }
     }
 }
