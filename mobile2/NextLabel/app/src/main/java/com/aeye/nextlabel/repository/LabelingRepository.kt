@@ -11,7 +11,7 @@ import okhttp3.RequestBody
 class LabelingRepository {
     var labelingApi: LabelingApi = ApplicationClass.sRetrofit.create(LabelingApi::class.java)
 
-    suspend fun giveLabels(label: RequestBody, img: MultipartBody.Part): Resource<LabelingResponse> {
+    suspend fun uploadLabels(label: RequestBody, img: MultipartBody.Part): Resource<LabelingResponse> {
         return try {
             val response = labelingApi.giveLabels(label, img)
             if (response.isSuccessful) {
