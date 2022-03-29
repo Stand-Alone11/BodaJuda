@@ -36,10 +36,6 @@ public class ImageService {
         BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
-//        System.out.println(image.getL_X());
-//        System.out.println(image.getL_Y());
-//        System.out.println(image.getR_X());
-//        System.out.println(image.getR_Y());
 
         int xs = (int) (height * image.getL_X());
         int xe = (int) (height * image.getR_X());
@@ -64,17 +60,14 @@ public class ImageService {
         else
             graphics2D.drawImage(cropedImage, null,(nh-nw)/2 , -(nw-nh)/2);
 
-//        System.out.println(width + ", " + height);
         Image savedImage = imageRepository.save(image);
         String fileName = Long.toString(savedImage.getId());
         File folder = new File(absolutePath + "tmpImgs");
 
-//        ImageIO.write(cropedImage, "jpg", new File(folder + File.separator + fileName + "_cropped.jpg"));
         ImageIO.write(newImageFromBuffer, "jpg", new File(folder + File.separator + fileName + "_cropped.jpg"));
 
         if (!folder.exists()) {
             folder.mkdirs();
-//            System.out.println("폴더 생성");
         }
 
         File newFile = new File(folder + File.separator + fileName + ".jpg");
@@ -92,9 +85,8 @@ public class ImageService {
     public void approveImage(int seq) throws Exception {
         Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
 
-        String croppedImagePath = nowImage.getImage().substring(0,nowImage.getImage().length()-4) + "cropped.jpg";
-        File curFile = new File(croppedImagePath);
-        File curFile2 = new File(nowImage.getImage());
+        File curFile = new File(nowImage.getImage());
+        File curFile2 = new File(nowImage.getImage().substring(0,nowImage.getImage().length()-12)+".jpg");
         String pathPrefix = absolutePath + "gpuImgs/";
         String pathPrefix2 = absolutePath + "savedImgs/";
         String pathSurfix = nowImage.getTypeA() + "/"
@@ -137,9 +129,8 @@ public class ImageService {
     public void rejectImage(int seq) throws Exception {
         Image nowImage = imageRepository.findById(Long.valueOf(seq)).orElse(null);
 
-        String croppedImagePath = nowImage.getImage().substring(0,nowImage.getImage().length()-4) + "cropped.jpg";
-        File curFile = new File(croppedImagePath);
-        File curFile2 = new File(nowImage.getImage());
+        File curFile = new File(nowImage.getImage());
+        File curFile2 = new File(nowImage.getImage().substring(0,nowImage.getImage().length()-12)+".jpg");
 
         if (curFile.exists()) {
             curFile.delete();
