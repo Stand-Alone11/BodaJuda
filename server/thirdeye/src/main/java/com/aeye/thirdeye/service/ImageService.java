@@ -63,12 +63,11 @@ public class ImageService {
         Image savedImage = imageRepository.save(image);
         String fileName = Long.toString(savedImage.getId());
         File folder = new File(absolutePath + "tmpImgs");
-
-        ImageIO.write(newImageFromBuffer, "jpg", new File(folder + File.separator + fileName + "_cropped.jpg"));
-
         if (!folder.exists()) {
             folder.mkdirs();
         }
+
+        ImageIO.write(newImageFromBuffer, "jpg", new File(folder + File.separator + fileName + "_cropped.jpg"));
 
         File newFile = new File(folder + File.separator + fileName + ".jpg");
         file.transferTo(newFile);
