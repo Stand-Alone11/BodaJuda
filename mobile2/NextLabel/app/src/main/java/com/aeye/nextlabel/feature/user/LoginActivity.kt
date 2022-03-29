@@ -11,6 +11,7 @@ import com.aeye.nextlabel.feature.main.MainActivity
 import com.aeye.nextlabel.global.FRAGMENT_BUNDLE_KEY
 import com.aeye.nextlabel.global.JOIN_FRAGMENT
 import com.aeye.nextlabel.global.LOGIN_FRAGMENT
+import com.aeye.nextlabel.global.MOVE_FRAGMENT
 import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.util.InputValidUtil
 
@@ -24,7 +25,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
     private fun init() {
         setFragment()
-        supportFragmentManager.setFragmentResultListener("MOVE", this) { _, bundle ->
+        supportFragmentManager.setFragmentResultListener(MOVE_FRAGMENT, this) { _, bundle ->
             val transaction = supportFragmentManager.beginTransaction()
             when(bundle[FRAGMENT_BUNDLE_KEY]) {
                 JOIN_FRAGMENT -> {
