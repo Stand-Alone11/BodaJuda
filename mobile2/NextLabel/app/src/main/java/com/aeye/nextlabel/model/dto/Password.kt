@@ -6,6 +6,6 @@ data class Password(
     @SerializedName("password")
     val password: String,
 
-    @SerializedName("passwordConfirmation")
-    val passwordConfirmation: String,
+    @SerializedName("passwordConfirm")
+    val passwordConfirm: String,
 )
