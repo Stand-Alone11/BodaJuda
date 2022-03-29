@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.feature.main
+package com.aeye.nextlabel.feature.user
 
 import android.graphics.Color
 import android.os.Bundle
