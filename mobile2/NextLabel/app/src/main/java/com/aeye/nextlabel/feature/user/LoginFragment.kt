@@ -6,11 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentLoginBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
 import com.aeye.nextlabel.feature.main.MainActivity
+import com.aeye.nextlabel.global.FRAGMENT_BUNDLE_KEY
+import com.aeye.nextlabel.global.JOIN_FRAGMENT
+import com.aeye.nextlabel.global.LOGIN_FRAGMENT
+import com.aeye.nextlabel.global.MOVE_FRAGMENT
 import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.util.InputValidUtil
 import com.aeye.nextlabel.util.Status
@@ -29,7 +35,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
 
     private fun init() {
         btnJoin.setOnClickListener {
-            // TODO: joinFragment로 이동 
+            setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to JOIN_FRAGMENT))
         }
 
         btnLogin.setOnClickListener {
