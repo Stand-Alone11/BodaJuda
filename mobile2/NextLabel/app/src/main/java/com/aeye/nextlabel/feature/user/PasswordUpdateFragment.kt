@@ -1,15 +1,12 @@
 package com.aeye.nextlabel.feature.user
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentPasswordUpdateBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
-import com.aeye.nextlabel.feature.main.MainActivity
 import com.aeye.nextlabel.model.dto.Password
-import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.util.InputValidUtil
 
 class PasswordUpdateFragment : BaseFragment<FragmentPasswordUpdateBinding>(
@@ -34,10 +31,10 @@ class PasswordUpdateFragment : BaseFragment<FragmentPasswordUpdateBinding>(
     }
 
     private fun updatePassword() {
-        val userId = binding.password.text.toString()
-        val password = binding.passwordConfirmation.text.toString()
+        val password = binding.password.text.toString()
+        val passwordConfirm = binding.passwordConfirmation.text.toString()
 
-        userViewModel.updatePassword(Password(userId, password))
+        userViewModel.updatePassword(Password(password, passwordConfirm))
     }
 
     private fun checkInputForm(): Boolean {

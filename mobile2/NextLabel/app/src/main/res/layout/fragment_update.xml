@@ -4,27 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature.main.UpdateFragment">
+    tools:context=".feature.user.UpdateFragment">
 
     <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
+        android:id="@+id/text_title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="회원정보 수정"
+        android:text="User Info Update"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="@dimen/font_size_title"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/padding_page"
+        android:layout_marginStart="@dimen/padding_page"
+        android:layout_marginEnd="@dimen/padding_page" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="383dp"
-        android:layout_height="151dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/constraintLayout_profile_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/text_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginStart="@dimen/padding_page"
+        android:layout_marginEnd="@dimen/padding_page">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card"
@@ -73,91 +78,88 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--  Email  -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField_update_email"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/outlinedTextField_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
         android:hint="Email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout_profile_image"
+        android:layout_marginTop="@dimen/margin_top_related"
+        android:layout_marginStart="@dimen/padding_page"
+        android:layout_marginEnd="@dimen/padding_page">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/update_email"
+            android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!--  Nickname  -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField_update_nickName"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/outlinedTextField_nickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:hint="Nick Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_update_email">
+        android:hint="Nickname"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toBottomOf="@id/outlinedTextField_email"
+        android:layout_marginTop="@dimen/margin_top_related"
+        android:layout_marginStart="@dimen/padding_page"
+        android:layout_marginEnd="@dimen/padding_page">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/update_nickName"
+            android:id="@+id/nickname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <Button
+        android:id="@+id/containedButton_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        app:layout_constraintTop_toBottomOf="@id/outlinedTextField_nickname"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginStart="@dimen/padding_page"
+        android:layout_marginEnd="@dimen/padding_page" />
+
+    <TextView
+        android:id="@+id/text_title_danger_zone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="DANGER ZONE"
+        android:textColor="@color/danger_color"
+        android:textSize="@dimen/font_size_title"
+        app:layout_constraintTop_toBottomOf="@id/containedButton_update"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginStart="@dimen/padding_page"
+        android:layout_marginEnd="@dimen/padding_page" />
 
     <Button
-        android:id="@+id/button_update_save"
-        android:layout_width="0dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:backgroundTint="#002C86"
-        android:text="저장"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_update_nickName" />
+        android:id="@+id/containedButton_password_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/danger_color"
+        android:text="Password Update"
+        app:layout_constraintTop_toBottomOf="@id/text_title_danger_zone"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginStart="@dimen/padding_page"
+        android:layout_marginEnd="@dimen/padding_page" />
 
     <Button
-        android:id="@+id/button_update_passwordUpdate"
-        android:layout_width="0dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:backgroundTint="#FF7D7D"
-        android:text="비밀번호 변경"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_update_save" />
-
-    <Button
-        android:id="@+id/button_update_withdraw"
-        android:layout_width="0dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="24dp"
-        android:backgroundTint="#FF7D7D"
-        android:text="회원탈퇴"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_update_passwordUpdate" />
+        android:id="@+id/containedButton_signout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/danger_color"
+        android:text="Sign Out"
+        app:layout_constraintTop_toBottomOf="@id/containedButton_password_update"
+        android:layout_marginTop="@dimen/margin_top_related"
+        android:layout_marginStart="@dimen/padding_page"
+        android:layout_marginEnd="@dimen/padding_page" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

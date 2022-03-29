@@ -11,4 +11,5 @@
     <!--  custom  -->
     <color name="brand_color">#77C4E0</color>
     <color name="brand_color_secondary">#002C86</color>
+    <color name="danger_color">#FF7D7D</color>
 </resources>
