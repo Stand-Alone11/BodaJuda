@@ -14,7 +14,8 @@
     <!--  margin for logo image  -->
     <dimen name="margin_logo">150dp</dimen>
 
-    <!--  font size for service name  -->
+    <!--  font size  -->
     <dimen name="font_size_service_name">15sp</dimen>
+    <dimen name="font_size_title">20sp</dimen>
 
 </resources>
