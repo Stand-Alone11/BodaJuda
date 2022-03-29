@@ -10,9 +10,7 @@ import com.aeye.nextlabel.model.dto.Password
 import com.aeye.nextlabel.model.dto.UserForUpdate
 import com.aeye.nextlabel.util.InputValidUtil
 
-class UpdateFragment : BaseFragment<FragmentUpdateBinding>(
-    FragmentUpdateBinding::bind, R.layout.fragment_password_update
-) {
+class UpdateFragment : BaseFragment<FragmentUpdateBinding>(FragmentUpdateBinding::bind, R.layout.fragment_update) {
 
     val userViewModel: UserViewModel by activityViewModels()
 
@@ -31,7 +29,7 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(
             }
         }
 
-        btnLeave.setOnClickListener { userViewModel.signout() }
+        btnLeave.setOnClickListener { signout() }
     }
 
     private fun update() {
@@ -40,6 +38,8 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(
 
         userViewModel.update(UserForUpdate(email, nickname))
     }
+
+    private fun signout() = userViewModel.signout()
 
     private fun checkInputForm(): Boolean {
         var result = 1
