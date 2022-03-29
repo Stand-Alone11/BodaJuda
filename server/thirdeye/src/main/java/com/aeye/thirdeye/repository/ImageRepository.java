@@ -24,7 +24,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     int getTotalUpload(@Param("userId") Long userid);
 
     @Query(value="SELECT * FROM (SELECT rank() over(order by count(*) DESC), i.user_id " +
-            "from Image i group by i.user_id ) ranked WHERE ranked.user_id = :userId"
+            "from image i group by i.user_id ) ranked WHERE ranked.user_id = :userId"
             , nativeQuery = true)
     Optional<Integer> getRank(@Param("userId") Long userid);
 
