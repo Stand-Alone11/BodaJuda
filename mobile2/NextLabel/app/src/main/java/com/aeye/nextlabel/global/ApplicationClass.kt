@@ -21,7 +21,7 @@ class ApplicationClass: Application() {
         lateinit var sContentResolver: ContentResolver
 
         const val JWT = "JWT"
-        const val X_AUTH_TOKEN = "X-AUTH-TOKEN"
+        const val AUTHORIZATION = "Authorization"
         const val SHARED_PREFERENCES_NAME = "NEXT_LABEL"
     }
 
