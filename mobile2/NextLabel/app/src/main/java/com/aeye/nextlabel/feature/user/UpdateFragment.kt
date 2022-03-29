@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.aeye.nextlabel.R
-import com.aeye.nextlabel.databinding.FragmentPasswordUpdateBinding
+import com.aeye.nextlabel.databinding.FragmentUpdateBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
 import com.aeye.nextlabel.model.dto.Password
+import com.aeye.nextlabel.model.dto.UserForUpdate
 import com.aeye.nextlabel.util.InputValidUtil
 
-class PasswordUpdateFragment : BaseFragment<FragmentPasswordUpdateBinding>(
-    FragmentPasswordUpdateBinding::bind, R.layout.fragment_password_update
+class UpdateFragment : BaseFragment<FragmentUpdateBinding>(
+    FragmentUpdateBinding::bind, R.layout.fragment_password_update
 ) {
 
     val userViewModel: UserViewModel by activityViewModels()
@@ -22,34 +23,37 @@ class PasswordUpdateFragment : BaseFragment<FragmentPasswordUpdateBinding>(
 
     private fun init() {
         val btnUpdate = binding.containedButtonUpdate
+        val btnLeave = binding.containedButtonSignout
 
         btnUpdate.setOnClickListener {
             if (checkInputForm()) {
-                updatePassword()
+                update()
             }
         }
+
+        btnLeave.setOnClickListener { userViewModel.signout() }
     }
 
-    private fun updatePassword() {
-        val password = binding.password.text.toString()
-        val passwordConfirm = binding.passwordConfirmation.text.toString()
+    private fun update() {
+        val email = binding.email.text.toString()
+        val nickname = binding.nickname.text.toString()
 
-        userViewModel.updatePassword(Password(password, passwordConfirm))
+        userViewModel.update(UserForUpdate(email, nickname))
     }
 
     private fun checkInputForm(): Boolean {
         var result = 1
 
-        val password = binding.password.text.toString()
-        val passwordConfirmation = binding.passwordConfirmation.text.toString()
+        val email = binding.email.text.toString()
+        val nickname = binding.nickname.text.toString()
 
-        if(!InputValidUtil.isValidPassword(password)) {
+        if(!InputValidUtil.isValidEmail(email)) {
             result *= 0
-            binding.password.error = resources.getText(R.string.passwordErrorMessage)
+            binding.email.error = resources.getText(R.string.emailErrorMessage)
         }
-        if(password != passwordConfirmation) {
+        if(!InputValidUtil.isValidNickname(nickname)) {
             result *= 0
-            binding.passwordConfirmation.error = resources.getText(R.string.passwordConfirmErrorMessage)
+            binding.nickname.error = resources.getText(R.string.nicknameErrorMessage)
         }
 
         return when(result) {
