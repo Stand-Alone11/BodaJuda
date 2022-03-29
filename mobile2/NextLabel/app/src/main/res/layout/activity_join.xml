@@ -1,157 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature.user.JoinActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--  text button login  -->
-    <Button
-        android:id="@+id/textButton_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log In"
-        android:textAllCaps="false"
-        android:textColor="@color/brand_color_secondary"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-<!--  brand  -->
-    <ImageView
-        android:id="@+id/img_service_logo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/service_logo"
-        app:layout_constraintDimensionRatio="w,1:1"
-        app:layout_constraintTop_toBottomOf="@id/textButton_login"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/margin_top"
-        android:layout_marginStart="@dimen/margin_logo"
-        android:layout_marginEnd="@dimen/margin_logo" />
-
-    <TextView
-        android:id="@+id/txt_service_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Service Name"
-        android:textSize="@dimen/size_service_name"
-        android:gravity="center"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/img_service_logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/margin_top_related"
-        android:layout_marginStart="@dimen/padding_page"
-        android:layout_marginEnd="@dimen/padding_page"/>
-
-<!--  input  -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField_id"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="ID"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/txt_service_name"
-        android:layout_marginTop="@dimen/margin_top"
-        android:layout_marginStart="@dimen/padding_page"
-        android:layout_marginEnd="@dimen/padding_page">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/user_id"
+        <!--  text button: "login"  -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/textButton_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_text_login"
+            android:textAllCaps="false"
+            android:textColor="@color/brand_color_secondary"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!--  brand area  -->
+        <ImageView
+            android:id="@+id/img_service_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/service_logo"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintTop_toBottomOf="@id/textButton_login"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginStart="@dimen/margin_logo"
+            android:layout_marginEnd="@dimen/margin_logo" />
+
+        <TextView
+            android:id="@+id/txt_service_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Service Name"
+            android:gravity="center"
+            android:textSize="@dimen/font_size_service_name"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/img_service_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_top_related"
+            android:layout_marginStart="@dimen/padding_page"
+            android:layout_marginEnd="@dimen/padding_page" />
+
+        <!--  input area  -->
+        <!--  ID  -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:hint="ID"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/txt_service_name"
+            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginStart="@dimen/padding_page"
+            android:layout_marginEnd="@dimen/padding_page">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/outlinedTextField_id"
-        android:layout_marginTop="@dimen/margin_top_related"
-        android:layout_marginStart="@dimen/padding_page"
-        android:layout_marginEnd="@dimen/padding_page">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
+        <!--  Password  -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:hint="Password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/outlinedTextField_id"
+            android:layout_marginTop="@dimen/margin_top_related"
+            android:layout_marginStart="@dimen/padding_page"
+            android:layout_marginEnd="@dimen/padding_page">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField_password_confirmation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password Confirmation"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/outlinedTextField_password"
-        android:layout_marginTop="@dimen/margin_top_related"
-        android:layout_marginStart="@dimen/padding_page"
-        android:layout_marginEnd="@dimen/padding_page">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_confirmation"
+        <!--  Password Confirmation  -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_password_confirmation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:hint="Password Confirmation"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/outlinedTextField_password"
+            android:layout_marginTop="@dimen/margin_top_related"
+            android:layout_marginStart="@dimen/padding_page"
+            android:layout_marginEnd="@dimen/padding_page">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_confirmation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/outlinedTextField_password_confirmation"
-        android:layout_marginTop="@dimen/margin_top_related"
-        android:layout_marginStart="@dimen/padding_page"
-        android:layout_marginEnd="@dimen/padding_page">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email"
+        <!--  Email  -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:hint="Email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/outlinedTextField_password_confirmation"
+            android:layout_marginTop="@dimen/margin_top_related"
+            android:layout_marginStart="@dimen/padding_page"
+            android:layout_marginEnd="@dimen/padding_page">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField_nickname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nickname"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintTop_toBottomOf="@id/outlinedTextField_email"
-        android:layout_marginTop="@dimen/margin_top_related"
-        android:layout_marginStart="@dimen/padding_page"
-        android:layout_marginEnd="@dimen/padding_page">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nickname"
+        <!--  Nickname  -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:hint="Nickname"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/outlinedTextField_email"
+            android:layout_marginTop="@dimen/margin_top_related"
+            android:layout_marginStart="@dimen/padding_page"
+            android:layout_marginEnd="@dimen/padding_page">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-<!--  button join  -->
-    <Button
-        android:id="@+id/containedButton_join"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Join"
-        app:layout_constraintTop_toBottomOf="@id/outlinedTextField_nickname"
-        android:layout_marginTop="@dimen/margin_top_related"
-        android:layout_marginStart="@dimen/padding_page"
-        android:layout_marginEnd="@dimen/padding_page" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!--  button: "join"  -->
+        <Button
+            android:id="@+id/containedButton_join"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Join"
+            app:layout_constraintTop_toBottomOf="@id/outlinedTextField_nickname"
+            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginStart="@dimen/padding_page"
+            android:layout_marginEnd="@dimen/padding_page" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
