@@ -58,10 +58,12 @@ class UserViewModel: ViewModel() {
         }
     }
 
-    fun update(user: UserForUpdate) = viewModelScope.launch {
+    fun update(user: UserForUpdate, absolutePath: String) = viewModelScope.launch {
         updateRequestLiveData.postValue(Resource.loading(null))
+        val imageMultiPartBody = makeMultiPartBody("image", absolutePath, "image/*")
+
         CoroutineScope(Dispatchers.IO).launch {
-            updateRequestLiveData.postValue(userRepository.update(user, makeMultiPart(this@UserViewModel.absoluteImgPath!!)))
+            updateRequestLiveData.postValue(userRepository.update(user, imageMultiPartBody))
         }
     }
 
@@ -79,8 +81,8 @@ class UserViewModel: ViewModel() {
         }
     }
 
-    private fun makeMultiPart(path: String): MultipartBody.Part {
-        val imgFile = File(path)
-        return MultipartBody.Part.createFormData("image", imgFile.name, imgFile.asRequestBody("image/*".toMediaType()))
+    fun makeMultiPartBody(name: String, absolutePath: String, mediaType: String): MultipartBody.Part {
+        val file = File(absolutePath)
+        return MultipartBody.Part.createFormData(name, file.name, file.asRequestBody(mediaType.toMediaType()))
     }
 }
