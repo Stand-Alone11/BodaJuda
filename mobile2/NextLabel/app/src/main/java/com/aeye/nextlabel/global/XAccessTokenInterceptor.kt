@@ -1,6 +1,6 @@
 package com.aeye.nextlabel.global
 
-import com.aeye.nextlabel.global.ApplicationClass.Companion.X_AUTH_TOKEN
+import com.aeye.nextlabel.global.ApplicationClass.Companion.AUTHORIZATION
 import com.aeye.nextlabel.global.ApplicationClass.Companion.sSharedPreferences
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -14,7 +14,7 @@ class XAccessTokenInterceptor : Interceptor {
         val builder: Request.Builder = chain.request().newBuilder()
         val token: String? = sSharedPreferences.getString(ApplicationClass.JWT)
         token?.let {
-            builder.addHeader(X_AUTH_TOKEN, token)
+            builder.addHeader(AUTHORIZATION, token)
         }
         return chain.proceed(builder.build())
     }

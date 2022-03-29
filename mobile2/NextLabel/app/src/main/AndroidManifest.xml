@@ -21,12 +21,6 @@
         android:theme="@style/Theme.NextLabel"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".feature.user.PasswordUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".feature.user.UpdateActivity"
-            android:exported="false" />
-        <activity
             android:name=".feature.community.LeaderboardActivity"
             android:exported="false" />
         <activity

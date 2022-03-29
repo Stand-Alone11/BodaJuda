@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 class ApplicationClass: Application() {
     val BASE_URL = "http://j6s004.p.ssafy.io:8080/"
-    val TIME_OUT = 5000L
+    val TIME_OUT = 10000L
 
     companion object {
         lateinit var sRetrofit: Retrofit
@@ -21,7 +21,7 @@ class ApplicationClass: Application() {
         lateinit var sContentResolver: ContentResolver
 
         const val JWT = "JWT"
-        const val X_AUTH_TOKEN = "X-AUTH-TOKEN"
+        const val AUTHORIZATION = "Authorization"
         const val SHARED_PREFERENCES_NAME = "NEXT_LABEL"
     }
 
