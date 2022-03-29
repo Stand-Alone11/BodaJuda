@@ -29,7 +29,7 @@ class UserViewModel: ViewModel() {
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse>>()
     val updateRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
     val passwordRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
-//    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
+    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
 
     var absoluteImgPath: String? = null
 
@@ -72,12 +72,12 @@ class UserViewModel: ViewModel() {
         }
     }
 
-//    fun getProfile(userId: Int) = viewModelScope.launch {
-//        profileRequestLiveData.postValue(Resource.loading(null))
-//        CoroutineScope(Dispatchers.IO).launch {
-//            profileRequestLiveData.postValue(userRepository.getProfile(userId))
-//        }
-//    }
+    fun getProfile(userId: Int) = viewModelScope.launch {
+        profileRequestLiveData.postValue(Resource.loading(null))
+        CoroutineScope(Dispatchers.IO).launch {
+            profileRequestLiveData.postValue(userRepository.getProfile(userId))
+        }
+    }
 
     private fun makeMultiPart(path: String): MultipartBody.Part {
         val imgFile = File(path)
