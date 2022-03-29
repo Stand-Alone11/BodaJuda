@@ -42,19 +42,47 @@ def image_maker(path):
             h = w
          
          createFolder(path + '_rota/'+i)
-
-         for degree in range(0,361,4):
-            new_img_name = path + '_rota/' + i +'/rota'+str(degree)+'_'+j
+         for c in range(4):
+            new_img_name = path + '_rota/' + i +'/crop'+str(c)+'_'+j
             if os.path.isfile(new_img_name):
                continue
-            matrix = cv2.getRotationMatrix2D((h/2,w/2), degree, 1)
-            rota_image = cv2.warpAffine(image, matrix, (h, w))
-            rota_image = cv2.resize(rota_image,[224,224])
+            cxs = 0
+            cxe = w
+            cys = 0
+            cye = h
+            if c < 2:
+               cys = int(h * 0.1)
+               cye = int(h * 0.7)
+            else:
+               cys = int(h * 0.3)
+               cye = int(h*0.9)
+            if (c % 2 == 0):
+               cxs = int(w*0.1)
+               cxe = int(w*0.7)
+            else:
+               cxs = int(w*0.3)
+               cxe = int(w*0.9)
+
+            crop_image = image[cys:cye,cxs:cxe]
             extension = os.path.splitext(new_img_name)[1]
-            result, encoded_img = cv2.imencode(extension, rota_image)
+            result, encoded_img = cv2.imencode(extension, crop_image)
             if result:
                with open(new_img_name, mode='w+b') as f:
                   encoded_img.tofile(f)
                   
-         os.remove(path+'/'+i+'/'+j)
+         
+         # for degree in range(0,361,3):
+         #    new_img_name = path + '_rota/' + i +'/rota'+str(degree)+'_'+j
+         #    if os.path.isfile(new_img_name):
+         #       continue
+         #    matrix = cv2.getRotationMatrix2D((h/2,w/2), degree, 1)
+         #    rota_image = cv2.warpAffine(image, matrix, (h, w))
+         #    rota_image = cv2.resize(rota_image,[224,224])
+         #    extension = os.path.splitext(new_img_name)[1]
+         #    result, encoded_img = cv2.imencode(extension, rota_image)
+         #    if result:
+         #       with open(new_img_name, mode='w+b') as f:
+         #          encoded_img.tofile(f)
+                  
+         # os.remove(path+'/'+i+'/'+j)
    return list
