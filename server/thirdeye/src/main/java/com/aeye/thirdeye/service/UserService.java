@@ -137,7 +137,7 @@ public class UserService {
 
     public List<LeaderBoardDto> getLeaderBoard(int page, int size){
         int pageStart = page * size;
-
+ 
         String query = "SELECT u.id, u.nick_name, ranked.ranking, ranked.total " +
                 "FROM (SELECT i.user_id, rank() over(order by count(*) DESC) AS RANKING, " +
                 "COUNT(*) total from image i WHERE i.image_validate = \"Y\" group by i.user_id ) ranked, user u " +
