@@ -3,6 +3,7 @@ package com.aeye.nextlabel.feature.user
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aeye.nextlabel.feature.common.BaseResponse
 import com.aeye.nextlabel.global.ApplicationClass.Companion.JWT
 import com.aeye.nextlabel.global.ApplicationClass.Companion.sSharedPreferences
 import com.aeye.nextlabel.model.dto.Password
@@ -23,13 +24,12 @@ import java.io.File
 class UserViewModel: ViewModel() {
     val userRepository = UserRepository()
 
-    val joinRequestLiveData = MutableLiveData<Resource<JoinResponse>>()
-    val leaveRequestLiveData = MutableLiveData<Resource<LeaveResponse>>()
+    val joinRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
+    val leaveRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse>>()
-    val updateRequestLiveData = MutableLiveData<Resource<UpdateResponse>>()
-    val passwordRequestLiveData = MutableLiveData<Resource<PasswordResponse>>()
+    val updateRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
+    val passwordRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
 //    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
-    val leaderBoardLiveData = MutableLiveData<Resource<LeaderBoardResponse>>()
 
     var absoluteImgPath: String? = null
 

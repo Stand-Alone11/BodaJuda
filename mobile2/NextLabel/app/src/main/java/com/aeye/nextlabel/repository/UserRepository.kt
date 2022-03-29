@@ -1,5 +1,6 @@
 package com.aeye.nextlabel.repository
 
+import com.aeye.nextlabel.feature.common.BaseResponse
 import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.model.dto.Password
 import com.aeye.nextlabel.util.Resource
@@ -15,7 +16,7 @@ class UserRepository {
 
     var userApi: UserApi = ApplicationClass.sRetrofit.create(UserApi::class.java)
 
-    suspend fun join(user: UserForJoin): Resource<JoinResponse> {
+    suspend fun join(user: UserForJoin): Resource<BaseResponse> {
         return try {
             val response = userApi.join(user)
             if (response.isSuccessful) {
@@ -32,7 +33,7 @@ class UserRepository {
         }
     }
 
-    suspend fun signout(): Resource<LeaveResponse> {
+    suspend fun signout(): Resource<BaseResponse> {
         return try {
             val response = userApi.signout()
             if (response.isSuccessful) {
@@ -66,7 +67,7 @@ class UserRepository {
         }
     }
 
-    suspend fun update(user: UserForUpdate, image: MultipartBody.Part): Resource<UpdateResponse> {
+    suspend fun update(user: UserForUpdate, image: MultipartBody.Part): Resource<BaseResponse> {
         return try {
             val email = getBody("email", user.email)
             val nickname = getBody("nickname", user.nickname)
@@ -86,7 +87,7 @@ class UserRepository {
         }
     }
 
-    suspend fun updatePassword(password: Password): Resource<PasswordResponse> {
+    suspend fun updatePassword(password: Password): Resource<BaseResponse> {
         return try {
             val response = userApi.updatePassword(password)
             if (response.isSuccessful) {
