@@ -16,18 +16,18 @@ public class LeaderBoardDto {
     private BigInteger id;
     private String nickName;
     private BigInteger rank;
-    private BigInteger imageTotal;
+    private BigInteger imageAccepted;
 
     public LeaderBoardDto(
             BigInteger id,
             String nickName,
             BigInteger rank,
-            BigInteger imageTotal
+            BigInteger imageAccepted
             ){
         this.id = id;
         this.nickName = nickName;
         this.rank = rank;
-        this.imageTotal = imageTotal;
+        this.imageAccepted = imageAccepted;
     }
 
 }

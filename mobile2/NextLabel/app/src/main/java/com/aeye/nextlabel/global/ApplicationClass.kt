@@ -2,9 +2,8 @@ package com.aeye.nextlabel.global
 
 import android.app.Application
 import android.content.ContentResolver
+import com.aeye.nextlabel.util.EmptyResponseOnEmptyConverterFactory
 import com.aeye.nextlabel.util.SharedPreferencesUtil
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -13,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 class ApplicationClass: Application() {
     val BASE_URL = "http://j6s004.p.ssafy.io:8080/"
-    val TIME_OUT = 5000L
+    val TIME_OUT = 10000L
 
     companion object {
         lateinit var sRetrofit: Retrofit
@@ -21,7 +20,7 @@ class ApplicationClass: Application() {
         lateinit var sContentResolver: ContentResolver
 
         const val JWT = "JWT"
-        const val X_AUTH_TOKEN = "X-AUTH-TOKEN"
+        const val AUTHORIZATION = "Authorization"
         const val SHARED_PREFERENCES_NAME = "NEXT_LABEL"
     }
 
@@ -45,6 +44,7 @@ class ApplicationClass: Application() {
 
         sRetrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .client(client)
+            .addConverterFactory(EmptyResponseOnEmptyConverterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

@@ -132,6 +132,8 @@ public class UserService {
 //            }
         }
         profileResponseDto.setRank(rank);
+        profileResponseDto.setProfileImgUrl(user.getProfileImage());
+
         return profileResponseDto;
     }
 
@@ -140,7 +142,7 @@ public class UserService {
 
         String query = "SELECT u.id, u.nick_name, ranked.ranking, ranked.total " +
                 "FROM (SELECT i.user_id, rank() over(order by count(*) DESC) AS RANKING, " +
-                "COUNT(*) total from Image i group by i.user_id ) ranked, user u " +
+                "COUNT(*) total from image i WHERE i.image_validate = \"Y\" group by i.user_id ) ranked, user u " +
                 "WHERE ranked.user_id = u.id order by ranked.ranking asc limit " + pageStart + " ," + size;
 
         JpaResultMapper result = new JpaResultMapper();

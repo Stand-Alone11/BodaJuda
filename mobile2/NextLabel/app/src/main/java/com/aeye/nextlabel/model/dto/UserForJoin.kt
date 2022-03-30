@@ -13,5 +13,5 @@ data class UserForJoin(
     val email: String,
 
     @SerializedName("nickname")
-    val nickname: String,
+    val nickname: String
 )

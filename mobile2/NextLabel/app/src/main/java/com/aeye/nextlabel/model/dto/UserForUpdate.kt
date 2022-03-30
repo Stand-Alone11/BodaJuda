@@ -6,6 +6,6 @@ data class UserForUpdate(
     @SerializedName("email")
     val email: String,
 
-    @SerializedName("nickname")
-    val nickname: String,
+    @SerializedName("nickName")
+    val nickname: String
 )

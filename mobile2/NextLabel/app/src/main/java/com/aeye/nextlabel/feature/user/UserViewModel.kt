@@ -3,6 +3,7 @@ package com.aeye.nextlabel.feature.user
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aeye.nextlabel.feature.common.BaseResponse
 import com.aeye.nextlabel.global.ApplicationClass.Companion.JWT
 import com.aeye.nextlabel.global.ApplicationClass.Companion.sSharedPreferences
 import com.aeye.nextlabel.model.dto.Password
@@ -12,6 +13,8 @@ import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.model.dto.UserForUpdate
 import com.aeye.nextlabel.model.network.response.*
 import com.aeye.nextlabel.repository.UserRepository
+import com.aeye.nextlabel.util.LoginUtil.getUserId
+import com.aeye.nextlabel.util.Status
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,13 +26,12 @@ import java.io.File
 class UserViewModel: ViewModel() {
     val userRepository = UserRepository()
 
-    val joinRequestLiveData = MutableLiveData<Resource<JoinResponse>>()
-    val leaveRequestLiveData = MutableLiveData<Resource<LeaveResponse>>()
+    val joinRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
+    val leaveRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse>>()
-    val updateRequestLiveData = MutableLiveData<Resource<UpdateResponse>>()
-    val passwordRequestLiveData = MutableLiveData<Resource<PasswordResponse>>()
-//    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
-    val leaderBoardLiveData = MutableLiveData<Resource<LeaderBoardResponse>>()
+    val updateRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
+    val passwordRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
+    val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
 
     var absoluteImgPath: String? = null
 
@@ -51,17 +53,21 @@ class UserViewModel: ViewModel() {
         loginRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             val resource = userRepository.login(user)
-
-            // token 저장
-            sSharedPreferences.setString(JWT, resource.data?.token.toString())
+            if(resource.status == Status.SUCCESS) {
+                // token 저장
+                sSharedPreferences.setString(JWT, resource.data?.token.toString())
+                getUserId()
+            }
             loginRequestLiveData.postValue(resource)
         }
     }
 
-    fun update(user: UserForUpdate) = viewModelScope.launch {
+    fun update(user: UserForUpdate, absolutePath: String) = viewModelScope.launch {
         updateRequestLiveData.postValue(Resource.loading(null))
+        val imageMultiPartBody = makeMultiPartBody("image", absolutePath, "image/*")
+
         CoroutineScope(Dispatchers.IO).launch {
-            updateRequestLiveData.postValue(userRepository.update(user, makeMultiPart(this@UserViewModel.absoluteImgPath!!)))
+            updateRequestLiveData.postValue(userRepository.update(user, imageMultiPartBody))
         }
     }
 
@@ -72,15 +78,15 @@ class UserViewModel: ViewModel() {
         }
     }
 
-//    fun getProfile(userId: Int) = viewModelScope.launch {
-//        profileRequestLiveData.postValue(Resource.loading(null))
-//        CoroutineScope(Dispatchers.IO).launch {
-//            profileRequestLiveData.postValue(userRepository.getProfile(userId))
-//        }
-//    }
+    fun getProfile(userId: Int) = viewModelScope.launch {
+        profileRequestLiveData.postValue(Resource.loading(null))
+        CoroutineScope(Dispatchers.IO).launch {
+            profileRequestLiveData.postValue(userRepository.getProfile(userId))
+        }
+    }
 
-    private fun makeMultiPart(path: String): MultipartBody.Part {
-        val imgFile = File(path)
-        return MultipartBody.Part.createFormData("image", imgFile.name, imgFile.asRequestBody("image/*".toMediaType()))
+    fun makeMultiPartBody(name: String, absolutePath: String, mediaType: String): MultipartBody.Part {
+        val file = File(absolutePath)
+        return MultipartBody.Part.createFormData(name, file.name, file.asRequestBody(mediaType.toMediaType()))
     }
 }

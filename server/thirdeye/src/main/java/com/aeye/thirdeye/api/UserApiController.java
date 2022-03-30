@@ -248,7 +248,7 @@ public class UserApiController {
      * @return
      * 반환 코드 : 200 / 401
      */
-    @PostMapping("/acoounts/auth/login")
+    @PostMapping("/accounts/auth/login")
     @ApiOperation(value = "구글 로그인", notes = "")
     @ApiResponses({
             @io.swagger.annotations.ApiResponse(code = 200, message = "로그인 성공", response = LoginUserResponse.class),
