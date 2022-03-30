@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.feature.community
+package com.aeye.nextlabel.feature.main.community
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

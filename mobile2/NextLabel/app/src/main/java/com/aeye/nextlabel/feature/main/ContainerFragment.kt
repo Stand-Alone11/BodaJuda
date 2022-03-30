@@ -6,6 +6,7 @@ import android.view.View
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.ContainerFragmentBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
+import com.aeye.nextlabel.feature.main.home.CameraFragment
 import com.aeye.nextlabel.global.BUNDLE_KEY_TO_MOVE
 import com.aeye.nextlabel.global.REQUEST_KEY_TO_MOVE
 
