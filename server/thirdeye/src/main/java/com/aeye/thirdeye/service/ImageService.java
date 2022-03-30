@@ -37,10 +37,14 @@ public class ImageService {
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
 
-        int xs = (int) (height * image.getL_X());
-        int xe = (int) (height * image.getR_X());
-        int ys = (int) (width * image.getL_Y());
-        int ye = (int) (width * image.getR_Y());
+//        int xs = (int) (height * image.getL_X());
+//        int xe = (int) (height * image.getR_X());
+//        int ys = (int) (width * image.getL_Y());
+//        int ye = (int) (width * image.getR_Y());
+        int xs = image.getL_X();
+        int xe = image.getR_X();
+        int ys = image.getL_Y();
+        int ye = image.getR_Y();
 
         int xx = ys;
         int yy = height - xe;

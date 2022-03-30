@@ -41,17 +41,20 @@ public class Image {
     private String faceYN;
 
     // 바운딩 박스 필요시 추가 예정
-    private double L_X;
+    private int L_X;
 
-    private double L_Y;
+    private int L_Y;
 
-    private double R_X;
+    private int R_X;
 
-    private double R_Y;
+    private int R_Y;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="project_id")
+    private Project project;
 }
 
