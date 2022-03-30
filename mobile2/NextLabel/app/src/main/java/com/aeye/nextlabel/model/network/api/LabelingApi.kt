@@ -14,5 +14,5 @@ interface LabelingApi {
     // 1. image and labeling data
     @Multipart
     @POST("/mo")
-    suspend fun giveLabels(@Body label: RequestBody, @Part file: MultipartBody.Part): Response<LabelingResponse>
+    suspend fun giveLabels(@Part("label") label: RequestBody, @Part file: MultipartBody.Part): Response<LabelingResponse>
 }
