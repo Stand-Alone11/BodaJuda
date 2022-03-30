@@ -51,13 +51,11 @@ class CommunityViewModel: ViewModel() {
      *  리스트가 비어있으면 isLast = true
      */
     private fun updateStatus(list: List<RankUser>) {
-        isFirstLoaded = true
-        if(list.isNotEmpty()) {
-            page++
-            updateLiveData(list)
-        } else {
+        if(list.size < 20) {
             isLast = true
         }
+        page++
+        updateLiveData(list)
     }
 
     private fun updateLiveData(list: List<RankUser>) {
