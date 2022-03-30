@@ -89,14 +89,7 @@ class UpdateFragment : BaseFragment<FragmentUpdateBinding>(FragmentUpdateBinding
             val imgUri = data!!.data!!
             absoluteUri = makeAbsoluteUri(imgUri)
 
-            val option = BitmapFactory.Options()
-            option.inSampleSize = 4
-
-            val inputStream = activity.contentResolver.openInputStream(imgUri)
-            val bitmap = BitmapFactory.decodeStream(inputStream, null, option)
-            inputStream!!.close()
-
-            binding.imageView.setImageBitmap(bitmap)
+            binding.imageView.setImageURI(imgUri)
         }
     }
 

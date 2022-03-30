@@ -13,6 +13,14 @@ import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.model.dto.UserForUpdate
 import com.aeye.nextlabel.model.network.response.*
 import com.aeye.nextlabel.repository.UserRepository
+import com.aeye.nextlabel.util.LoginUtil.USER_EMAIL
+import com.aeye.nextlabel.util.LoginUtil.USER_IMG_ACCEPT
+import com.aeye.nextlabel.util.LoginUtil.USER_IMG_DENY
+import com.aeye.nextlabel.util.LoginUtil.USER_IMG_TOTAL
+import com.aeye.nextlabel.util.LoginUtil.USER_IMG_URL
+import com.aeye.nextlabel.util.LoginUtil.USER_IMG_WAIT
+import com.aeye.nextlabel.util.LoginUtil.USER_NICKNAME
+import com.aeye.nextlabel.util.LoginUtil.USER_RANK
 import com.aeye.nextlabel.util.LoginUtil.getUserId
 import com.aeye.nextlabel.util.Status
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +41,6 @@ class UserViewModel: ViewModel() {
     val passwordRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
     val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
 
-    var absoluteImgPath: String? = null
 
     fun join(user: UserForJoin) = viewModelScope.launch {
         joinRequestLiveData.postValue(Resource.loading(null))
@@ -53,7 +60,7 @@ class UserViewModel: ViewModel() {
         loginRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             val resource = userRepository.login(user)
-            if(resource.status == Status.SUCCESS) {
+            if (resource.status == Status.SUCCESS) {
                 // token 저장
                 sSharedPreferences.setString(JWT, resource.data?.token.toString())
                 getUserId()
@@ -81,7 +88,20 @@ class UserViewModel: ViewModel() {
     fun getProfile(userId: Int) = viewModelScope.launch {
         profileRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
-            profileRequestLiveData.postValue(userRepository.getProfile(userId))
+            val resource = userRepository.getProfile(userId)
+            if (resource.status == Status.SUCCESS) {
+                // userInfo 저장
+                sSharedPreferences.setString(USER_IMG_URL, resource.data?.imgUrl.toString())
+                sSharedPreferences.setString(USER_EMAIL, resource.data?.email.toString())
+                sSharedPreferences.setString(USER_NICKNAME, resource.data?.nickname.toString())
+                sSharedPreferences.setString(USER_IMG_TOTAL, resource.data?.imageTotal.toString())
+                sSharedPreferences.setString(USER_IMG_ACCEPT, resource.data?.imageAccept.toString())
+                sSharedPreferences.setString(USER_IMG_DENY, resource.data?.imageDeny.toString())
+                sSharedPreferences.setString(USER_IMG_WAIT, resource.data?.imageWait.toString())
+                sSharedPreferences.setString(USER_RANK, resource.data?.rank.toString())
+            }
+
+            profileRequestLiveData.postValue(resource)
         }
     }
 

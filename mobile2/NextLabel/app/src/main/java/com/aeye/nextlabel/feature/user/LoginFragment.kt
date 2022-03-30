@@ -2,10 +2,7 @@ package com.aeye.nextlabel.feature.user
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
@@ -15,10 +12,10 @@ import com.aeye.nextlabel.feature.common.BaseFragment
 import com.aeye.nextlabel.feature.main.MainActivity
 import com.aeye.nextlabel.global.FRAGMENT_BUNDLE_KEY
 import com.aeye.nextlabel.global.JOIN_FRAGMENT
-import com.aeye.nextlabel.global.LOGIN_FRAGMENT
 import com.aeye.nextlabel.global.MOVE_FRAGMENT
 import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.util.InputValidUtil
+import com.aeye.nextlabel.util.LoginUtil.USER_ID
 import com.aeye.nextlabel.util.Status
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::bind, R.layout.fragment_login) {
@@ -47,7 +44,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
         userViewModel.loginRequestLiveData.observe(requireActivity()) {
             when(it.status) {
                 Status.SUCCESS -> {
-                    // TODO: dismissLoading() 
+                    // 프로필 정보 저장
+                    userViewModel.getProfile(USER_ID!!)
+
                     val intent = Intent(requireActivity(), MainActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
@@ -89,5 +88,4 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
             else -> false
         }
     }
-
 }

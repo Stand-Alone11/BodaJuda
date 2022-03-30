@@ -11,7 +11,7 @@ import com.aeye.nextlabel.feature.common.BaseFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind, R.layout.fragment_home) {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind, R.layout.fragment_home) {
     private lateinit var viewPager: ViewPager2
     private lateinit var viewPagerAdapter: FragmentStateAdapter
     private lateinit var tabLayout: TabLayout
