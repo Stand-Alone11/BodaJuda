@@ -47,9 +47,9 @@ public class ProjectAPIController {
     @ApiOperation(value = "프로젝트 목록 조회", notes = "")
     @ApiResponses({
             @io.swagger.annotations.ApiResponse(code = 200, message = "프로젝트 목록 조회 성공"),
-            @io.swagger.annotations.ApiResponse(code = 400, message = "프로젝트 목록 조회 실퍂")
+            @io.swagger.annotations.ApiResponse(code = 400, message = "프로젝트 목록 조회 실패")
     })
-    public ResponseEntity<?> getProjects(@PageableDefault(size=20, sort="goal", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<?> getProjects(@ApiParam(value = "page, size 입력") @PageableDefault(size=20, sort="goal", direction = Sort.Direction.DESC) Pageable pageable){
 
         List<Project> result = projectService.getProjects(pageable);
 

@@ -2,9 +2,13 @@ package com.aeye.thirdeye.service;
 
 import com.aeye.thirdeye.dto.LeaderBoardDto;
 import com.aeye.thirdeye.dto.request.ChangeUserInfoRequest;
+import com.aeye.thirdeye.dto.response.HistoryCountDto;
 import com.aeye.thirdeye.dto.response.ProfileResponseDto;
+import com.aeye.thirdeye.dto.response.SimpleProjectDto;
+import com.aeye.thirdeye.entity.Project;
 import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.repository.ImageRepository;
+import com.aeye.thirdeye.repository.ProjectRepository;
 import com.aeye.thirdeye.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -13,7 +17,9 @@ import com.google.api.client.json.gson.GsonFactory;
 import lombok.RequiredArgsConstructor;
 import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +29,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,6 +45,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
+    private final ProjectRepository projectRepository;
 
     @Transactional
     public Long join(User user) {
@@ -133,6 +142,28 @@ public class UserService {
         }
         profileResponseDto.setRank(rank);
         profileResponseDto.setProfileImgUrl(user.getProfileImage());
+        List<Project> histories = projectRepository.findHistory(id, PageRequest.of(0, 5));
+        int len = histories.size();
+        List<HistoryCountDto> historyCountDtoList = new ArrayList<>();
+        for(int i = 0 ; i < len; i++){
+            HistoryCountDto historyCountDto = new HistoryCountDto();
+            String[] historyCounts = imageRepository.getCategoryUploadWithProject(id, histories.get(i).getId());
+            if(historyCounts != null && historyCounts.length > 0) {
+                for (String s: historyCounts){
+                    if(s.endsWith("N")){
+                        historyCountDto.setDenied(Integer.parseInt(s.substring(0,s.length()-1)));
+                    }else if(s.endsWith("W")){
+                        historyCountDto.setWaited(Integer.parseInt(s.substring(0,s.length()-1)));
+                    }else if(s.endsWith("Y")){
+                        historyCountDto.setAccepted(Integer.parseInt(s.substring(0,s.length()-1)));
+                    }
+                }
+                historyCountDto.setTotal(historyCountDto.getAccepted() + historyCountDto.getDenied() + historyCountDto.getWaited());
+            }
+            historyCountDto.setProject(new SimpleProjectDto(histories.get(i)));
+            historyCountDtoList.add(historyCountDto);
+        }
+        profileResponseDto.setHistory(historyCountDtoList);
 
         return profileResponseDto;
     }
