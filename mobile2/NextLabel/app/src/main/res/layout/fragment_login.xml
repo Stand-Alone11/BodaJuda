@@ -102,19 +102,6 @@
             android:layout_marginStart="@dimen/padding_page"
             android:layout_marginEnd="@dimen/padding_page" />
 
-        <!--  fragment area: "temporary"  -->
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainerView"
-            android:name="com.aeye.nextlabel.feature.main.profile.PasswordUpdateFragment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/containedButton_login"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="@dimen/padding_page"
-            android:layout_marginEnd="@dimen/padding_page" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
