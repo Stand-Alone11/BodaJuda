@@ -1,16 +1,14 @@
-package com.aeye.thirdeye.dto;
+package com.aeye.thirdeye.dto.response;
 
 import com.aeye.thirdeye.entity.Project;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Size;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectDto {
+public class SimpleProjectDto {
     private Long id;
 
     private String provider;
@@ -21,21 +19,16 @@ public class ProjectDto {
 
     private String description;
 
-    private String typeA;
+    private int accepted;
 
-    private String typeB;
-
-    private String typeC;
-
-    public ProjectDto(Project project){
+    public SimpleProjectDto(Project project){
         this.id = project.getId();
         this.provider = project.getProvider();
         this.title = project.getTitle();
         this.goal = project.getGoal();
         this.description = project.getDescription();
-        this.typeA = project.getTypeA();
-        this.typeB = project.getTypeB();
-        this.typeC = project.getTypeC();
+        this.accepted = project.getAccepted();
     }
 
 }
+

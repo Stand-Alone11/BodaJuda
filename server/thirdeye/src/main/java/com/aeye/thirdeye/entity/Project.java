@@ -30,6 +30,17 @@ public class Project {
     @Size(max = 1024)
     private String description;
 
+    @Size(max = 20)
+    private String typeA;
+
+    @Size(max = 20)
+    private String typeB;
+
+    @Size(max = 20)
+    private String typeC;
+
+    private int accepted;
+
     @OneToMany(mappedBy = "project")
     private List<Image> imageList = new ArrayList<>();
 }
