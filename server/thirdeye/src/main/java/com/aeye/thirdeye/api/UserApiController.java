@@ -214,6 +214,7 @@ public class UserApiController {
         if(profileResponseDto == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
         return ResponseEntity.status(HttpStatus.OK).body(profileResponseDto);
     }
 
