@@ -7,7 +7,7 @@ import com.aeye.nextlabel.model.network.response.LeaderBoardResponse
 import com.aeye.nextlabel.util.Resource
 import java.lang.Exception
 
-class CommunityRepository: ViewModel() {
+class CommunityRepository {
 
     var communityApi: CommunityApi = ApplicationClass.sRetrofit.create(CommunityApi::class.java)
 
