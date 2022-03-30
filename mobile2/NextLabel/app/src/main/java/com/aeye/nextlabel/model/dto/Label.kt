@@ -9,11 +9,10 @@ data class Label(
     @SerializedName("provider")
     val provider: String? = null,
 
-    // 소문자 'l'
-    @SerializedName("l_X")
+    @SerializedName("L_X")
     val coorXOfLeftTop: Int? = null,
 
-    @SerializedName("l_Y")
+    @SerializedName("L_Y")
     val coorYOfLeftTop: Int? = null,
 
     @SerializedName("R_X")
