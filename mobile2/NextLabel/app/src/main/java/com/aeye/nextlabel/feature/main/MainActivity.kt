@@ -1,16 +1,14 @@
 package com.aeye.nextlabel.feature.main
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.ActivityMainBinding
 import com.aeye.nextlabel.feature.common.BaseActivity
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+import com.aeye.nextlabel.feature.user.LoginActivity
+import com.aeye.nextlabel.util.LoginUtil.isLogin
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
@@ -23,8 +21,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView_main)
         val navController = navHostFragment?.findNavController()
         navController?.let {
-            binding.bottomNavMain.setupWithNavController(it)
+            // TODO: 로그인 상태라면 이동 허용, otherwise 로그인 요청
+            if (isLogin()) {
+                binding.bottomNavMain.setupWithNavController(it)
+            } else {
+                val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
-
 }

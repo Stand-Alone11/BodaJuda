@@ -11,7 +11,8 @@ object LoginUtil {
     private val preferences = ApplicationClass.sSharedPreferences
     var userId: Int? = null
 
-    fun isTokenExisted(): Boolean {
+    // TODO: Login 여부 확인
+    fun isLogin(): Boolean {
         return !preferences.getString(ApplicationClass.JWT).isNullOrBlank()
     }
 
@@ -20,6 +21,7 @@ object LoginUtil {
         userId = null
     }
 
+    // TODO: Token에서 "userId" 추출
     fun getUserId() {
         val token = preferences.getString(ApplicationClass.JWT)!!
         val jwt = JWT(token)
