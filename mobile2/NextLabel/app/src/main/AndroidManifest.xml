@@ -6,10 +6,8 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <!--  API  -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- API -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".global.ApplicationClass"
@@ -20,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NextLabel"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".feature.labeling.LabelingActivity"
+            android:exported="false" />
         <activity
             android:name=".feature.user.LoginActivity"
             android:exported="true">
