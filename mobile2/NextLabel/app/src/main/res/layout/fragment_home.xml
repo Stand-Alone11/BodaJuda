@@ -5,11 +5,19 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="홈" />
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_home"
             app:layout_constraintStart_toStartOf="parent"
             app:tabIndicatorColor="?attr/colorPrimary"
             app:tabIndicator="@drawable/tab_layout_indicator"
