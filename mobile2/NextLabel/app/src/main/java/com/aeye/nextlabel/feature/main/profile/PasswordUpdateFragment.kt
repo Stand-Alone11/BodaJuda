@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.feature.user
+package com.aeye.nextlabel.feature.main.profile
 
 import android.os.Bundle
 import android.view.View
@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentPasswordUpdateBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
+import com.aeye.nextlabel.feature.user.UserViewModel
 import com.aeye.nextlabel.model.dto.Password
 import com.aeye.nextlabel.util.InputValidUtil
 

@@ -14,6 +14,7 @@ import com.aeye.nextlabel.model.dto.UserForUpdate
 import com.aeye.nextlabel.model.network.response.*
 import com.aeye.nextlabel.repository.UserRepository
 import com.aeye.nextlabel.util.LoginUtil.getUserId
+import com.aeye.nextlabel.util.Status
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,10 +53,11 @@ class UserViewModel: ViewModel() {
         loginRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             val resource = userRepository.login(user)
-
-            // token 저장
-            sSharedPreferences.setString(JWT, resource.data?.token.toString())
-            getUserId()
+            if(resource.status == Status.SUCCESS) {
+                // token 저장
+                sSharedPreferences.setString(JWT, resource.data?.token.toString())
+                getUserId()
+            }
             loginRequestLiveData.postValue(resource)
         }
     }

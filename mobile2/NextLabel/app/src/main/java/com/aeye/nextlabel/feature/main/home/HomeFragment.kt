@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.feature.main
+package com.aeye.nextlabel.feature.main.home
 
 import android.os.Bundle
 import android.view.View

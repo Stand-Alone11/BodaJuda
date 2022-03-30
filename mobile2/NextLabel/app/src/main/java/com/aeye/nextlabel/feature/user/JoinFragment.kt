@@ -50,6 +50,7 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
                 }
                 Status.SUCCESS -> {
                     // TODO: dismissLoading()
+                    // TODO: login 실행
                     val intent = Intent(requireActivity(), MainActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()

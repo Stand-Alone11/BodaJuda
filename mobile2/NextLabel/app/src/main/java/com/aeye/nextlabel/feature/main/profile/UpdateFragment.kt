@@ -1,8 +1,6 @@
-package com.aeye.nextlabel.feature.user
+package com.aeye.nextlabel.feature.main.profile
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.BitmapFactory
@@ -14,6 +12,8 @@ import androidx.fragment.app.activityViewModels
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentUpdateBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
+import com.aeye.nextlabel.feature.user.LoginActivity
+import com.aeye.nextlabel.feature.user.UserViewModel
 import com.aeye.nextlabel.model.dto.UserForUpdate
 import com.aeye.nextlabel.util.InputValidUtil
 

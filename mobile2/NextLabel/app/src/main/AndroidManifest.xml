@@ -21,9 +21,6 @@
         android:theme="@style/Theme.NextLabel"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".feature.community.LeaderboardActivity"
-            android:exported="false" />
-        <activity
             android:name=".feature.user.LoginActivity"
             android:exported="true">
             <intent-filter>

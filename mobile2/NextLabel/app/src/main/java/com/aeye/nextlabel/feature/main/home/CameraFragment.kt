@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.feature.main
+package com.aeye.nextlabel.feature.main.home
 
 import android.Manifest
 import android.content.Context
@@ -22,11 +22,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentCameraBinding
+import com.aeye.nextlabel.feature.main.ContainerViewModel
+import com.aeye.nextlabel.feature.main.MainActivity
 import com.aeye.nextlabel.global.BUNDLE_KEY_TO_MOVE
 import com.aeye.nextlabel.global.REQUEST_KEY_TO_MOVE
 import com.google.common.util.concurrent.ListenableFuture
