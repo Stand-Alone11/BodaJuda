@@ -24,9 +24,6 @@ import com.aeye.nextlabel.util.Status
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::bind, R.layout.fragment_login) {
     private val userViewModel: UserViewModel by activityViewModels()
 
-    private val btnJoin = binding.textButtonJoin  // button join
-    private val btnLogin = binding.containedButtonLogin  // button login: move to home
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
@@ -34,11 +31,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
     }
 
     private fun init() {
-        btnJoin.setOnClickListener {
+        binding.textButtonJoin.setOnClickListener {
             setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to JOIN_FRAGMENT))
         }
 
-        btnLogin.setOnClickListener {
+        binding.containedButtonLogin.setOnClickListener {
             if (checkInputForm()) {
                 login()
             }
