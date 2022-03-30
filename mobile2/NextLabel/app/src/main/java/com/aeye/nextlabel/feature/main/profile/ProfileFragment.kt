@@ -40,24 +40,26 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         pieChart.setUsePercentValues(true)
         pieChart.setEntryLabelTextSize(12f)
         pieChart.setEntryLabelColor(Color.BLACK)
-        pieChart.setCenterText("승인율")
-        pieChart.setCenterTextSize(24f)
         pieChart.getDescription().setEnabled(false)
+        pieChart.setHighlightPerTapEnabled(true)
+        pieChart.setCenterText("승인율")
+        pieChart.setCenterTextSize(20f)
 
+        // 범례 설정
         val legend = pieChart.getLegend()
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP)
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT)
-        legend.setOrientation(Legend.LegendOrientation.VERTICAL)
-        legend.setDrawInside(false)
-        legend.setEnabled(true)
+//        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP)
+//        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT)
+//        legend.setOrientation(Legend.LegendOrientation.VERTICAL)
+//        legend.setDrawInside(false)
+        legend.setEnabled(false)
 
     }
 
     private fun loadPieChartData() {
         // 데이터 추가
         val entries = mutableListOf<PieEntry>()
-        entries.add(PieEntry(0.6f, "Approved"))
-        entries.add(PieEntry(0.4f, "Denied"))
+        entries.add(PieEntry(0.6f, "승인"))
+        entries.add(PieEntry(0.4f, "거부"))
 
         // 색 템플릿 추가
         val colors = mutableListOf<Int>()
@@ -68,7 +70,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
             colors.add(color)
         }
 
-        val dataSet = PieDataSet(entries, "Approval Rating")
+        val dataSet = PieDataSet(entries, "")
         dataSet.setColors(colors)
 
         val data = PieData(dataSet)
@@ -79,8 +81,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
         pieChart.setData(data)
         pieChart.invalidate()
-
-        // 애니메이션 추가가
+        // 애니메이션 추가
        pieChart.animateY(1400, Easing.EaseInOutQuad)
     }
 }
