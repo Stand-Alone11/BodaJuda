@@ -26,7 +26,7 @@ class LabelingViewModel: ViewModel() {
 
     fun uploadLabel(label: Label, absolutePath: String) = viewModelScope.launch {
         _uploadLabelResponse.postValue(Resource.loading(null))
-        val labelRequestBody = RequestBody.create("text/plain".toMediaType(), Gson().toJson(label))
+        val labelRequestBody = Gson().toJson(label).toRequestBody("text/plain".toMediaType())
         val imageMultipart = MultiPartUtil.makeMultiPartBodyFile("file", absolutePath, "image/*")
         withContext(Dispatchers.IO) {
             _uploadLabelResponse.postValue(labelingRepository.uploadLabels(labelRequestBody, imageMultipart))
