@@ -53,7 +53,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card3"
+            android:id="@+id/card2"
             android:layout_width="36dp"
             android:layout_height="36dp"
             app:cardBackgroundColor="@color/white"
