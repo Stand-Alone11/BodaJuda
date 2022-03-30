@@ -31,14 +31,11 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
     }
 
     private fun init() {
-        val btnLogin = binding.textButtonLogin  // button login
-        val btnJoin = binding.containedButtonJoin  // button join: move to home
-
-        btnLogin.setOnClickListener {
+        binding.textButtonLogin.setOnClickListener {
             setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to LOGIN_FRAGMENT))
         }
 
-        btnJoin.setOnClickListener {
+        binding.containedButtonJoin.setOnClickListener {
             if (checkInputForm()) {
                 join()
             }
