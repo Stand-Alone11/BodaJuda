@@ -18,11 +18,13 @@ import com.aeye.nextlabel.global.FRAGMENT_BUNDLE_KEY
 import com.aeye.nextlabel.global.LOGIN_FRAGMENT
 import com.aeye.nextlabel.global.MOVE_FRAGMENT
 import com.aeye.nextlabel.model.dto.UserForJoin
+import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.util.InputValidUtil
 import com.aeye.nextlabel.util.Status
 
 class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind, R.layout.fragment_join) {
     private val userViewModel: UserViewModel by activityViewModels()
+    lateinit var userForLogin: UserForLogin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,15 +47,16 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
     private fun initLiveDataObserver() {
         userViewModel.joinRequestLiveData.observe(requireActivity()) {
             when(it.status) {
-                Status.LOADING -> {
-                    // TODO: showLoading()
-                }
                 Status.SUCCESS -> {
-                    // TODO: dismissLoading()
-                    // TODO: login 실행
+                    // 회원가입에 성공하면 로그인 함께 수행
+                    userViewModel.login(userForLogin)
+
                     val intent = Intent(requireActivity(), MainActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
+                }
+                Status.LOADING -> {
+                    // TODO: showLoading()
                 }
                 Status.ERROR -> {
                     // TODO: dismissLoading()
@@ -68,6 +71,8 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
         val email = binding.email.text.toString()
         val nickname = binding.nickname.text.toString()
 
+        // 로그인 준비
+        userForLogin = UserForLogin(userId, password)
         userViewModel.join(UserForJoin(userId, password, email, nickname))
     }
 

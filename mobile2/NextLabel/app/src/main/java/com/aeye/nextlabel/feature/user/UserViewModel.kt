@@ -33,7 +33,6 @@ class UserViewModel: ViewModel() {
     val passwordRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
     val profileRequestLiveData = MutableLiveData<Resource<ProfileResponse>>()
 
-    var absoluteImgPath: String? = null
 
     fun join(user: UserForJoin) = viewModelScope.launch {
         joinRequestLiveData.postValue(Resource.loading(null))

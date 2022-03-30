@@ -47,7 +47,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
         userViewModel.loginRequestLiveData.observe(requireActivity()) {
             when(it.status) {
                 Status.SUCCESS -> {
-                    // TODO: dismissLoading() 
                     val intent = Intent(requireActivity(), MainActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
@@ -89,5 +88,4 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
             else -> false
         }
     }
-
 }

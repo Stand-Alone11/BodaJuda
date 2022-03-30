@@ -16,7 +16,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // TODO: 로그인 상태가 아니라면, 로그인 먼저 요청
+        // 로그인 상태가 아니라면, 로그인 먼저 요청
        if (isLogin()) {
             init()
         } else {
