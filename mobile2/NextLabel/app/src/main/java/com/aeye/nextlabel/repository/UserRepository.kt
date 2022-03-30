@@ -1,5 +1,6 @@
 package com.aeye.nextlabel.repository
 
+import android.util.Log
 import com.aeye.nextlabel.feature.common.BaseResponse
 import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.model.dto.Password
@@ -13,24 +14,22 @@ import okhttp3.MultipartBody
 import java.lang.Exception
 
 class UserRepository {
-
+    private val TAG = "UserRepository_debuk"
     var userApi: UserApi = ApplicationClass.sRetrofit.create(UserApi::class.java)
 
     suspend fun join(user: UserForJoin): Resource<BaseResponse> {
         return try {
             val response = userApi.join(user)
             if (response.isSuccessful) {
-                return if (response.code() == 200 || response.code() == 201) {
-                    Resource.success(response.body()!!)
-                } else if (response.code() == 400) {
-                    Resource.error(null, "Validation 에러")
-                } else {
-                    Resource.error(null, "예외처리가 되어 있지 않은 오류입니다.")
-                }
+                Resource.success(response.body()!!)
             } else {
-                Resource.error(null, "알 수 없는 오류입니다.")
+                when(response.code()) {
+                    400 -> Resource.error(null, "Validation 에러")
+                    else -> Resource.error(null, "알 수 없는 오류입니다.")
+                }
             }
         } catch (e: Exception) {
+            Log.d(TAG, "join: $e")
             Resource.error(null, "서버와 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.")
         }
     }

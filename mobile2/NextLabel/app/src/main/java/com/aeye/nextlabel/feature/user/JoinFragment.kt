@@ -2,38 +2,61 @@ package com.aeye.nextlabel.feature.user
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import com.aeye.nextlabel.R
-import com.aeye.nextlabel.databinding.ActivityJoinBinding
-import com.aeye.nextlabel.feature.common.BaseActivity
+import com.aeye.nextlabel.databinding.FragmentJoinBinding
+import com.aeye.nextlabel.feature.common.BaseFragment
 import com.aeye.nextlabel.feature.main.MainActivity
+import com.aeye.nextlabel.global.BUNDLE_KEY_TO_MOVE
+import com.aeye.nextlabel.global.FRAGMENT_BUNDLE_KEY
+import com.aeye.nextlabel.global.LOGIN_FRAGMENT
+import com.aeye.nextlabel.global.MOVE_FRAGMENT
 import com.aeye.nextlabel.model.dto.UserForJoin
 import com.aeye.nextlabel.util.InputValidUtil
+import com.aeye.nextlabel.util.Status
 
-class JoinActivity : BaseActivity<ActivityJoinBinding>(ActivityJoinBinding::inflate) {
+class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind, R.layout.fragment_join) {
+    private val userViewModel: UserViewModel by activityViewModels()
 
-    val userViewModel: UserViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         init()
+        initLiveDataObserver()
     }
 
     private fun init() {
-        val btnLogin = binding.textButtonLogin  // button login
-        val btnJoin = binding.containedButtonJoin  // button join: move to home
-
-        btnLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+        binding.textButtonLogin.setOnClickListener {
+            setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to LOGIN_FRAGMENT))
         }
 
-        btnJoin.setOnClickListener {
+        binding.containedButtonJoin.setOnClickListener {
             if (checkInputForm()) {
                 join()
+            }
+        }
+    }
 
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+    private fun initLiveDataObserver() {
+        userViewModel.joinRequestLiveData.observe(requireActivity()) {
+            when(it.status) {
+                Status.LOADING -> {
+                    // TODO: showLoading()
+                }
+                Status.SUCCESS -> {
+                    // TODO: dismissLoading()
+                    val intent = Intent(requireActivity(), MainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+                Status.ERROR -> {
+                    // TODO: dismissLoading()
+                }
             }
         }
     }
