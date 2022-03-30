@@ -2,9 +2,8 @@ package com.aeye.nextlabel.global
 
 import android.app.Application
 import android.content.ContentResolver
+import com.aeye.nextlabel.util.EmptyResponseOnEmptyConverterFactory
 import com.aeye.nextlabel.util.SharedPreferencesUtil
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -45,6 +44,7 @@ class ApplicationClass: Application() {
 
         sRetrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .client(client)
+            .addConverterFactory(EmptyResponseOnEmptyConverterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
