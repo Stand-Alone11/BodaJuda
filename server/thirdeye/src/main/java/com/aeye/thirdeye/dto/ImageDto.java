@@ -20,10 +20,10 @@ public class ImageDto {
     private String Provider;
     private String faceYN;
 
-    private double L_X;
-    private double L_Y;
-    private double R_X;
-    private double R_Y;
+    private int L_X;
+    private int L_Y;
+    private int R_X;
+    private int R_Y;
 
     public ImageDto(Image image){
         this.id = image.getId();
