@@ -34,6 +34,20 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
         binding.recyclerViewLeaderF.apply {
             adapter = leaderAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val lastVisibleItemPosition =
+                        (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                    val itemTotalCount = recyclerView.adapter!!.itemCount-1
+
+                    // 스크롤이 끝에 도달했는지 확인
+                    if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL) && lastVisibleItemPosition == itemTotalCount) {
+                        communityViewModel.getLeaderBoard()
+                    }
+                }
+            })
         }
     }
 
@@ -44,12 +58,16 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
                 when(it.status) {
                     Status.SUCCESS -> {
                         // TODO: adapter의 로딩 제거
+                        leaderAdapter.dismissLoading()
+                        Log.d(TAG, "initLiveDataObserver: second success")
                     }
                     Status.ERROR -> {
                         // TODO: adapter의 로딩 제거
+                        leaderAdapter.dismissLoading()
                     }
                     Status.LOADING -> {
                         // TODO: adapter의 로딩 추가
+                        leaderAdapter.showLoading()
                     }
                 }
             } else {
@@ -57,6 +75,8 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
                 when(it.status) {
                     Status.SUCCESS -> {
                         // TODO: 전체 플레이스 홀더 제거
+                        communityViewModel.isFirstLoaded = true
+                        Log.d(TAG, "initLiveDataObserver: first success")
                     }
                     Status.ERROR -> {
                         // TODO: 전체 플레이스 홀더 제거
@@ -77,6 +97,7 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
     /** 첫 Fragment 생성 시 request*/
     private fun requestLeaderBoard() {
         if(!communityViewModel.isFirstLoaded) {
+            Log.d(TAG, "requestLeaderBoard: first request")
             communityViewModel.getLeaderBoard()
         }
     }
