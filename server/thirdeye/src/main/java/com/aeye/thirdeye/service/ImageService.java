@@ -2,9 +2,12 @@ package com.aeye.thirdeye.service;
 
 import com.aeye.thirdeye.dto.ImageDto;
 import com.aeye.thirdeye.entity.Image;
+import com.aeye.thirdeye.entity.Project;
 import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.repository.ImageRepository;
+import com.aeye.thirdeye.repository.ProjectRepository;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,26 +29,30 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
+    private final ProjectRepository projectRepository;
 
+
+    GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = new Gson();
     @Value("${spring.servlet.multipart.location}")
     private String absolutePath;
 
     @Transactional
-    public ImageDto insertImage(MultipartFile file, Image image, User user) throws Exception {
+    public ImageDto insertImage(MultipartFile file, Image image, User user, Long projectId) throws Exception {
         BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
-
+//        System.out.println(width + ", " + height);
 //        int xs = (int) (height * image.getL_X());
 //        int xe = (int) (height * image.getR_X());
 //        int ys = (int) (width * image.getL_Y());
 //        int ye = (int) (width * image.getR_Y());
-        int xs = image.getL_X();
-        int xe = image.getR_X();
-        int ys = image.getL_Y();
-        int ye = image.getR_Y();
-
+        int xs = image.getL_X(); // 1500
+        int xe = image.getR_X(); // 2000
+        int ys = image.getL_Y(); // 2000
+        int ye = image.getR_Y(); // 2700
+//        System.out.println(xs + ", " + xe);
+//        System.out.println(ys + ", " + ye);
         int xx = ys;
         int yy = height - xe;
         int h = xe - xs;
@@ -59,10 +66,7 @@ public class ImageService {
         BufferedImage newImageFromBuffer = new BufferedImage(nh, nw, nt);
         Graphics2D graphics2D = newImageFromBuffer.createGraphics();
         graphics2D.rotate(Math.toRadians(90), nw/2, nh/2);
-        if(nw > nh)
-            graphics2D.drawImage(cropedImage, null,-(nh-nw)/2 , (nw-nh)/2);
-        else
-            graphics2D.drawImage(cropedImage, null,(nh-nw)/2 , -(nw-nh)/2);
+        graphics2D.drawImage(cropedImage, null,-(nh-nw)/2 , (nw-nh)/2);
 
         Image savedImage = imageRepository.save(image);
         String fileName = Long.toString(savedImage.getId());
@@ -76,8 +80,16 @@ public class ImageService {
         File newFile = new File(folder + File.separator + fileName + ".jpg");
         file.transferTo(newFile);
 
+        Project nowProject = projectRepository.findById(projectId).orElse(null);
+
         savedImage.setImage(newFile.getAbsolutePath());
         savedImage.setUser(user);
+        savedImage.setProject(nowProject);
+        savedImage.setTypeA(nowProject.getTypeA());
+        savedImage.setTypeB(nowProject.getTypeB());
+        savedImage.setTypeC(nowProject.getTypeC());
+        savedImage.setTitle(nowProject.getTitle());
+        savedImage.setProvider(nowProject.getProvider());
         imageRepository.save(savedImage);
 
         savedImage.setImage(folder + File.separator + fileName + "_cropped.jpg");
@@ -94,8 +106,8 @@ public class ImageService {
         String pathPrefix2 = absolutePath + "savedImgs/";
         String pathSurfix = nowImage.getTypeA() + "/"
                 + nowImage.getTypeB() + "/"
-                + nowImage.getTypeC() + "/"
-                + nowImage.getProvider() + "_"
+                + nowImage.getTypeC() + "/";
+        String folderName = nowImage.getProvider() + "_"
                 + nowImage.getTitle() + "_"
                 + nowImage.getFaceYN() + "/";
 
@@ -106,23 +118,27 @@ public class ImageService {
 
         nowImage.setImage(pathPrefix2 + pathSurfix + fileName + ".jpg");
 
-        File folder = new File(pathPrefix + pathSurfix);
+        File folder = new File(pathPrefix + folderName);
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
         File imgFile = new File(folder + File.separator + fileName + ".jpg");
+        System.out.println(imgFile.getAbsolutePath());
         curFile.renameTo(imgFile);
 
-        File folder2 = new File(pathPrefix2 + pathSurfix);
+        File folder2 = new File(pathPrefix2 + pathSurfix + folderName);
         if (!folder2.exists()) {
             folder2.mkdirs();
         }
         File imgFile2 = new File(folder2 + File.separator + fileName + ".jpg");
         curFile2.renameTo(imgFile2);
         File jsonFile2 = new File(folder2 + File.separator + fileName + ".json");
+        jsonFile2.createNewFile();
+
+        ImageDto imageDto = new ImageDto(nowImage);
         FileWriter fileWriter = new FileWriter(jsonFile2);
-        gson.toJson(nowImage, fileWriter);
+        gson.toJson(imageDto, fileWriter);
         fileWriter.close();
 
 

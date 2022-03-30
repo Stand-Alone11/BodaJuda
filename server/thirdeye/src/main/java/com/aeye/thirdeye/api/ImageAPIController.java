@@ -1,6 +1,7 @@
 package com.aeye.thirdeye.api;
 
 import com.aeye.thirdeye.dto.ImageDto;
+import com.aeye.thirdeye.dto.response.SimpleProjectDto;
 import com.aeye.thirdeye.entity.Image;
 import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.service.ImageService;
@@ -48,8 +49,6 @@ public class ImageAPIController {
     /**
      * 사진 및 라벨링 데이터 전송
      * @param file
-     * @param image
-     * @param request
      * @return
      * 반환 코드 : 200, 406
      */
@@ -61,7 +60,8 @@ public class ImageAPIController {
             @ApiResponse(code = 406, message = "입력값 에러")
     })
     public ResponseEntity<?> insertImage(@ApiParam(value = "사진 파일") @RequestPart(value = "file", required = false) MultipartFile file,
-                                         @ApiParam(value = "title, provider, l_X, l_Y, R_X, R_Y") @RequestPart(value="label") String image,
+                                         @ApiParam(value = "L_X, L_Y, R_X, R_Y") @RequestPart(value="label") String image,
+                                         Long projectId,
                                          HttpServletRequest request){
 
         String token = request.getHeader("Authorization");
@@ -73,15 +73,15 @@ public class ImageAPIController {
         try {
             Image req = gson.fromJson(image, Image.class);
             User user = token != null ? jwtTokenProvider.getUser(token) : null;
-            ImageDto imageInfo = imageService.insertImage(file, req, user);
+            ImageDto imageInfo = imageService.insertImage(file, req, user, projectId);
             slackImageService.fileUpload(imageInfo);
             slackImageService.makeRequestLayout(imageInfo);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<Integer>(0, HttpStatus.NOT_ACCEPTABLE);
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
         }
 
-        return new ResponseEntity<Integer>(1, HttpStatus.OK);
+        return ResponseEntity.ok(null);
     }
 
     /**
