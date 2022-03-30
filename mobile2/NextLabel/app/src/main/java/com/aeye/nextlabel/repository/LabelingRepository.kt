@@ -17,14 +17,13 @@ class LabelingRepository {
         return try {
             val response = labelingApi.giveLabels(label, img)
             if (response.isSuccessful) {
+                Resource.success(response.body()!!)
+            } else {
                 when(response.code()) {
-                    200 -> Resource.success(response.body()!!)
-                    401 -> Resource.error(null, "")
+                    401 -> Resource.error(null, "유효하지 않은 유저입니다.")
                     406 -> Resource.error(null, "잘못된 정보를 보냈습니다.")
                     else -> Resource.error(null, "알 수 없는 오류입니다.")
                 }
-            } else {
-                Resource.error(null, "알 수 없는 오류입니다.")
             }
         } catch (e: Exception) {
             Log.d(TAG, "uploadLabels: $e")
