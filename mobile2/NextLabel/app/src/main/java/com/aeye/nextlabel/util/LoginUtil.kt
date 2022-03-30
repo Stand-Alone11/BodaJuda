@@ -1,39 +1,30 @@
 package com.aeye.nextlabel.util
 
+import android.util.Log
 import com.aeye.nextlabel.global.ApplicationClass
+import com.aeye.nextlabel.global.ApplicationClass.Companion.JWT
 import com.aeye.nextlabel.model.dto.UserInfo
+import com.auth0.android.jwt.JWT
 import java.util.*
 
 object LoginUtil {
-    private val USER_ID = "userId"
     private val preferences = ApplicationClass.sSharedPreferences
-
-
-
-    fun signOut() {
-        preferences.deleteString(ApplicationClass.JWT)
-        deleteUserInfo()
-    }
+    var userId: Int? = null
 
     fun isTokenExisted(): Boolean {
         return !preferences.getString(ApplicationClass.JWT).isNullOrBlank()
     }
 
-    fun saveUserInfo(userInfo: UserInfo) {
-        preferences.setString(USER_ID, userInfo.userId.toString())
+    fun logOut() {
+        preferences.deleteString(ApplicationClass.JWT)
+        userId = null
     }
 
-    fun deleteUserInfo() {
-        preferences.deleteString(USER_ID)
-    }
+    fun getUserId() {
+        val token = preferences.getString(ApplicationClass.JWT)!!
+        val jwt = JWT(token)
 
-    fun getUserInfo(): UserInfo? {
-        val userId = preferences.getString(USER_ID)?.toString()
-
-        return if (userId == null) {
-            null
-        } else {
-            UserInfo(userId!!)
-        }
+        userId = jwt.getClaim("id").asInt()
+        Log.d("USER_ID", userId.toString())
     }
 }
