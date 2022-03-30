@@ -33,11 +33,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.user.JoinActivity"
-            android:exported="false" />
-        <activity
             android:name=".feature.main.MainActivity"
-            android:exported="false" />
+            android:exported="true" />
     </application>
 
 </manifest>
