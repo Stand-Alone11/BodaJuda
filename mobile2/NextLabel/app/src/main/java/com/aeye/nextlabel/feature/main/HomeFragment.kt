@@ -23,7 +23,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind,
 
     private fun init() {
         viewPager = binding.viewPagerHome
-        viewPagerAdapter = MainViewPagerAdapter()
+        viewPagerAdapter = HomeViewPagerAdapter()
         viewPager.adapter = viewPagerAdapter
 
         tabLayout = binding.tabLayoutHome
@@ -33,15 +33,15 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind,
         }.attach()
     }
 
-    inner class MainViewPagerAdapter : FragmentStateAdapter(this) {
+    inner class HomeViewPagerAdapter : FragmentStateAdapter(this) {
 
         override fun getItemCount(): Int = 2
 
         // TODO: 뷰페이저 위치에 맞는 프래그먼트 세팅
         override fun createFragment(position: Int): Fragment {
             return when(position) {
-                0 -> HomeFragment()
-                else -> ContainerFragment()
+                0 -> DescriptionFragment()
+                else -> CameraFragment()
             }
         }
     }
