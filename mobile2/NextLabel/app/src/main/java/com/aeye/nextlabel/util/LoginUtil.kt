@@ -16,7 +16,7 @@ object LoginUtil {
         return !preferences.getString(ApplicationClass.JWT).isNullOrBlank()
     }
 
-    fun logOut() {
+    fun logout() {
         preferences.deleteString(ApplicationClass.JWT)
         userId = null
     }
