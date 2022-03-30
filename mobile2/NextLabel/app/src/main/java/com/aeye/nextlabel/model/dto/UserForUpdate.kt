@@ -7,5 +7,5 @@ data class UserForUpdate(
     val email: String,
 
     @SerializedName("nickName")
-    val nickname: String,
+    val nickname: String
 )

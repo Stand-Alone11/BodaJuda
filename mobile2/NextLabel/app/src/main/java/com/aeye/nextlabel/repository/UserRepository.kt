@@ -77,7 +77,7 @@ class UserRepository {
     suspend fun update(user: UserForUpdate, image: MultipartBody.Part): Resource<BaseResponse> {
         return try {
             val email = getBody("email", user.email)
-            val nickname = getBody("nickname", user.nickname)
+            val nickname = getBody("nickName", user.nickname)
             val response = userApi.update(email=email, nickName=nickname, image=image)
 
             if (response.isSuccessful) {
