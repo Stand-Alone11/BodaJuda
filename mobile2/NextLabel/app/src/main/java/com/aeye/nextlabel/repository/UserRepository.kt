@@ -21,15 +21,12 @@ class UserRepository {
         return try {
             val response = userApi.join(user)
             if (response.isSuccessful) {
-                return if (response.code() == 200 || response.code() == 201) {
-                    Resource.success(response.body()!!)
-                } else if (response.code() == 400) {
-                    Resource.error(null, "Validation 에러")
-                } else {
-                    Resource.error(null, "예외처리가 되어 있지 않은 오류입니다.")
-                }
+                Resource.success(response.body()!!)
             } else {
-                Resource.error(null, "알 수 없는 오류입니다.")
+                when(response.code()) {
+                    400 -> Resource.error(null, "Validation 에러")
+                    else -> Resource.error(null, "알 수 없는 오류입니다.")
+                }
             }
         } catch (e: Exception) {
             Log.d(TAG, "join: $e")
