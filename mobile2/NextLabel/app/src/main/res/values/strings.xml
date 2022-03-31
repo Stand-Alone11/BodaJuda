@@ -10,6 +10,9 @@
     <string name="hint_email">이메일을 입력해 주세요.</string>
     <string name="hint_nickname">닉네임(2~8자)을 입력해 주세요.</string>
 
+    <string name="hint_login_user_id">아이디를 입력해 주세요.</string>
+    <string name="hint_login_password">비밀번호를 입력해 주세요.</string>
+
     <!--  Button Text  -->
     <string name="btn_text_join">Join</string>
     <string name="btn_text_login">Log In</string>
