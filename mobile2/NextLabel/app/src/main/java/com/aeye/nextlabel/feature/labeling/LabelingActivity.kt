@@ -31,14 +31,14 @@ class LabelingActivity : BaseActivity<ActivityLabelingBinding>(ActivityLabelingB
             binding.boxImageViewLabeling.setImage(it)
         }?: finish()
 
-        binding.buttonLabelingSubmit.setOnClickListener {
-            val boundingBoxCoor = setBoundingBox() // ltrb
-            val name = binding.editTextLabelingProductName.text.toString()
-            val manufacturer = binding.editTextLabelingManufacturer.text.toString()
-            getAbsolutePath(imgUri!!)?.let {
-                labelingViewModel.uploadLabel(Label(name, manufacturer, boundingBoxCoor[0], boundingBoxCoor[1], boundingBoxCoor[2], boundingBoxCoor[3]), it)
-            }
-        }
+//        binding.buttonLabelingSubmit.setOnClickListener {
+//            val boundingBoxCoor = setBoundingBox() // ltrb
+//            val name = binding.editTextLabelingProductName.text.toString()
+//            val manufacturer = binding.editTextLabelingManufacturer.text.toString()
+//            getAbsolutePath(imgUri!!)?.let {
+//                labelingViewModel.uploadLabel(Label(name, manufacturer, boundingBoxCoor[0], boundingBoxCoor[1], boundingBoxCoor[2], boundingBoxCoor[3]), it)
+//            }
+//        }
     }
 
     private fun initLiveDataObserver() {

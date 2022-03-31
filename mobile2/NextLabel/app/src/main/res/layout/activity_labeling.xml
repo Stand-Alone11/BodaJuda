@@ -1,78 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature.labeling.LabelingActivity">
+    android:background="@color/background_color">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_labeling"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-27dp" />
+
+    <TextView
+        android:id="@+id/textView_labeling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="54dp"
+        android:text="제출하기"
+        android:textColor="@color/black"
+        style="@style/Text.Largest.Bold"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar_labeling"
+        app:layout_constraintStart_toStartOf="@+id/toolbar_labeling"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_labeling" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="360dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_labeling">
 
         <com.aeye.bounding.BoxImageView
             android:id="@+id/boxImageView_labeling"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_labeling_name"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="상품명"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout_labeling_manufacturer"
-            app:layout_constraintTop_toBottomOf="@id/boxImageView_labeling"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="@dimen/margin_default"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editText_labeling_productName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_labeling_manufacturer"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="제조사"
-            app:layout_constraintBottom_toTopOf="@+id/button_labeling_submit"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_labeling_name"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default"
-            android:layout_marginBottom="@dimen/margin_default">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editText_labeling_manufacturer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:imeOptions="actionDone"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_labeling_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="제출하기"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_labeling_manufacturer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default"
-            />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="흰색 박스를 조절해서 맞춰주세요"
+        android:textColor="@color/black"
+        style="@style/Text.Largest.Bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+    <ImageButton
+        android:id="@+id/imageButton_labeling_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar_labeling"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar_labeling"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_labeling"
+        app:srcCompat="@drawable/ic_paper_plane"
+        app:tint="@color/brand_color" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#00FFFFFF"
+        app:tint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar_labeling"
+        app:layout_constraintStart_toStartOf="@+id/toolbar_labeling"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_labeling"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_new_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
