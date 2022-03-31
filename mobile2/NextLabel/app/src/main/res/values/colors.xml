@@ -10,11 +10,15 @@
     <color name="gray">#7A7A7A</color>
 
     <!--  custom  -->
-    <color name="brand_color">#77C4E0</color>
-    <color name="brand_color_secondary">#002C86</color>
+    <color name="brand_color">#87A986</color>
+    <color name="brand_color_secondary">#207476</color>
     <color name="danger_color">#FF7D7D</color>
     <color name="approved_color">#87A986</color>
-    <color name="Awaiting_color">#CFCDCB</color>
+    <color name="awaiting_color">#CFCDCB</color>
     <color name="denied_color">#FBC1B5</color>
+    <color name="background_color">#F4F5F0</color>
+    <color name="gold_color">#EED038</color>
+    <color name="silver_color">#B4B4B4</color>
+    <color name="bronze_color">#AE8A56</color>
 
 </resources>
