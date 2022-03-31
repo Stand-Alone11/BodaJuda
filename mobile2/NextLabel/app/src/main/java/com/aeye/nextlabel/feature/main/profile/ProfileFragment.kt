@@ -132,7 +132,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 //            colors.add(color)
 //        }
         colors.add(ContextCompat.getColor(requireContext(), R.color.approved_color))
-        colors.add(ContextCompat.getColor(requireContext(), R.color.Awaiting_color))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.awaiting_color))
         colors.add(ContextCompat.getColor(requireContext(), R.color.denied_color))
 
         val dataSet = PieDataSet(entries, "")
