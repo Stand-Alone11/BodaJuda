@@ -3,7 +3,6 @@ package com.aeye.nextlabel.util
 import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.model.dto.UserInfo
 import com.auth0.android.jwt.JWT
-import java.util.*
 
 object LoginUtil {
     private val preferences = ApplicationClass.sSharedPreferences
@@ -27,6 +26,16 @@ object LoginUtil {
     fun logout() {
         preferences.deleteString(ApplicationClass.JWT)
         USER_ID = null
+
+        // logout 하면 user info 지우기
+        preferences.deleteString(USER_IMG_URL)
+        preferences.deleteString(USER_EMAIL)
+        preferences.deleteString(USER_NICKNAME)
+        preferences.deleteString(USER_IMG_TOTAL)
+        preferences.deleteString(USER_IMG_ACCEPT)
+        preferences.deleteString(USER_IMG_DENY)
+        preferences.deleteString(USER_IMG_WAIT)
+        preferences.deleteString(USER_RANK)
     }
 
     // Token에서 "userId" 추출
