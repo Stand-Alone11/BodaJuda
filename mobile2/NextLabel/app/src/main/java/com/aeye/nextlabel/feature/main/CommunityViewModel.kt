@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aeye.nextlabel.model.dto.RankUser
-import com.aeye.nextlabel.model.network.response.LeaderBoardResponse
 import com.aeye.nextlabel.repository.CommunityRepository
 import com.aeye.nextlabel.util.Resource
 import com.aeye.nextlabel.util.Status
@@ -30,7 +29,6 @@ class CommunityViewModel: ViewModel() {
     private val _leaderBoardItems = MutableLiveData<List<RankUser>>()
     val leaderBoardItems: LiveData<List<RankUser>>
         get() = _leaderBoardItems
-
 
     fun getLeaderBoard() = viewModelScope.launch {
         if(!isLast) {
