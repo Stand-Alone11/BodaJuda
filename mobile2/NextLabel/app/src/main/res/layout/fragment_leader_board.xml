@@ -60,6 +60,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/imageView_leaderF_second"
                     android:text="2"
+                    android:textColor="@color/silver_color"
                     android:textAppearance="@style/Text.Large.Bold" />
 
                 <ImageView
@@ -184,7 +185,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/imageView_leaderF_third"
-                    android:text="2"
+                    android:text="3"
+                    android:textColor="@color/bronze_color"
                     android:textAppearance="@style/Text.Large.Bold" />
 
                 <ImageView
@@ -235,7 +237,6 @@
         app:layout_constraintTop_toBottomOf="@id/linear_layout_leaderF"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="@dimen/margin_default"
-
         app:cardBackgroundColor="@color/brand_color"
         app:cardCornerRadius="15dp">
 
@@ -250,7 +251,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="순위"
+                android:text="순위"
                 android:layout_marginStart="8dp"
                 android:textAppearance="@style/Text.Large"
                 android:textColor="@color/white"
@@ -262,7 +263,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="유저"
+                android:text="유저"
                 android:layout_marginStart="120dp"
                 android:textAppearance="@style/Text.Large"
                 android:textColor="@color/white"
@@ -274,7 +275,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="기여도"
+                android:text="기여도"
                 android:layout_marginEnd="8dp"
                 android:textAppearance="@style/Text.Large"
                 android:textColor="@color/white"
