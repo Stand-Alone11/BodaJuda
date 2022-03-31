@@ -27,6 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -220,22 +223,18 @@ public class UserApiController {
 
     /**
      * 리더보드 순위 API
-     * @param page
-     * @param size
+     * @param pageable
      * @return
      * 반환 코드 : 200 / 404
      */
     @GetMapping("/accounts/rank")
-    @ApiOperation(value = "리더보드 순위 API", notes = "")
+    @ApiOperation(value = "리더보드 순위 API", notes = "파라미터 page, size 입력 (default page = 0, size = 20)")
     @ApiResponses({
             @io.swagger.annotations.ApiResponse(code = 200, message = "조회 성공", response = LeaderBoardDto.class, responseContainer = "List"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "해당 유저 없음")
     })
-    public ResponseEntity<?> getLeaderBoard(@ApiParam(value = "page (0부터 시작)")
-                                            @RequestParam(value = "page") int page,
-                                            @ApiParam(value = "size (페이지 당 size)")
-                                            @RequestParam(value = "size") int size){
-        List<LeaderBoardDto> leaderBoardDtos = userService.getLeaderBoard(page, size);
+    public ResponseEntity<?> getLeaderBoard(@PageableDefault(size=20, sort="ranking", direction = Sort.Direction.ASC) Pageable pageable){
+        List<LeaderBoardDto> leaderBoardDtos = userService.getLeaderBoard(pageable);
         if(leaderBoardDtos == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -284,7 +283,7 @@ public class UserApiController {
      * @return
      * 반환 코드 : 200 / 401 / 406
      */
-    @PostMapping("/accounts/update/password")
+    @PutMapping("/accounts/update/password")
     @ApiOperation(value = "패스워드 변경", notes = "")
     @ApiResponses({
             @io.swagger.annotations.ApiResponse(code = 200, message = "변경 성공"),
@@ -321,7 +320,7 @@ public class UserApiController {
      * @return
      * 반환 코드 200 / 400 / 401
      */
-    @PostMapping("/accounts/update/userinfo")
+    @PutMapping("/accounts/update/userinfo")
     @ApiOperation(value = "회원 정보 변경", notes = "")
     @ApiResponses({
             @io.swagger.annotations.ApiResponse(code = 200, message = "변경 성공"),
@@ -361,44 +360,15 @@ public class UserApiController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    // 회원 정보 변경 테스트
-    @PostMapping(value = "/accounts/update/test")
-    @ApiOperation(value = "회원 정보 변경", notes = "")
-    public ResponseEntity<?> test(@RequestParam(value = "id") Long id,
-                                            @RequestParam(value = "image", required = false) MultipartFile file,
-                                            @RequestParam(value = "nickName", required = false) String nickName,
-                                            @RequestParam(value = "email", required = false) String email) throws IOException{
-//        if (!jwtTokenProvider.validateToken(token)) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body(new ErrorResponse(messageSource.getMessage("error.valid.jwt", null, LocaleContextHolder.getLocale())));
-//        }
+        @PutMapping("/test/test")
+        public ResponseEntity<?> zzz() {
 
-//        Long id = jwtTokenProvider.getId(token);
+            userService.testDeleteLeader();
+            userService.testLeader();
 
-        //utf-8 내용 적용해서 DB에 넣기
-//        email = URLDecoder.decode(email, "UTF-8");
-//        nickName = URLDecoder.decode(nickName, "UTF-8");
-
-        String image = userService.getProfileImgUrl(id);
-        if(nickName == null || email == null ||
-                file == null){
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Content is null");
+            return null;
         }
-        if(file != null){
-            try {
-                image = fileService.imageUploadGCS(file, id);
-            } catch (Exception e) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new ErrorResponse(messageSource
-                                .getMessage("error.wrong", null, LocaleContextHolder.getLocale())));
-            }
-        }
-        userService.updateUserInfo(id, nickName, email, image);
 
 
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-}
