@@ -33,4 +33,10 @@ class ProjectAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun addProject(list: List<Project>) {
+        val lastIndex = items.lastIndex
+        items.addAll(list)
+        notifyItemInserted(lastIndex)
+    }
 }
