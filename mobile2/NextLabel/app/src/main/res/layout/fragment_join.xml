@@ -142,7 +142,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--  input form: nickname  -->
+        <!--  button: sign up  -->
         <Button
             android:id="@+id/containedButton"
             android:layout_width="0dp"

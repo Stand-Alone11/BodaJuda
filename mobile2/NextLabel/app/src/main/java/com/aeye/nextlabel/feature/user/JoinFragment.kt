@@ -18,7 +18,7 @@ import com.aeye.nextlabel.model.dto.UserForLogin
 import com.aeye.nextlabel.util.InputValidUtil
 import com.aeye.nextlabel.util.Status
 
-class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind, R.layout.legacy_fragment_join) {
+class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind, R.layout.fragment_join) {
     private val userViewModel: UserViewModel by activityViewModels()
     lateinit var userForLogin: UserForLogin
 
@@ -29,11 +29,11 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
     }
 
     private fun init() {
-        binding.textButtonLogin.setOnClickListener {
+        binding.textButtonLogIn.setOnClickListener {
             setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to LOGIN_FRAGMENT))
         }
 
-        binding.containedButtonJoin.setOnClickListener {
+        binding.containedButton.setOnClickListener {
             if (checkInputForm()) {
                 join()
             }

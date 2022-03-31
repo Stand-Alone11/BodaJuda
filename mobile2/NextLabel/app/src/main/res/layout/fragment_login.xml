@@ -11,7 +11,7 @@
 
         <!--  text button: sign up  -->
         <Button
-            android:id="@+id/textButton_log_in"
+            android:id="@+id/textButton_join"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="회원 가입"
@@ -76,7 +76,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--  input form: nickname  -->
+        <!--  button: log in  -->
         <Button
             android:id="@+id/containedButton"
             android:layout_width="0dp"
