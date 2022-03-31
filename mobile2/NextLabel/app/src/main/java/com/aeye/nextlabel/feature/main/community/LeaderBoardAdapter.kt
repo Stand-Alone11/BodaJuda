@@ -1,14 +1,15 @@
 package com.aeye.nextlabel.feature.main.community
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.LeaderboardItemBinding
 import com.aeye.nextlabel.databinding.LeaderboardItemLoadingBinding
+import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.model.dto.RankUser
+import com.bumptech.glide.Glide
 
 class LeaderBoardAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val items: MutableList<RankUser> = mutableListOf()
@@ -18,6 +19,12 @@ class LeaderBoardAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class ViewHolder(val binding: LeaderboardItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(user: RankUser) {
             binding.user = user
+            val imgUri = if(user.profileImage.startsWith("/")) {
+                "${ApplicationClass.BASE_URL}${user.profileImage.drop(1)}"
+            } else {
+                user.profileImage
+            }
+            Glide.with(binding.root).load(imgUri).circleCrop().into(binding.imageViewLeaderBoard)
         }
     }
 
@@ -55,7 +62,7 @@ class LeaderBoardAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun showLoading() {
-        items.add(RankUser(id = -1, 0, "", 0))
+        items.add(RankUser(id = -1, 0, "", "", 0))
         notifyItemInserted(items.lastIndex)
     }
 
