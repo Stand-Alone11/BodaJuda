@@ -131,9 +131,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 //        for (color in ColorTemplate.VORDIPLOM_COLORS) {
 //            colors.add(color)
 //        }
-        colors.add(ContextCompat.getColor(requireContext(), R.color.a))
-        colors.add(ContextCompat.getColor(requireContext(), R.color.b))
-        colors.add(ContextCompat.getColor(requireContext(), R.color.c))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.approved_color))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.Awaiting_color))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.denied_color))
 
         val dataSet = PieDataSet(entries, "")
         dataSet.setColors(colors)

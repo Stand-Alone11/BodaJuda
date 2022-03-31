@@ -13,8 +13,8 @@
     <color name="brand_color">#77C4E0</color>
     <color name="brand_color_secondary">#002C86</color>
     <color name="danger_color">#FF7D7D</color>
-    <color name="a">#87A986</color>
-    <color name="b">#CFCDCB</color>
-    <color name="c">#FBC1B5</color>
+    <color name="approved_color">#87A986</color>
+    <color name="Awaiting_color">#CFCDCB</color>
+    <color name="denied_color">#FBC1B5</color>
 
 </resources>
