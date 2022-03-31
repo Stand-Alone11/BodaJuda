@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.aeye.nextlabel.R
@@ -96,9 +97,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     private fun setupPieChart() {
         pieChart.setDrawHoleEnabled(true)
+        pieChart.holeRadius = 85f
         pieChart.setUsePercentValues(true)
-        pieChart.setEntryLabelTextSize(12f)
-        pieChart.setEntryLabelColor(Color.BLACK)
+//        pieChart.setEntryLabelTextSize(12f)
+//        pieChart.setEntryLabelColor(Color.BLACK)
         pieChart.getDescription().setEnabled(false)
         pieChart.setHighlightPerTapEnabled(true)
         pieChart.setCenterText("승인율")
@@ -117,28 +119,32 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
     private fun loadPieChartData() {
         // 데이터 추가
         val entries = mutableListOf<PieEntry>()
-        entries.add(PieEntry(0.6f, "승인"))
-        entries.add(PieEntry(0.4f, "거부"))
+        entries.add(PieEntry(0.5f)) // 승인
+        entries.add(PieEntry(0.25f)) // 대기
+        entries.add(PieEntry(0.25f)) // 반려
 
         // 색 템플릿 추가
         val colors = mutableListOf<Int>()
-        for (color in ColorTemplate.MATERIAL_COLORS) {
-            colors.add(color)
-        }
-        for (color in ColorTemplate.VORDIPLOM_COLORS) {
-            colors.add(color)
-        }
+//        for (color in ColorTemplate.MATERIAL_COLORS) {
+//            colors.add(color)
+//        }
+//        for (color in ColorTemplate.VORDIPLOM_COLORS) {
+//            colors.add(color)
+//        }
+        colors.add(ContextCompat.getColor(requireContext(), R.color.approved_color))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.Awaiting_color))
+        colors.add(ContextCompat.getColor(requireContext(), R.color.denied_color))
 
         val dataSet = PieDataSet(entries, "")
         dataSet.setColors(colors)
 
         val data = PieData(dataSet)
-        data.setDrawValues(true)
-        data.setValueFormatter(PercentFormatter(pieChart))
-        data.setValueTextSize(12f)
-        data.setValueTextColor(Color.BLACK)
-
+        data.setDrawValues(false)
+//        data.setValueFormatter(PercentFormatter(pieChart))
+//        data.setValueTextSize(12f)
+//        data.setValueTextColor(Color.BLACK)
         pieChart.setData(data)
+
         pieChart.invalidate()
         // 애니메이션 추가
        pieChart.animateY(1400, Easing.EaseInOutQuad)
