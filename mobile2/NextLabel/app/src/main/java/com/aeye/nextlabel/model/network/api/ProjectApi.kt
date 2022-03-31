@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface ProjectApi {
     @GET("/admin/project/list")
-    fun getProjectByPage(page: Int): Response<List<Project>>
+    suspend fun getProjectByPage(page: Int): Response<List<Project>>
 }
