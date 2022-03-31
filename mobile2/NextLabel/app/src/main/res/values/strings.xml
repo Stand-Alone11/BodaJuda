@@ -3,7 +3,12 @@
 
     <!--  custom  -->
 
-    <!--  Text  -->
+    <!--  Hint  -->
+    <string name="hint_user_id">아이디(2~20자)를 입력해 주세요.</string>
+    <string name="hint_password">비밀번호(8~14자)를 입력해 주세요.</string>
+    <string name="hint_password_confirmation">비밀번호를 확인해 주세요.</string>
+    <string name="hint_email">이메일을 입력해 주세요.</string>
+    <string name="hint_nickname">닉네임(2~8자)을 입력해 주세요.</string>
 
     <!--  Button Text  -->
     <string name="btn_text_join">Join</string>

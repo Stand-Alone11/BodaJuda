@@ -2,71 +2,50 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!--  text button: "login"  -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <!--  text button: log in  -->
         <Button
-            android:id="@+id/textButton_login"
+            android:id="@+id/textButton_log_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_text_login"
-            android:textAllCaps="false"
+            android:text="로그인"
             android:textColor="@color/brand_color_secondary"
+            android:textAppearance="@style/Text.Normal.Bold"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!--  brand area  -->
+        <!--  image: service logo  -->
         <ImageView
-            android:id="@+id/img_service_logo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:src="@drawable/service_logo"
-            app:layout_constraintDimensionRatio="w,1:1"
-            app:layout_constraintTop_toBottomOf="@id/textButton_login"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_top"
-            android:layout_marginStart="@dimen/margin_logo"
-            android:layout_marginEnd="@dimen/margin_logo" />
-
-        <TextView
-            android:id="@+id/txt_service_name"
-            android:layout_width="0dp"
+            android:id="@+id/image_service_logo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Service Name"
-            android:gravity="center"
-            android:textSize="@dimen/font_size_service_name"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/img_service_logo"
+            android:src="@drawable/service_logo"
+            app:layout_constraintTop_toBottomOf="@id/textButton_log_in"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_top_related"
-            android:layout_marginStart="@dimen/padding_page"
-            android:layout_marginEnd="@dimen/padding_page" />
+            android:layout_marginTop="@dimen/margin_tb_service_logo" />
 
-        <!--  input area  -->
-        <!--  ID  -->
+        <!--  input form: user id  -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/outlinedTextField_id"
+            android:id="@+id/outlinedTextField_user_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="ID"
+            android:hint="@string/hint_user_id"
+            app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toBottomOf="@id/txt_service_name"
-            android:layout_marginTop="@dimen/margin_top"
-            android:layout_marginStart="@dimen/padding_page"
-            android:layout_marginEnd="@dimen/padding_page">
+            app:layout_constraintTop_toBottomOf="@id/image_service_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_tb_service_logo"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_id"
@@ -75,17 +54,20 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--  Password  -->
+        <!--  input form: password  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/hint_password"
+            app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toBottomOf="@id/outlinedTextField_id"
-            android:layout_marginTop="@dimen/margin_top_related"
-            android:layout_marginStart="@dimen/padding_page"
-            android:layout_marginEnd="@dimen/padding_page">
+            app:layout_constraintTop_toBottomOf="@id/outlinedTextField_user_id"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
@@ -94,17 +76,20 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--  Password Confirmation  -->
+        <!--  input form: password confirmation  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField_password_confirmation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password Confirmation"
+            android:hint="@string/hint_password_confirmation"
+            app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@id/outlinedTextField_password"
-            android:layout_marginTop="@dimen/margin_top_related"
-            android:layout_marginStart="@dimen/padding_page"
-            android:layout_marginEnd="@dimen/padding_page">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_confirmation"
@@ -113,17 +98,20 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--  Email  -->
+        <!--  input form: email  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/hint_email"
+            app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@id/outlinedTextField_password_confirmation"
-            android:layout_marginTop="@dimen/margin_top_related"
-            android:layout_marginStart="@dimen/padding_page"
-            android:layout_marginEnd="@dimen/padding_page">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
@@ -132,17 +120,20 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--  Nickname  -->
+        <!--  input form: nickname  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nickname"
+            android:hint="@string/hint_nickname"
+            app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@id/outlinedTextField_email"
-            android:layout_marginTop="@dimen/margin_top_related"
-            android:layout_marginStart="@dimen/padding_page"
-            android:layout_marginEnd="@dimen/padding_page">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nickname"
@@ -151,16 +142,19 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--  button: "join"  -->
+        <!--  input form: nickname  -->
         <Button
-            android:id="@+id/containedButton_join"
-            android:layout_width="match_parent"
+            android:id="@+id/containedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Join"
-            app:layout_constraintTop_toBottomOf="@id/outlinedTextField_nickname"
-            android:layout_marginTop="@dimen/margin_top"
-            android:layout_marginStart="@dimen/padding_page"
-            android:layout_marginEnd="@dimen/padding_page" />
+            android:text="회원 가입"
+            android:textAppearance="@style/Text.Largest"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_nickname"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
