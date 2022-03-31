@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -7,60 +9,61 @@
             type="com.aeye.nextlabel.model.dto.RankUser" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_centerVertical="true"
-    android:background="#00FFFFFF">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView_leaderBoard"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#FDD32F"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="15dp"
-        app:cardElevation="8dp"
-        app:cardMaxElevation="20dp"
+        app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/textView_leaderBoard_rank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                tools:text="1"
-                android:textColor="@color/gray"
-                android:textSize="18sp"
+                android:layout_marginStart="8dp"
                 android:text="@{Integer.toString(user.rank)}"
+                android:textAppearance="@style/Text.Large.Bold"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1" />
+
+            <ImageView
+                android:id="@+id/imageView_leaderBoard"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="100dp"
+                android:src="@color/gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TextAppearance.AppCompat.Headline"
                 android:id="@+id/textView_leaderBoard_name"
+                style="@style/TextAppearance.AppCompat.Headline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="150dp"
                 android:text="@{user.nickName}"
-                tools:text="Name"
-                android:textColor="@color/black"
+                android:textAppearance="@style/Text.Normal.Bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView_leaderBoard"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Name" />
 
             <TextView
                 android:id="@+id/textView_leaderBoard_approved"
@@ -69,14 +72,12 @@
                 android:layout_marginEnd="16dp"
                 android:text="@{Integer.toString(user.imageAccepted)}"
                 tools:text="100"
-                android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textAppearance="@style/Text.Normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
