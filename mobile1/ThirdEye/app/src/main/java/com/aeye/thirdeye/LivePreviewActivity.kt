@@ -246,7 +246,6 @@ class LivePreviewActivity :
      */
     private fun downloadRemoteModel(manager: RemoteModelManager, remoteModel: CustomRemoteModel) {
         val downloadConditions = DownloadConditions.Builder()
-            .requireWifi()
             .build()
         manager.download(remoteModel, downloadConditions)
             .addOnSuccessListener {
