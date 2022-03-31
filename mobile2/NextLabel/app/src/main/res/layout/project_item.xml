@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="4dp"
+    android:background="@color/white"
+    android:layout_margin="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_default">
+
+        <TextView
+            android:id="@+id/textView_project_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="오리온 포카칩 어니언"
+            android:textAppearance="@style/Text.Largest.Bold"/>
+
+        <TextView
+            android:id="@+id/textView_project_item_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/textView_project_item_name"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            tools:text="포카칩 어니언 앞면 사진 1000장이 필요해요."
+            android:textAppearance="@style/Text.Small"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressBar_project_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:trackCornerRadius="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/textView_project_item_progress"
+            app:layout_constraintTop_toBottomOf="@id/textView_project_item_desc"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            app:indicatorColor="@color/brand_color"
+            app:trackColor="@color/gray" />
+
+        <TextView
+            android:id="@+id/textView_project_item_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Text.Large.Bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/progressBar_project_item"
+            app:layout_constraintTop_toTopOf="@id/progressBar_project_item"
+            tools:text="85%"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
