@@ -9,7 +9,7 @@ class TextToSpeechUtil(activity: Activity,
                        private val pit: Double = 1.0,
                        private val spd: Double = 1.0): TextToSpeech.OnInitListener {
 
-    val ttsCustom = TextToSpeech(activity, this, "com.google.android.tts")
+    val ttsCustom = TextToSpeech(activity, this)
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
