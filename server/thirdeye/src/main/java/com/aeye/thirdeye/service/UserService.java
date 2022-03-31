@@ -5,9 +5,11 @@ import com.aeye.thirdeye.dto.request.ChangeUserInfoRequest;
 import com.aeye.thirdeye.dto.response.HistoryCountDto;
 import com.aeye.thirdeye.dto.response.ProfileResponseDto;
 import com.aeye.thirdeye.dto.response.SimpleProjectDto;
+import com.aeye.thirdeye.entity.LeaderBoard;
 import com.aeye.thirdeye.entity.Project;
 import com.aeye.thirdeye.entity.User;
 import com.aeye.thirdeye.repository.ImageRepository;
+import com.aeye.thirdeye.repository.LeaderBoardRepository;
 import com.aeye.thirdeye.repository.ProjectRepository;
 import com.aeye.thirdeye.repository.UserRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -46,6 +48,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
     private final ProjectRepository projectRepository;
+    private final LeaderBoardRepository leaderBoardRepository;
 
     @Transactional
     public Long join(User user) {
@@ -168,18 +171,12 @@ public class UserService {
         return profileResponseDto;
     }
 
-    public List<LeaderBoardDto> getLeaderBoard(int page, int size){
-        int pageStart = page * size;
+    public List<LeaderBoardDto> getLeaderBoard(Pageable pageable){
 
-        String query = "SELECT u.id, u.nick_name, ranked.ranking, ranked.total " +
-                "FROM (SELECT i.user_id, rank() over(order by count(*) DESC) AS RANKING, " +
-                "COUNT(*) total from image i WHERE i.image_validate = \"Y\" group by i.user_id ) ranked, user u " +
-                "WHERE ranked.user_id = u.id order by ranked.ranking asc limit " + pageStart + " ," + size;
+        Page<LeaderBoard> rankResult = leaderBoardRepository.findAll(pageable);
+        List<LeaderBoard> leaderBoards = rankResult.getContent();
 
-        JpaResultMapper result = new JpaResultMapper();
-        Query resultQuery = em.createNativeQuery(query);
-        List<LeaderBoardDto> leaderBoardDtos = result.list(resultQuery, LeaderBoardDto.class);
-        return leaderBoardDtos;
+        return leaderBoards.stream().map(l -> new LeaderBoardDto(l)).collect(Collectors.toList());
     }
 
     @Transactional
@@ -205,5 +202,31 @@ public class UserService {
     public String getProfileImgUrl(Long id){
         User user = userRepository.findById(id).orElse(null);
         return user.getProfileImage();
+    }
+
+    @Transactional
+    public void testDeleteLeader(){
+
+        String query = "DELETE FROM leader_board";
+
+        JpaResultMapper result = new JpaResultMapper();
+        Query resultQuery = em.createNativeQuery(query);
+        resultQuery.executeUpdate();
+//        result.list(resultQuery, LeaderBoardDto.class);
+    }
+
+    @Transactional
+    public void testLeader(){
+
+        String query = "INSERT INTO leader_board(user_id, nick_name, ranking, total, profile_image) " +
+                "SELECT u.id user_id, u.nick_name nick_name, ranked.ranking ranking, ranked.total total, u.profile_image profile_image " +
+                "FROM (SELECT i.user_id, rank() over(order by count(*) DESC) AS RANKING, " +
+                "COUNT(*) total from image i WHERE i.image_validate = \"Y\" group by i.user_id ) ranked, user u " +
+                "WHERE ranked.user_id = u.id order by ranked.ranking asc; ";
+
+        JpaResultMapper result = new JpaResultMapper();
+        Query resultQuery = em.createNativeQuery(query);
+        resultQuery.executeUpdate();
+//        result.list(resultQuery, LeaderBoardDto.class);
     }
 }

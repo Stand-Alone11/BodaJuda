@@ -1,5 +1,6 @@
 package com.aeye.thirdeye.dto;
 
+import com.aeye.thirdeye.entity.LeaderBoard;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,21 +14,18 @@ import java.math.BigInteger;
 @NoArgsConstructor
 public class LeaderBoardDto {
 
-    private BigInteger id;
+    private Long id;
     private String nickName;
-    private BigInteger rank;
-    private BigInteger imageAccepted;
+    private int rank;
+    private int imageAccepted;
+    private String profileImage;
 
-    public LeaderBoardDto(
-            BigInteger id,
-            String nickName,
-            BigInteger rank,
-            BigInteger imageAccepted
-            ){
-        this.id = id;
-        this.nickName = nickName;
-        this.rank = rank;
-        this.imageAccepted = imageAccepted;
+    public LeaderBoardDto(LeaderBoard leaderBoard){
+        this.id = leaderBoard.getUserId();
+        this.nickName = leaderBoard.getNickName();
+        this.rank = leaderBoard.getRanking();
+        this.imageAccepted = leaderBoard.getTotal();
+        this.profileImage = leaderBoard.getProfileImage();
     }
 
 }

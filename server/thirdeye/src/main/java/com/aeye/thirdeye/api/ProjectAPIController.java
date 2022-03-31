@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,13 +44,13 @@ public class ProjectAPIController {
         return ResponseEntity.status(HttpStatus.CREATED).body("ADD Project Success");
     }
 
-    @PostMapping("/admin/project/list")
-    @ApiOperation(value = "프로젝트 목록 조회", notes = "")
+    @GetMapping("/admin/project/list")
+    @ApiOperation(value = "프로젝트 목록 조회", notes = "파라미터 page, size 입력 (default page = 0, size = 20)")
     @ApiResponses({
             @io.swagger.annotations.ApiResponse(code = 200, message = "프로젝트 목록 조회 성공"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "프로젝트 목록 조회 실패")
     })
-    public ResponseEntity<?> getProjects(@ApiParam(value = "page, size 입력") @PageableDefault(size=20, sort="goal", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<?> getProjects(@PageableDefault(size=20, sort="goal", direction = Sort.Direction.DESC) Pageable pageable){
 
         List<Project> result = projectService.getProjects(pageable);
 
