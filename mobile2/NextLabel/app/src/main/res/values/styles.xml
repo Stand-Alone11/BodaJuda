@@ -3,4 +3,42 @@
     <style name="tab_text_size" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">15sp</item>
     </style>
+    <style name="Text.Smallest" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="Text.Smallest.Bold" parent="Text.Smallest">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.Small" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Text.Small.Bold" parent="Text.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.Normal" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text.Normal.Bold" parent="Text.Normal">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.Large" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text.Large.Bold" parent="Text.Large">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.Largest" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.Largest.Bold" parent="Text.Largest">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
