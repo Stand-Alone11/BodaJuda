@@ -1,6 +1,7 @@
 package com.aeye.nextlabel.feature.main.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aeye.nextlabel.databinding.ProjectItemBinding
@@ -8,9 +9,19 @@ import com.aeye.nextlabel.model.dto.Project
 
 class ProjectAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val items = mutableListOf<Project>()
+    lateinit var itemClickListener: ItemClickListener
 
     inner class ViewHolder(val binding: ProjectItemBinding): RecyclerView.ViewHolder(binding.root) {
+        init {
+            if(this@ProjectAdapter::itemClickListener.isInitialized) {
+                binding.root.setOnClickListener {
+                    itemClickListener.onClick(it)
+                }
+            }
+        }
+
         fun bind(project: Project) {
+            binding.root.tag = project
             binding.textViewProjectItemName.text = "${project.provider} ${project.title}"
             binding.textViewProjectItemDesc.text = project.description
             val progress = project.accepted / project.goal
@@ -38,5 +49,9 @@ class ProjectAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val lastIndex = items.lastIndex
         items.addAll(list)
         notifyItemInserted(lastIndex)
+    }
+
+    interface ItemClickListener {
+        fun onClick(view: View)
     }
 }
