@@ -19,7 +19,6 @@
         android:id="@+id/btn_camera"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_corner_all_brand"
         android:text="사진 찍기"
         android:textSize="18sp"
         android:textColor="@color/black"
