@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.feature.main.home
+package com.aeye.nextlabel.feature.camera
 
 import android.Manifest
 import android.content.Context
@@ -23,13 +23,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentCameraBinding
 import com.aeye.nextlabel.feature.labeling.LabelingActivity
+import com.aeye.nextlabel.feature.labeling.LabelingViewModel
 import com.aeye.nextlabel.feature.main.MainActivity
-import com.aeye.nextlabel.global.BUNDLE_KEY_TO_MOVE
-import com.aeye.nextlabel.global.REQUEST_KEY_TO_MOVE
+import com.aeye.nextlabel.global.FRAGMENT_BUNDLE_KEY
+import com.aeye.nextlabel.global.LABELING_FRAGMENT
+import com.aeye.nextlabel.global.LOGIN_FRAGMENT
+import com.aeye.nextlabel.global.MOVE_FRAGMENT
 import com.google.common.util.concurrent.ListenableFuture
 import java.io.File
 import java.text.SimpleDateFormat
@@ -38,11 +42,11 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class CameraFragment: Fragment() {
-
+    val labelingViewModel: LabelingViewModel by activityViewModels()
     val binding by lazy { FragmentCameraBinding.inflate(layoutInflater) }
 
     // TODO: activity를 MainActivity로 바로 사용하지 않게 수정
-    lateinit var activity: MainActivity
+    lateinit var activity: CameraActivity
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -54,7 +58,7 @@ class CameraFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity = context as MainActivity
+        activity = context as CameraActivity
 
         if (!hasPermissions(activity)) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
@@ -147,9 +151,8 @@ class CameraFragment: Fragment() {
                         arrayOf(savedUri.toFile().absolutePath),
                         arrayOf(mimeType)
                     ) { _, uri ->
-                        startActivity(Intent(requireActivity(), LabelingActivity::class.java).apply {
-                            putExtra("imgUri", uri)
-                        })
+                        labelingViewModel.imageUrl = uri
+                        setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to LABELING_FRAGMENT))
                         Log.d(TAG, "Image capture scanned into media store: $uri")
                     }
                 }

@@ -21,8 +21,12 @@
         android:theme="@style/Theme.NextLabel"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".feature.camera.CameraActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".feature.labeling.LabelingActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".feature.main.profile.UpdateActivity"
             android:exported="false" />

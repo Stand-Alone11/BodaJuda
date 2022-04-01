@@ -12,6 +12,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentHomeBinding
+import com.aeye.nextlabel.feature.camera.CameraFragment
 import com.aeye.nextlabel.feature.common.BaseFragment
 import com.aeye.nextlabel.util.Status
 import com.google.android.material.tabs.TabLayout
