@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentProfileBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
-import com.aeye.nextlabel.feature.user.UpdateActivity
 import com.aeye.nextlabel.feature.user.UserViewModel
 import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.model.network.response.ProfileResponse

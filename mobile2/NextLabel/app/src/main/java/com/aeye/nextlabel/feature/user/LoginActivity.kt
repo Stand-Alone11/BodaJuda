@@ -11,8 +11,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // temporary: 토큰 삭제
-//        logout()
 
         init()
     }

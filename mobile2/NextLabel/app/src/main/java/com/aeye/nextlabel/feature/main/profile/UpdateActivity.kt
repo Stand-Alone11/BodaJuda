@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.EditText
 import androidx.activity.viewModels
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.ActivityUpdateBinding
@@ -13,26 +14,30 @@ import com.aeye.nextlabel.feature.common.BaseActivity
 import com.aeye.nextlabel.feature.main.MainActivity
 import com.aeye.nextlabel.feature.user.LoginActivity
 import com.aeye.nextlabel.feature.user.UserViewModel
+import com.aeye.nextlabel.model.dto.Password
 import com.aeye.nextlabel.model.dto.UserForUpdate
 import com.aeye.nextlabel.model.dto.UserInfo
 import com.aeye.nextlabel.util.InputValidUtil
-import com.aeye.nextlabel.util.LoginUtil.USER_ID
 import com.aeye.nextlabel.util.LoginUtil.getUserInfo
+import com.aeye.nextlabel.util.LoginUtil.logout
+import com.aeye.nextlabel.util.Status
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding::inflate) {
 
-    lateinit var absoluteUri: String
-    lateinit var userInfo: UserInfo
-
     val GALLERY_REQUEST_CODE = 1
     val BASE_URL = "https://storage.googleapis.com/thirdeye_profile"
+
     val userViewModel: UserViewModel by viewModels()
 
+    lateinit var absoluteUri: String
+    lateinit var userInfo: UserInfo
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
+        initLiveDataObserver()
     }
 
     private fun init() {
@@ -53,7 +58,6 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
 
         // url 조합하기
         val profileUrlImg = BASE_URL + userInfo.imgUrl
-        Log.d("UPDATE_NEXT", profileUrlImg)
 
         if (userInfo.imgUrl.isNullOrBlank()) {
             // profile image 원형으로 자르기
@@ -63,25 +67,15 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
             Glide.with(this)
                 .load(profileUrlImg).circleCrop().into(profileImage)
         }
-
-
+        
         btnGallery.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.setType("image/*")
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
             startActivityForResult(intent, GALLERY_REQUEST_CODE)
         }
 
-        btnEmailUpdate.setOnClickListener {
-            if (checkInputForm()) {
-                update()
-            }
-        }
-
-        btnNicknameUpdate.setOnClickListener {
-            if (checkInputForm()) {
-                update()
-            }
-        }
+        btnEmailUpdate.setOnClickListener { update() }
+        btnNicknameUpdate.setOnClickListener { update() }
 
         // password update dialog
         btnPasswordUpdate.setOnClickListener { prepareDialog() }
@@ -89,35 +83,28 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
         btnSignout.setOnClickListener { signout() }
     }
 
-    private fun update() {
+    private fun initLiveDataObserver() {
+        userViewModel.leaveRequestLiveData.observe(this@UpdateActivity) {
+            when(it.status) {
+                Status.SUCCESS -> {
+                    // 로그아웃 하면 로그인 페이지로 이동
+                    logout()
 
-        userInfo = getUserInfo()
-
-        var email = userInfo.email
-        var nickname = userInfo.nickname
-//        Log.d("UPDATE_NEXT", email!!)
-//        Log.d("UPDATE_NEXT", nickname!!)
-
-        val newEmail = binding.email.text.toString()
-        val newNickname = binding.nickname.text.toString()
-        if (newEmail.length > 0) {
-            email = newEmail
+                    val intent = Intent(this@UpdateActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                Status.LOADING -> {
+                    // TODO: showLoading()
+                }
+                Status.ERROR -> {
+                    // TODO: dismissLoading()
+                }
+            }
         }
-        if (newNickname.length > 0) {
-            nickname = newNickname
-        }
-
-        userViewModel.update(UserForUpdate(email!!, nickname!!), absoluteUri)
     }
 
-    private fun signout() {
-        userViewModel.signout()
-
-        val intent = Intent(this@UpdateActivity, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
+    // 프로필 사진
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -125,7 +112,8 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
             val imgUri = data!!.data!!
             absoluteUri = makeAbsoluteUri(imgUri)
 
-            binding.imageProfile.setImageURI(imgUri)
+            val profileImage = binding.imageProfile
+            Glide.with(this).load(imgUri).circleCrop().into(profileImage)
         }
     }
 
@@ -136,63 +124,50 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
         c?.moveToFirst()
 
         val result = c?.getString(index!!)
-
         return result!!
     }
 
-    private fun checkInputForm(): Boolean {
-        var result = 1
+    private fun update() {
 
-        val email = binding.email.text.toString()
-        val nickname = binding.nickname.text.toString()
+        userInfo = getUserInfo()
 
-        if(!InputValidUtil.isValidEmail(email)) {
-            result *= 0
-            binding.email.error = resources.getText(R.string.emailErrorMessage)
+        var email = userInfo.email
+        var nickname = userInfo.nickname
+        val newEmail = binding.email.text.toString()
+        val newNickname = binding.nickname.text.toString()
+
+        if (newEmail.length > 0) {
+            email = newEmail
         }
-        if(!InputValidUtil.isValidNickname(nickname)) {
-            result *= 0
-            binding.nickname.error = resources.getText(R.string.nicknameErrorMessage)
+        if (newNickname.length > 0) {
+            nickname = newNickname
         }
 
-        return when(result) {
-            1 -> true
-            else -> false
-        }
+        // 업데이트 하면 홈 화면으로 이동
+        userViewModel.update(UserForUpdate(email!!, nickname!!), absoluteUri)
+
+        val intent = Intent(this@UpdateActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
-
-//    private fun checkInputForm(): Boolean {
-//        var result = 1
-//
-//        val password = binding.password.text.toString()
-//        val passwordConfirmation = binding.passwordConfirmation.text.toString()
-//
-//        if(!InputValidUtil.isValidPassword(password)) {
-//            result *= 0
-//            binding.password.error = resources.getText(R.string.passwordErrorMessage)
-//        }
-//        if(password != passwordConfirmation) {
-//            result *= 0
-//            binding.passwordConfirmation.error = resources.getText(R.string.passwordConfirmErrorMessage)
-//        }
-//
-//        return when(result) {
-//            1 -> true
-//            else -> false
-//        }
-//    }
 
     private fun prepareDialog() {
 
+        val view = layoutInflater.inflate(R.layout.fragment_dialog_password_update, null)
+        val password = view.findViewById<EditText>(R.id.password_dialog).text.toString()
+        val passwordConfirmation = view.findViewById<EditText>(R.id.password_confirmation_dialog).text.toString()
+
         MaterialAlertDialogBuilder(this)
             .setTitle(resources.getString(R.string.password_update_dialog_title))
-            .setView(R.layout.fragment_dialog_password_update)
+            .setView(view)
             .setNegativeButton(resources.getString(R.string.password_update_dialog_cancel)) { dialog, which ->
                 Log.d("DIALOG_OK", "canceled")
             }
             .setPositiveButton(resources.getString(R.string.password_update_dialog_ok)) { dialog, which ->
-                Log.d("DIALOG_OK", "accepted")
+                userViewModel.updatePassword(Password(password, passwordConfirmation))
             }
             .show()
     }
+
+    private fun signout() { userViewModel.signout() }
 }

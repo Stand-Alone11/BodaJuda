@@ -45,9 +45,9 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
             when(it.status) {
                 Status.SUCCESS -> {
                     // 회원가입에 성공하면 로그인 함께 수행
-                    userViewModel.login(userForLogin)
+//                    userViewModel.login(userForLogin)
 
-                    val intent = Intent(requireActivity(), MainActivity::class.java)
+                    val intent = Intent(requireActivity(), LoginActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
                 }
@@ -59,6 +59,22 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
                 }
             }
         }
+
+//        userViewModel.loginRequestLiveData.observe(requireActivity()) {
+//            when(it.status) {
+//                Status.SUCCESS -> {
+//                    val intent = Intent(requireActivity(), MainActivity::class.java)
+//                    startActivity(intent)
+//                    requireActivity().finish()
+//                }
+//                Status.LOADING -> {
+//                    // TODO: showLoading()
+//                }
+//                Status.ERROR -> {
+//                    // TODO: dismissLoading()
+//                }
+//            }
+//        }
     }
 
     private fun join() {

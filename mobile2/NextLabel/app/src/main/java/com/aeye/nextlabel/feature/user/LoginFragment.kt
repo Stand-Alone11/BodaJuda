@@ -25,7 +25,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-//        initLiveDataObserver()
+        initLiveDataObserver()
     }
 
     private fun init() {
@@ -36,11 +36,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
         binding.containedButtonLogIn.setOnClickListener {
             if (checkInputForm()) {
                 login()
-
-                // test: 화면 테스트를 위해 로그인 버튼을 누르면 업데이트 액티비티로 이동(라이브데이터옵저버 주석처리)
-                val intent = Intent(requireActivity(), UpdateActivity::class.java)
-                startActivity(intent)
-                requireActivity().finish()
             }
         }
     }
@@ -53,9 +48,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
                     // 프로필 정보 저장
                     userViewModel.getProfile(USER_ID!!)
 
-//                    val intent = Intent(requireActivity(), MainActivity::class.java)
-//                    startActivity(intent)
-//                    requireActivity().finish()
+                    val intent = Intent(requireActivity(), MainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
                 }
                 Status.LOADING -> {
                     // TODO: showLoading() 
