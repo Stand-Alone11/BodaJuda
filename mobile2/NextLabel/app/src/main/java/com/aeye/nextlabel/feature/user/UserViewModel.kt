@@ -34,6 +34,8 @@ import java.io.File
 class UserViewModel: ViewModel() {
     val userRepository = UserRepository()
 
+    var isFirstLoaded = false
+
     val joinRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
     val leaveRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
     val loginRequestLiveData = MutableLiveData<Resource<LoginResponse>>()
@@ -85,11 +87,18 @@ class UserViewModel: ViewModel() {
         }
     }
 
+    fun getProfileFirst(userId: Int) {
+        if(!isFirstLoaded) {
+            getProfile(userId)
+        }
+    }
+
     fun getProfile(userId: Int) = viewModelScope.launch {
         profileRequestLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             val resource = userRepository.getProfile(userId)
             if (resource.status == Status.SUCCESS) {
+                isFirstLoaded = true
                 // userInfo 저장
                 sSharedPreferences.setString(USER_IMG_URL, resource.data?.imgUrl.toString())
                 sSharedPreferences.setString(USER_EMAIL, resource.data?.email.toString())

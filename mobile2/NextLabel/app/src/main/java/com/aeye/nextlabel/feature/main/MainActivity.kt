@@ -11,6 +11,7 @@ import com.aeye.nextlabel.feature.common.BaseActivity
 import com.aeye.nextlabel.feature.main.home.ProjectViewModel
 import com.aeye.nextlabel.feature.user.LoginActivity
 import com.aeye.nextlabel.feature.user.UserViewModel
+import com.aeye.nextlabel.util.LoginUtil
 import com.aeye.nextlabel.util.LoginUtil.isLogin
 import com.aeye.nextlabel.util.LoginUtil.logout
 
@@ -37,5 +38,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         navController?.let {
             binding.bottomNavMain.setupWithNavController(it)
         }
+        LoginUtil.getUserId()
     }
 }

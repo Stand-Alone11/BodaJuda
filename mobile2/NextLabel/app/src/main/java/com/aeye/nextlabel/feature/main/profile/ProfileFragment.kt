@@ -1,16 +1,28 @@
 package com.aeye.nextlabel.feature.main.profile
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentProfileBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
+import com.aeye.nextlabel.feature.user.UpdateActivity
 import com.aeye.nextlabel.feature.user.UserViewModel
+import com.aeye.nextlabel.global.ApplicationClass
+import com.aeye.nextlabel.model.network.response.ProfileResponse
+import com.aeye.nextlabel.util.LoginUtil
+import com.aeye.nextlabel.util.Status
+import com.bumptech.glide.Glide
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -21,73 +33,130 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::bind, R.layout.fragment_profile) {
-
+    private val TAG = "ProfileFragment_debuk"
     private val userViewModel: UserViewModel by activityViewModels()
+    lateinit var user: ProfileResponse
     private lateinit var pieChart: PieChart
+    private lateinit var historyAdapter: HistoryAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        Log.d(TAG, "onCreateView: ")
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated: ")
         initView()
+        initLiveDataObserver()
+        requestData()
+    }
 
-        // 승인율 파이 차트
-        pieChart = binding.profilePiechart
-        setupPieChart()
-        loadPieChartData()
+    private fun requestData() {
+        LoginUtil.USER_ID?.let {
+            userViewModel.getProfileFirst(it)
+        }
     }
 
     private fun initView() {
+        pieChart = binding.profilePiechart
+        setupPieChart()
 
+        historyAdapter = HistoryAdapter()
+        binding.recyclerViewProfileF.apply {
+            adapter = historyAdapter
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        }
+
+        binding.imageButtonProfileFEdit.setOnClickListener {
+            startActivity(Intent(requireActivity(), UpdateActivity::class.java))
+        }
+    }
+
+    private fun initLiveDataObserver() {
+        userViewModel.profileRequestLiveData.observe(requireActivity()) {
+            when(it.status) {
+                Status.SUCCESS -> {
+                    user = it.data!!
+                    setUserData(user)
+                }
+                Status.ERROR -> {
+                    // TODO: user profile error 처리
+                }
+                Status.LOADING -> {
+                    // TODO: loading 처리
+                }
+            }
+        }
+    }
+
+    private fun setUserData(data: ProfileResponse) {
+        Log.d(TAG, "setUserData: ")
+        val imageView = binding?.imageViewProfileF
+        Glide.with(requireActivity()).load("${ApplicationClass.IMAGE_BASE_URL}${data.imgUrl}").circleCrop().into(imageView)
+        binding.textViewProfileFName.text = data.nickname
+        binding.textViewProfileFEmail.text = data.email
+
+        loadPieChartData(data)
+        loadRecentProject(data)
+    }
+
+    private fun loadRecentProject(data: ProfileResponse) {
+        historyAdapter.setData(data.historyList)
     }
 
     private fun setupPieChart() {
-        pieChart.setDrawHoleEnabled(true)
-        pieChart.holeRadius = 85f
+        pieChart.isDrawHoleEnabled = true
+        pieChart.holeRadius = 80f
         pieChart.setUsePercentValues(true)
-//        pieChart.setEntryLabelTextSize(12f)
-//        pieChart.setEntryLabelColor(Color.BLACK)
-        pieChart.getDescription().setEnabled(false)
-        pieChart.setHighlightPerTapEnabled(true)
-        pieChart.setCenterText("승인율")
+        pieChart.description.isEnabled = false
+        pieChart.isHighlightPerTapEnabled = true
         pieChart.setCenterTextSize(20f)
 
         // 범례 설정
         val legend = pieChart.getLegend()
-//        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP)
-//        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT)
-//        legend.setOrientation(Legend.LegendOrientation.VERTICAL)
-//        legend.setDrawInside(false)
-        legend.setEnabled(false)
-
+        legend.isEnabled = false
     }
 
-    private fun loadPieChartData() {
+    private fun loadPieChartData(data: ProfileResponse) {
+        // textView에 세팅
+        binding.textViewProfileFAccepted.text = data.imageAccept.toString()
+        binding.textViewProfileFWaiting.text = data.imageWait.toString()
+        binding.textViewProfileFRejected.text = data.imageDeny.toString()
+        binding.textViewProfileFSubmitted.text = data.imageTotal.toString()
+
         // 데이터 추가
         val entries = mutableListOf<PieEntry>()
-        entries.add(PieEntry(0.5f)) // 승인
-        entries.add(PieEntry(0.25f)) // 대기
-        entries.add(PieEntry(0.25f)) // 반려
+        data.imageTotal.let {
+            if(it != 0) {
+                val acceptedRate = data.imageAccept.toFloat().div(it)
+                val waitingRate = data.imageWait.toFloat().div(it)
+                val deniedRate = data.imageDeny.toFloat().div(it).toFloat()
+
+                entries.add(PieEntry(acceptedRate)) // 승인
+                entries.add(PieEntry(waitingRate)) // 대기
+                entries.add(PieEntry(deniedRate)) // 반려
+
+                pieChart.centerText = "${(acceptedRate * 100).toInt()}%"
+            }
+        }
 
         // 색 템플릿 추가
         val colors = mutableListOf<Int>()
-//        for (color in ColorTemplate.MATERIAL_COLORS) {
-//            colors.add(color)
-//        }
-//        for (color in ColorTemplate.VORDIPLOM_COLORS) {
-//            colors.add(color)
-//        }
         colors.add(ContextCompat.getColor(requireContext(), R.color.approved_color))
         colors.add(ContextCompat.getColor(requireContext(), R.color.awaiting_color))
         colors.add(ContextCompat.getColor(requireContext(), R.color.denied_color))
 
         val dataSet = PieDataSet(entries, "")
-        dataSet.setColors(colors)
+        dataSet.colors = colors
 
-        val data = PieData(dataSet)
-        data.setDrawValues(false)
-//        data.setValueFormatter(PercentFormatter(pieChart))
-//        data.setValueTextSize(12f)
-//        data.setValueTextColor(Color.BLACK)
-        pieChart.setData(data)
+        val chartData = PieData(dataSet)
+        chartData.setDrawValues(false)
+        pieChart.data = chartData
 
         pieChart.invalidate()
         // 애니메이션 추가
