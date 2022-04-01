@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<layout>
+    <data>
+        <variable
+            name="project"
+            type="com.aeye.nextlabel.model.dto.Project" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="history"
+            type="com.aeye.nextlabel.model.dto.History" />
+    </data>
+
+
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_default">
+
+            <TextView
+                android:id="@+id/textView_history_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="오리온 포카칩 어니언"
+                android:text='@{project.provider + " " + project.title}'
+                android:textAppearance="@style/Text.Largest.Bold"/>
+
+            <TextView
+                android:id="@+id/textView_history_item_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView_history_item_name"
+                android:layout_marginTop="16dp"
+                tools:text="40장 제출"
+                android:text='@{history.total + "장 제출"}'
+                android:textAppearance="@style/Text.Small.Bold"/>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart_history_item"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>
