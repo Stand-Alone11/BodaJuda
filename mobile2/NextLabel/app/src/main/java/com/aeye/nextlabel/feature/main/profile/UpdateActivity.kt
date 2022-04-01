@@ -11,11 +11,12 @@ import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.ActivityUpdateBinding
 import com.aeye.nextlabel.feature.common.BaseActivity
 import com.aeye.nextlabel.feature.main.MainActivity
+import com.aeye.nextlabel.feature.user.LoginActivity
 import com.aeye.nextlabel.feature.user.UserViewModel
-import com.aeye.nextlabel.model.dto.Password
 import com.aeye.nextlabel.model.dto.UserForUpdate
 import com.aeye.nextlabel.model.dto.UserInfo
 import com.aeye.nextlabel.util.InputValidUtil
+import com.aeye.nextlabel.util.LoginUtil.USER_ID
 import com.aeye.nextlabel.util.LoginUtil.getUserInfo
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -26,6 +27,7 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
     lateinit var userInfo: UserInfo
 
     val GALLERY_REQUEST_CODE = 1
+    val BASE_URL = "https://storage.googleapis.com/thirdeye_profile"
     val userViewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,13 +45,25 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
         val btnPasswordUpdate = binding.containedButtonUpdatePassword
         val btnSignout = binding.containedButtonSignOut
 
+        userInfo = getUserInfo()
+
         // tool bar 뒤로가기 버튼 생성
         setSupportActionBar(toolBar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        // profile image 원형으로 자르기
-        Glide.with(this)
-            .load(R.drawable.ic_default_profile_image).circleCrop().into(profileImage)
+        // url 조합하기
+        val profileUrlImg = BASE_URL + userInfo.imgUrl
+        Log.d("UPDATE_NEXT", profileUrlImg)
+
+        if (userInfo.imgUrl.isNullOrBlank()) {
+            // profile image 원형으로 자르기
+            Glide.with(this)
+                .load(R.drawable.ic_default_profile_image).circleCrop().into(profileImage)
+        } else {
+            Glide.with(this)
+                .load(profileUrlImg).circleCrop().into(profileImage)
+        }
+
 
         btnGallery.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
