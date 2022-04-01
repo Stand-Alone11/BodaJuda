@@ -11,80 +11,61 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!--  button: go back  -->
-        <ImageView
-            android:id="@+id/button_back"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:src="@drawable/button_back"
-            app:layout_constraintDimensionRatio="h,1:1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/tool_bar"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <!--  tool bar  -->
-        <com.google.android.material.appbar.MaterialToolbar
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/tool_bar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:title="회원 정보 수정"
-            app:titleTextAppearance="@style/Text.Largest.Bold"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_back"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="회원 정보 수정"
+                app:titleTextAppearance="@style/Text.Largest.Bold"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <!--  image: profile  -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_profile_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cardCornerRadius="100dp"
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintTop_toBottomOf="@id/tool_bar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_tb_service_logo">
-
-            <ImageView
-                android:id="@+id/profile_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:src="@drawable/default_profile_image" />
-
-        </com.google.android.material.card.MaterialCardView>
+            android:layout_marginTop="@dimen/margin_tb_service_logo"
+            android:layout_marginStart="120dp"
+            android:layout_marginEnd="120dp" />
 
         <!--  button: gallery  -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/button_gallery"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="100dp"
-            app:layout_constraintBottom_toBottomOf="@+id/card_profile_image"
-            app:layout_constraintEnd_toEndOf="@+id/card_profile_image">
-
-            <ImageView
-                android:id="@+id/gallery"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:src="@drawable/gallery" />
-
-        </com.google.android.material.card.MaterialCardView>
+        <ImageButton
+            android:id="@+id/img_button_gallery"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_gallery_button"
+            android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/profile_image"
+            app:layout_constraintEnd_toEndOf="@id/profile_image" />
 
         <!--  input form: email  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField_email"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/hint_email"
             app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toBottomOf="@id/card_profile_image"
+            app:layout_constraintTop_toBottomOf="@id/profile_image"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/containedButton_update_email"
             android:layout_marginTop="@dimen/margin_tb_service_logo"
-            android:layout_marginStart="@dimen/margin_default" >
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_small">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
@@ -96,15 +77,17 @@
         <!--  input form: nickname  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField_nickname"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/hint_update_nickname"
             app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@id/outlinedTextField_email"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/containedButton_update_nickname"
             android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginStart="@dimen/margin_default" >
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_small" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nickname"
@@ -117,7 +100,7 @@
         <Button
             android:id="@+id/containedButton_update_email"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="변경"
             android:textAppearance="@style/Text.Largest"
             app:layout_constraintTop_toTopOf="@id/outlinedTextField_email"
@@ -128,8 +111,8 @@
         <!--  button: nickname -->
         <Button
             android:id="@+id/containedButton_update_nickname"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:text="변경"
             android:textAppearance="@style/Text.Largest"
             app:layout_constraintTop_toTopOf="@id/outlinedTextField_nickname"
@@ -153,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/danger_color"
-                android:padding="@dimen/margin_small">
+                android:padding="@dimen/margin_default" >
 
                 <TextView
                     android:id="@+id/title_danger_zone"
@@ -161,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:text="DANGER ZONE"
                     android:textColor="@color/white"
-                    android:textAppearance="@style/Text.Large"
+                    android:textAppearance="@style/Text.Normal.Bold"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -177,7 +160,7 @@
                     app:layout_constraintTop_toBottomOf="@id/title_danger_zone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginTop="@dimen/margin_small" />
+                    android:layout_marginTop="@dimen/margin_default" />
 
                 <!--  button: sign out -->
                 <Button
