@@ -1,5 +1,6 @@
 package com.aeye.nextlabel.feature.labeling
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,6 +19,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class LabelingViewModel: ViewModel() {
+    var imageUrl: Uri? = null
     private val labelingRepository = LabelingRepository()
 
     private val _uploadLabelResponse = MutableLiveData<Resource<LabelingResponse>>()
