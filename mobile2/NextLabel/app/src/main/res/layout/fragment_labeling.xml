@@ -7,25 +7,14 @@
     android:layout_height="match_parent"
     android:background="@color/background_color">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_labeling"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/white"
+        app:title="제출하기"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="-27dp" />
-
-    <TextView
-        android:id="@+id/textView_labeling"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="54dp"
-        android:text="제출하기"
-        android:textColor="@color/black"
-        style="@style/Text.Largest.Bold"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar_labeling"
-        app:layout_constraintStart_toStartOf="@+id/toolbar_labeling"
-        app:layout_constraintTop_toTopOf="@+id/toolbar_labeling" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -68,17 +57,6 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar_labeling"
         app:srcCompat="@drawable/ic_paper_plane"
         app:tint="@color/brand_color" />
-
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#00FFFFFF"
-        app:tint="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar_labeling"
-        app:layout_constraintStart_toStartOf="@+id/toolbar_labeling"
-        app:layout_constraintTop_toTopOf="@+id/toolbar_labeling"
-        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_new_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
