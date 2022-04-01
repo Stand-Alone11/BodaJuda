@@ -4,15 +4,16 @@ import android.os.Bundle
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.ActivityLoginBinding
 import com.aeye.nextlabel.feature.common.BaseActivity
-import com.aeye.nextlabel.global.FRAGMENT_BUNDLE_KEY
-import com.aeye.nextlabel.global.JOIN_FRAGMENT
-import com.aeye.nextlabel.global.LOGIN_FRAGMENT
-import com.aeye.nextlabel.global.MOVE_FRAGMENT
+import com.aeye.nextlabel.global.*
+import com.aeye.nextlabel.util.LoginUtil.logout
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // temporary: 토큰 삭제
+//        logout()
+
         init()
     }
 

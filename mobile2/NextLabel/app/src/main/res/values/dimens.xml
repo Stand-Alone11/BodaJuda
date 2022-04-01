@@ -3,6 +3,17 @@
     <dimen name="margin_default">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
 
-    <!--  temporary  -->
-    <dimen name="margin_tb_service_logo">32dp</dimen>
+    <!--  image  -->
+    <!--  logo  -->
+    <dimen name="margin_top_logo">60dp</dimen>
+    <dimen name="margin_x_logo">100dp</dimen>
+
+    <!--  profile  -->
+    <dimen name="margin_x_profile">120dp</dimen>
+    <dimen name="padding_profile">3dp</dimen>
+
+    <!--  size  -->
+    <dimen name="height_button">55dp</dimen>
+    <dimen name="size_image_button">32dp</dimen>
+
 </resources>

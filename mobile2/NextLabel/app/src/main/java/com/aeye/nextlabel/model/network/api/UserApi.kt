@@ -24,13 +24,13 @@ interface UserApi {
 
     // 5. 회원정보 수정(without password)
     @Multipart
-    @POST("/accounts/update/userinfo")
+    @PUT("/accounts/update/userinfo")
     suspend fun update(@Part email: MultipartBody.Part,
                        @Part nickName: MultipartBody.Part,
                        @Part image: MultipartBody.Part): Response<BaseResponse>
 
     // 6. 비밀번호 수정
-    @POST("/accounts/update/password")
+    @PUT("/accounts/update/password")
     suspend fun updatePassword(@Body password: Password): Response<BaseResponse>
 
     // 7. 프로필
