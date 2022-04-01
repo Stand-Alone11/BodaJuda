@@ -19,6 +19,9 @@
         android:theme="@style/Theme.NextLabel"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".feature.camera.CameraActivity"
+            android:exported="false"/>
+        <activity
             android:name=".feature.labeling.LabelingActivity"
             android:exported="false" />
         <activity
