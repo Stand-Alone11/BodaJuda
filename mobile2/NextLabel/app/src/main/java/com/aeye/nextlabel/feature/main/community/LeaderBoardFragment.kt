@@ -2,10 +2,7 @@ package com.aeye.nextlabel.feature.main.community
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,10 +12,12 @@ import com.aeye.nextlabel.feature.common.BaseFragment
 import com.aeye.nextlabel.feature.main.CommunityViewModel
 import com.aeye.nextlabel.model.dto.RankUser
 import com.aeye.nextlabel.util.Status
+import com.bumptech.glide.Glide
 
 class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLeaderBoardBinding::bind, R.layout.fragment_leader_board) {
     private val TAG = "LeaderBoardFragment_debuk"
 
+    // TODO: adpater clicklistener 구현 
     private val communityViewModel: CommunityViewModel by activityViewModels()
     private lateinit var leaderAdapter: LeaderBoardAdapter
 
@@ -91,6 +90,25 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
 
         communityViewModel.leaderBoardItems.observe(requireActivity()) {
             updateDiff(it)
+        }
+
+        communityViewModel.top3LiveData.observe(requireActivity()) { list ->
+            list.forEach {
+                updateTop3(it)
+            }
+        }
+    }
+
+    private fun updateTop3(user: RankUser) {
+        val imageViews = arrayOf(binding.imageViewLeaderFFirst, binding.imageViewLeaderFSecond, binding.imageViewLeaderFThird)
+        val names = arrayOf(binding.textViewLeaderFFirstName, binding.textViewLeaderFSecondName, binding.textViewLeaderFThirdName)
+        val contributes = arrayOf(binding.textViewLeaderFFirstAccepted, binding.textViewLeaderFSecondAccepted, binding.textViewLeaderFThirdAccepted)
+
+        if(user.rank < 4) {
+            val index = user.rank - 1
+            Glide.with(this).load(user.profileImage).error(R.drawable.bottom_nav_profile).circleCrop().into(imageViews[index])
+            names[index].text = user.nickName
+            contributes[index].text = user.imageAccepted.toString()
         }
     }
 

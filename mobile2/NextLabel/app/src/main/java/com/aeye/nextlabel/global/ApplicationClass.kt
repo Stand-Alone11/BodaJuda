@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class ApplicationClass: Application() {
-    val BASE_URL = "http://j6s004.p.ssafy.io:8080/"
+
     val TIME_OUT = 10000L
 
     companion object {
@@ -19,6 +19,7 @@ class ApplicationClass: Application() {
         lateinit var sSharedPreferences: SharedPreferencesUtil
         lateinit var sContentResolver: ContentResolver
 
+        const val BASE_URL = "http://j6s004.p.ssafy.io:8080/"
         const val JWT = "JWT"
         const val AUTHORIZATION = "Authorization"
         const val SHARED_PREFERENCES_NAME = "NEXT_LABEL"
