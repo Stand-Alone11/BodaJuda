@@ -3,9 +3,11 @@
     <style name="tab_text_size" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">15sp</item>
     </style>
+
     <style name="Text.Smallest" parent="TextAppearance.AppCompat">
         <item name="android:textSize">10sp</item>
     </style>
+
     <style name="Text.Smallest.Bold" parent="Text.Smallest">
         <item name="android:textStyle">bold</item>
     </style>

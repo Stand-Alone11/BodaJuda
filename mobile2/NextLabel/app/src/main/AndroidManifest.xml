@@ -19,19 +19,24 @@
         android:theme="@style/Theme.NextLabel"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".feature.user.UpdateActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".feature.labeling.LabelingActivity"
             android:exported="false" />
         <activity
             android:name=".feature.user.LoginActivity"
-            android:exported="true" />
-        <activity
-            android:name=".feature.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".feature.main.MainActivity"
+            android:exported="true">
         </activity>
     </application>
 

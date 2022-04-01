@@ -32,7 +32,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
             setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to JOIN_FRAGMENT))
         }
 
-        binding.containedButtonLogin.setOnClickListener {
+        binding.containedButton.setOnClickListener {
             if (checkInputForm()) {
                 login()
             }

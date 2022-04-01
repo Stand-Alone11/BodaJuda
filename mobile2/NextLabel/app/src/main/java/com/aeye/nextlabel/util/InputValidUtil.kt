@@ -3,7 +3,7 @@ package com.aeye.nextlabel.util
 object InputValidUtil {
     val idRegex = "^(?=.*[a-zA-Z])(?=.*[0-9]).{2,20}$".toRegex()
     val emailRegex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$".toRegex()
-    val nicknameRegex = "^[가-힣a-zA-Z]{2,20}$".toRegex()
+    val nicknameRegex = "^[가-힣a-zA-Z]{2,8}$".toRegex()
 
     val passRegex1 = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,14}$".toRegex()  // 영문, 숫자
     val passRegex2 = "^(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,14}$".toRegex()  //영문, 특문

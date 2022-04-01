@@ -3,7 +3,23 @@
 
     <!--  custom  -->
 
-    <!--  Text  -->
+    <!--  password update dialog  -->
+    <string name="password_update_dialog_title">비밀번호 변경</string>
+    <string name="password_update_dialog_ok">변경</string>
+    <string name="password_update_dialog_cancel">취소</string>
+
+
+    <!--  Hint  -->
+    <string name="hint_user_id">아이디(2~20자)를 입력해 주세요.</string>
+    <string name="hint_password">비밀번호(8~14자)를 입력해 주세요.</string>
+    <string name="hint_password_confirmation">비밀번호를 확인해 주세요.</string>
+    <string name="hint_email">이메일을 입력해 주세요.</string>
+    <string name="hint_nickname">닉네임(2~8자)을 입력해 주세요.</string>
+
+    <string name="hint_login_user_id">아이디를 입력해 주세요.</string>
+    <string name="hint_login_password">비밀번호를 입력해 주세요.</string>
+
+    <string name="hint_update_nickname">닉네임을 입력해 주세요.</string>
 
     <!--  Button Text  -->
     <string name="btn_text_join">Join</string>
@@ -18,4 +34,5 @@
     <string name="emailErrorMessage">올바르지 않은 이메일입니다.</string>
     <string name="nicknameErrorMessage">올바르지 않은 닉네임입니다.</string>
     <string name="passwordConfirmErrorMessage">비밀번호가 일치하지 않습니다.</string>
+
 </resources>
