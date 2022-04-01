@@ -164,7 +164,12 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
                 Log.d("DIALOG_OK", "canceled")
             }
             .setPositiveButton(resources.getString(R.string.password_update_dialog_ok)) { dialog, which ->
+                // 업데이트 하면 홈 화면으로 이동
                 userViewModel.updatePassword(Password(password, passwordConfirmation))
+
+                val intent = Intent(this@UpdateActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
             }
             .show()
     }
