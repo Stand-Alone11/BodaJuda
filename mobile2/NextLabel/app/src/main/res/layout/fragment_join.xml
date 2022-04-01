@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:text="로그인"
             android:textColor="@color/brand_color_secondary"
-            android:textAppearance="@style/Text.Normal.Bold"
+            android:textAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

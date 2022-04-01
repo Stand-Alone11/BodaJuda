@@ -28,11 +28,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
     }
 
     private fun init() {
-        binding.textButtonJoin.setOnClickListener {
+        binding.textButtonSignUp .setOnClickListener {
             setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to JOIN_FRAGMENT))
         }
 
-        binding.containedButton.setOnClickListener {
+        binding.containedButtonLogIn.setOnClickListener {
             if (checkInputForm()) {
                 login()
             }
