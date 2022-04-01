@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aeye.nextlabel.model.dto.RankUser
-import com.aeye.nextlabel.model.network.response.LeaderBoardResponse
 import com.aeye.nextlabel.repository.CommunityRepository
 import com.aeye.nextlabel.util.Resource
 import com.aeye.nextlabel.util.Status
@@ -31,6 +30,10 @@ class CommunityViewModel: ViewModel() {
     val leaderBoardItems: LiveData<List<RankUser>>
         get() = _leaderBoardItems
 
+    //1, 2, 3위
+    private val _top3LiveData = MutableLiveData<List<RankUser>>()
+    val top3LiveData: LiveData<List<RankUser>>
+        get() = _top3LiveData
 
     fun getLeaderBoard() = viewModelScope.launch {
         if(!isLast) {
@@ -60,7 +63,24 @@ class CommunityViewModel: ViewModel() {
 
     private fun updateLiveData(list: List<RankUser>) {
         val origin = _leaderBoardItems.value?.toMutableList()?: mutableListOf()
-        origin.addAll(list)
-        _leaderBoardItems.postValue(origin)
+        if(!isFirstLoaded && list.isNotEmpty()) {
+            val top3List = mutableListOf<RankUser>()
+
+            try {
+                for(i in 0..2) {
+                    if(list[i].rank < 4) {
+                        top3List.add(list[i])
+                    }
+                }
+            } catch (e: Exception) {
+
+            } finally {
+                _top3LiveData.postValue(top3List)
+            }
+
+        } else {
+            origin.addAll(list)
+            _leaderBoardItems.postValue(origin)
+        }
     }
 }

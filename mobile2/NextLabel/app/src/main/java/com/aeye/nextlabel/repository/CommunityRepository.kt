@@ -1,11 +1,9 @@
 package com.aeye.nextlabel.repository
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.model.dto.RankUser
 import com.aeye.nextlabel.model.network.api.CommunityApi
-import com.aeye.nextlabel.model.network.response.LeaderBoardResponse
 import com.aeye.nextlabel.util.Resource
 import java.lang.Exception
 

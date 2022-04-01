@@ -2,10 +2,7 @@ package com.aeye.nextlabel.feature.user
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
@@ -13,7 +10,6 @@ import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentJoinBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
 import com.aeye.nextlabel.feature.main.MainActivity
-import com.aeye.nextlabel.global.BUNDLE_KEY_TO_MOVE
 import com.aeye.nextlabel.global.FRAGMENT_BUNDLE_KEY
 import com.aeye.nextlabel.global.LOGIN_FRAGMENT
 import com.aeye.nextlabel.global.MOVE_FRAGMENT
@@ -33,11 +29,11 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
     }
 
     private fun init() {
-        binding.textButtonLogin.setOnClickListener {
+        binding.textButtonLogIn.setOnClickListener {
             setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to LOGIN_FRAGMENT))
         }
 
-        binding.containedButtonJoin.setOnClickListener {
+        binding.containedButton.setOnClickListener {
             if (checkInputForm()) {
                 join()
             }
