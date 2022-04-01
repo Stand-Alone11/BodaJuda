@@ -1,5 +1,6 @@
 package com.aeye.nextlabel.feature.main.profile
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentProfileBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
+import com.aeye.nextlabel.feature.user.UpdateActivity
 import com.aeye.nextlabel.feature.user.UserViewModel
 import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.model.network.response.ProfileResponse
@@ -68,6 +70,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         binding.recyclerViewProfileF.apply {
             adapter = historyAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        }
+
+        binding.imageButtonProfileFEdit.setOnClickListener {
+            startActivity(Intent(requireActivity(), UpdateActivity::class.java))
         }
     }
 
