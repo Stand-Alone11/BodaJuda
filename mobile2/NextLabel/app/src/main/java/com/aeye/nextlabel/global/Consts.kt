@@ -11,3 +11,7 @@ const val LOGIN_FRAGMENT = "LoginFragment"
 const val FRAGMENT_BUNDLE_KEY = "FragmentKey"
 const val CAMERA_FRAGMENT = "CameraFragment"
 const val LABELING_FRAGMENT = "LabelingFragment"
+
+//ExtraKey
+const val HISTORY_EXTRA = "History"
+const val PROJECT_EXTRA = "Project"
