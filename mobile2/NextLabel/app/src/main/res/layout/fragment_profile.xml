@@ -16,7 +16,9 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:background="@color/background_color">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -62,7 +64,7 @@
                     android:id="@+id/imageButton_profileF_edit"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@color/bronze_color"
+                    android:src="@drawable/ic_next"
                     android:background="@null"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/imageView_profileF"
@@ -119,7 +121,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textAppearance="@style/Text.Small.Bold"
+                            android:textAppearance="@style/Text.Normal.Bold"
                             app:layout_constraintBottom_toTopOf="@+id/textView_profileF_waiting"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -130,7 +132,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textAppearance="@style/Text.Small.Bold"
+                            android:textAppearance="@style/Text.Normal.Bold"
                             app:layout_constraintBottom_toTopOf="@+id/textView_profileF_rejected"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView_profileF_accepted" />
@@ -140,7 +142,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textAppearance="@style/Text.Small.Bold"
+                            android:textAppearance="@style/Text.Normal.Bold"
                             app:layout_constraintBottom_toTopOf="@+id/textView_profileF_submitted"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView_profileF_waiting" />
@@ -150,7 +152,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textAppearance="@style/Text.Small.Bold"
+                            android:textAppearance="@style/Text.Normal.Bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView_profileF_rejected" />
@@ -161,7 +163,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="80dp"
                             android:text="승인"
-                            android:textAppearance="@style/Text.Small"
+                            android:textAppearance="@style/Text.Normal"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView_profileF_accepted"
@@ -182,7 +184,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="대기"
-                            android:textAppearance="@style/Text.Small"
+                            android:textAppearance="@style/Text.Normal"
                             app:layout_constraintBottom_toTopOf="@+id/textView_profileF_rejectedLabel"
                             app:layout_constraintEnd_toEndOf="@id/textView_profileF_acceptedLabel"
                             app:layout_constraintTop_toBottomOf="@+id/textView_profileF_acceptedLabel" />
@@ -202,7 +204,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="반려"
-                            android:textAppearance="@style/Text.Small"
+                            android:textAppearance="@style/Text.Normal"
                             app:layout_constraintBottom_toTopOf="@+id/textView_profileF_submittedLabel"
                             app:layout_constraintEnd_toEndOf="@id/textView_profileF_acceptedLabel"
                             app:layout_constraintTop_toBottomOf="@+id/textView_profileF_waitingLabel" />
@@ -222,7 +224,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="제출"
-                            android:textAppearance="@style/Text.Small"
+                            android:textAppearance="@style/Text.Normal"
                             app:layout_constraintBottom_toTopOf="@+id/textView_profileF_submitted"
                             app:layout_constraintEnd_toEndOf="@id/textView_profileF_acceptedLabel"
                             app:layout_constraintTop_toBottomOf="parent" />
@@ -253,6 +255,7 @@
                     app:layout_constraintTop_toBottomOf="@id/textView_profileF_recentProject"
                     android:nestedScrollingEnabled="false"
                     android:layout_marginTop="8dp"
+                    android:overScrollMode="never"
                     />
 
 
