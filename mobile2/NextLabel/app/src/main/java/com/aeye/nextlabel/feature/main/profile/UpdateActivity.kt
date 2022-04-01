@@ -1,4 +1,4 @@
-package com.aeye.nextlabel.feature.user
+package com.aeye.nextlabel.feature.main.profile
 
 import android.os.Bundle
 import android.util.Log

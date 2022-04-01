@@ -1,15 +1,12 @@
 <resources>
     <string name="app_name">Next Label</string>
 
-    <!--  custom  -->
-
     <!--  password update dialog  -->
     <string name="password_update_dialog_title">비밀번호 변경</string>
     <string name="password_update_dialog_ok">변경</string>
     <string name="password_update_dialog_cancel">취소</string>
 
-
-    <!--  Hint  -->
+    <!--  hint  -->
     <string name="hint_user_id">아이디(2~20자)를 입력해 주세요.</string>
     <string name="hint_password">비밀번호(8~14자)를 입력해 주세요.</string>
     <string name="hint_password_confirmation">비밀번호를 확인해 주세요.</string>

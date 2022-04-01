@@ -21,16 +21,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!--  image: service logo  -->
+        <!--  image: logo  -->
         <ImageView
-            android:id="@+id/image_service_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/service_logo"
-            app:layout_constraintTop_toBottomOf="@id/textButton_log_in"
+            android:id="@+id/image_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_juda_logo"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_tb_service_logo" />
+            android:layout_marginTop="@dimen/margin_top_logo"
+            android:layout_marginStart="@dimen/margin_x_logo"
+            android:layout_marginEnd="@dimen/margin_x_logo" />
 
         <!--  input form: user id  -->
         <com.google.android.material.textfield.TextInputLayout
@@ -40,12 +43,12 @@
             android:hint="@string/hint_user_id"
             app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toBottomOf="@id/image_service_logo"
+            app:layout_constraintTop_toBottomOf="@id/image_logo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_tb_service_logo"
+            android:layout_marginTop="@dimen/margin_default"
             android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default" >
+            android:layout_marginEnd="@dimen/margin_default">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_id"
@@ -144,17 +147,18 @@
 
         <!--  button: sign up  -->
         <Button
-            android:id="@+id/containedButton"
+            android:id="@+id/containedButton_sign_up"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/height_button"
             android:text="회원 가입"
-            android:textAppearance="@style/Text.Largest"
+            android:textAppearance="@style/Text.Large.Bold"
             app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_nickname"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_default"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginEnd="@dimen/margin_default" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

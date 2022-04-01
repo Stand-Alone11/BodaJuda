@@ -4,9 +4,11 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
+    <!--  labeling  -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- API -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--  api  -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -19,11 +21,10 @@
         android:theme="@style/Theme.NextLabel"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".feature.user.UpdateActivity"
-            android:exported="true">
-        </activity>
-        <activity
             android:name=".feature.labeling.LabelingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feature.main.profile.UpdateActivity"
             android:exported="false" />
         <activity
             android:name=".feature.user.LoginActivity"

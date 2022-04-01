@@ -33,7 +33,7 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
             setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to LOGIN_FRAGMENT))
         }
 
-        binding.containedButton.setOnClickListener {
+        binding.containedButtonSignUp.setOnClickListener {
             if (checkInputForm()) {
                 join()
             }

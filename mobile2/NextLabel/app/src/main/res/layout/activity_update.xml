@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature.user.UpdateActivity"
+    tools:context=".feature.main.profile.UpdateActivity"
     android:background="@color/background_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,7 +38,7 @@
             app:layout_constraintTop_toBottomOf="@id/tool_bar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_tb_service_logo"
+            android:layout_marginTop="@dimen/margin_top_logo"
             android:layout_marginStart="120dp"
             android:layout_marginEnd="120dp" />
 
@@ -63,7 +63,7 @@
             app:layout_constraintTop_toBottomOf="@id/profile_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/containedButton_update_email"
-            android:layout_marginTop="@dimen/margin_tb_service_logo"
+            android:layout_marginTop="@dimen/margin_top_logo"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginEnd="@dimen/margin_small">
 
@@ -128,7 +128,7 @@
             app:layout_constraintTop_toBottomOf="@id/outlinedTextField_nickname"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_tb_service_logo"
+            android:layout_marginTop="@dimen/margin_top_logo"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginEnd="@dimen/margin_default">
 

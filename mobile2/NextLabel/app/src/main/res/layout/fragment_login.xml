@@ -30,7 +30,7 @@
             app:layout_constraintTop_toBottomOf="@id/textButton_join"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_tb_service_logo" />
+            android:layout_marginTop="@dimen/margin_top_logo" />
 
         <!--  input form: user id  -->
         <com.google.android.material.textfield.TextInputLayout
@@ -43,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@id/image_service_logo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_tb_service_logo"
+            android:layout_marginTop="@dimen/margin_top_logo"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginEnd="@dimen/margin_default" >
 
