@@ -10,6 +10,7 @@ import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentLeaderBoardBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
 import com.aeye.nextlabel.feature.main.CommunityViewModel
+import com.aeye.nextlabel.global.ApplicationClass
 import com.aeye.nextlabel.model.dto.RankUser
 import com.aeye.nextlabel.util.Status
 import com.bumptech.glide.Glide
@@ -106,7 +107,7 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
 
         if(user.rank < 4) {
             val index = user.rank - 1
-            Glide.with(this).load(user.profileImage).error(R.drawable.bottom_nav_profile).circleCrop().into(imageViews[index])
+            Glide.with(this).load("${ApplicationClass.IMAGE_BASE_URL}${user.profileImage}").error(R.drawable.bottom_nav_profile).circleCrop().into(imageViews[index])
             names[index].text = user.nickName
             contributes[index].text = user.imageAccepted.toString()
         }
