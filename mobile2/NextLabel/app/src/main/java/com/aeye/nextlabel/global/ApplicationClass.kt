@@ -20,6 +20,7 @@ class ApplicationClass: Application() {
         lateinit var sContentResolver: ContentResolver
 
         const val BASE_URL = "http://j6s004.p.ssafy.io:8080/"
+        const val IMAGE_BASE_URL = "https://storage.googleapis.com/thirdeye_profile"
         const val JWT = "JWT"
         const val AUTHORIZATION = "Authorization"
         const val SHARED_PREFERENCES_NAME = "NEXT_LABEL"
