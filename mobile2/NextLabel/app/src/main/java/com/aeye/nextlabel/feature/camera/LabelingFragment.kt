@@ -31,7 +31,7 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
 
     private fun prepareDialog() {
         MaterialAlertDialogBuilder(requireActivity())
-            .setTitle("과자이름")
+            .setTitle("${labelingViewModel.project?.provider} ${labelingViewModel.project?.title}")
             .setMessage("사진을 전송하시겠습니까?")
             .setPositiveButton("전송") { dialog, which ->
                 Log.d("DIALOG_SUBMIT", "submited")
