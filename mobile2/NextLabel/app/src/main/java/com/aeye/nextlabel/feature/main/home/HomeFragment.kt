@@ -1,22 +1,20 @@
 package com.aeye.nextlabel.feature.main.home
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentHomeBinding
-import com.aeye.nextlabel.feature.camera.CameraFragment
+import com.aeye.nextlabel.feature.camera.CameraActivity
 import com.aeye.nextlabel.feature.common.BaseFragment
+import com.aeye.nextlabel.global.PROJECT_EXTRA
+import com.aeye.nextlabel.model.dto.Project
 import com.aeye.nextlabel.util.Status
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind, R.layout.fragment_home) {
     private lateinit var projectAdapter: ProjectAdapter
@@ -37,7 +35,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
 
     private fun init() {
         // TODO: Adapter ClickListener 구현
-        projectAdapter = ProjectAdapter()
+        projectAdapter = ProjectAdapter().apply {
+            itemClickListener = object: ProjectAdapter.ItemClickListener {
+                override fun onClick(view: View) {
+                    startCameraActivity(view.tag as Project)
+                }
+            }
+        }
         binding.recyclerViewHomeF.apply {
             adapter = projectAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -54,6 +58,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
                 }
             })
         }
+    }
+
+    private fun startCameraActivity(project: Project) {
+        val intent = Intent(requireActivity(), CameraActivity::class.java).apply {
+            putExtra(PROJECT_EXTRA, project)
+        }
+        startActivity(intent)
     }
 
     private fun initLiveDataObserver() {
