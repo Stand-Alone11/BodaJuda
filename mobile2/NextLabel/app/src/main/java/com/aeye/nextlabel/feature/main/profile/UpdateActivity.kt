@@ -17,7 +17,7 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
 
     private fun init() {
         val toolBar = binding.topAppBar
-        val profileImage = binding.profileImage
+        val profileImage = binding.imageProfile
         val btnPasswordUpdate = binding.containedButtonUpdatePassword
 
         // tool bar 뒤로가기 버튼 생성
@@ -26,7 +26,7 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
 
         // profile image 원형으로 자르기
         Glide.with(this)
-            .load(R.drawable.ic_default_profile_image_without_circle).circleCrop().into(profileImage)
+            .load(R.drawable.ic_default_profile_image).circleCrop().into(profileImage)
 
         // password update dialog
         btnPasswordUpdate.setOnClickListener { prepareDialog() }
@@ -40,7 +40,7 @@ class UpdateActivity : BaseActivity<ActivityUpdateBinding>(ActivityUpdateBinding
             .setNegativeButton(resources.getString(R.string.password_update_dialog_cancel)) { dialog, which ->
                 Log.d("DIALOG_CANCEL", "canceled")
             }
-            .setPositiveButton(resources.getString(R.string.password_update_dialog_cancel)) { dialog, which ->
+            .setPositiveButton(resources.getString(R.string.password_update_dialog_ok)) { dialog, which ->
                 Log.d("DIALOG_OK", "accepted")
             }
             .show()

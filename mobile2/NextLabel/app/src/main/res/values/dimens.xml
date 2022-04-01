@@ -9,7 +9,11 @@
     <dimen name="margin_x_logo">100dp</dimen>
 
     <!--  profile  -->
+    <dimen name="margin_x_profile">120dp</dimen>
+    <dimen name="padding_profile">3dp</dimen>
 
-<!--  height  -->
+    <!--  size  -->
     <dimen name="height_button">55dp</dimen>
+    <dimen name="size_image_button">32dp</dimen>
+
 </resources>

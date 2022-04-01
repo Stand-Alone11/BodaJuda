@@ -16,15 +16,6 @@
     <string name="hint_login_user_id">아이디를 입력해 주세요.</string>
     <string name="hint_login_password">비밀번호를 입력해 주세요.</string>
 
-    <string name="hint_update_nickname">닉네임을 입력해 주세요.</string>
-
-    <!--  Button Text  -->
-    <string name="btn_text_join">Join</string>
-    <string name="btn_text_login">Log In</string>
-
-    <!--  Image Description  -->
-    <string name="img_descrip_service_logo">Service Logo</string>
-
     <!--  Error Message  -->
     <string name="userIdErrorMessage">올바르지 않은 아이디입니다.</string>
     <string name="passwordErrorMessage">올바르지 않은 비밀번호입니다.</string>

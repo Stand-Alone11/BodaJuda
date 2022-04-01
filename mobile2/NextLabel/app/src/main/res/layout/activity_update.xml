@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".feature.main.profile.UpdateActivity"
     android:background="@color/background_color">
 
@@ -23,7 +23,7 @@
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="회원 정보 수정"
+                app:title="회원정보 수정"
                 app:titleTextAppearance="@style/Text.Largest.Bold"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
@@ -31,26 +31,30 @@
 
         <!--  image: profile  -->
         <ImageView
-            android:id="@+id/profile_image"
+            android:id="@+id/image_profile"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitCenter"
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintTop_toBottomOf="@id/tool_bar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/margin_top_logo"
-            android:layout_marginStart="120dp"
-            android:layout_marginEnd="120dp" />
+            android:layout_marginStart="@dimen/margin_x_profile"
+            android:layout_marginEnd="@dimen/margin_x_profile"
+            android:padding="@dimen/padding_profile"/>
 
         <!--  button: gallery  -->
         <ImageButton
             android:id="@+id/img_button_gallery"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/size_image_button"
+            android:layout_height="@dimen/size_image_button"
             android:src="@drawable/ic_gallery_button"
+            android:scaleType="fitCenter"
             android:backgroundTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="@id/profile_image"
-            app:layout_constraintEnd_toEndOf="@id/profile_image" />
+            app:layout_constraintBottom_toBottomOf="@id/image_profile"
+            app:layout_constraintEnd_toEndOf="@id/image_profile"
+            android:padding="@dimen/padding_profile"/>
 
         <!--  input form: email  -->
         <com.google.android.material.textfield.TextInputLayout
@@ -60,12 +64,12 @@
             android:hint="@string/hint_email"
             app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toBottomOf="@id/profile_image"
+            app:layout_constraintTop_toBottomOf="@id/image_profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/containedButton_update_email"
             android:layout_marginTop="@dimen/margin_top_logo"
             android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_small">
+            android:layout_marginEnd="@dimen/margin_small" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
@@ -74,12 +78,24 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!--  button: update email  -->
+        <Button
+            android:id="@+id/containedButton_update_email"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_button"
+            android:text="변경"
+            android:textAppearance="@style/Text.Large"
+            app:layout_constraintTop_toTopOf="@+id/outlinedTextField_email"
+            app:layout_constraintBottom_toBottomOf="@+id/outlinedTextField_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/margin_default" />
+
         <!--  input form: nickname  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField_nickname"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_update_nickname"
+            android:hint="@string/hint_nickname"
             app:hintTextAppearance="@style/Text.Normal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@id/outlinedTextField_email"
@@ -96,31 +112,19 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--  button: email  -->
-        <Button
-            android:id="@+id/containedButton_update_email"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="변경"
-            android:textAppearance="@style/Text.Largest"
-            app:layout_constraintTop_toTopOf="@id/outlinedTextField_email"
-            app:layout_constraintBottom_toBottomOf="@id/outlinedTextField_email"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/margin_default" />
-
-        <!--  button: nickname -->
+        <!--  button: update nickname  -->
         <Button
             android:id="@+id/containedButton_update_nickname"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/height_button"
             android:text="변경"
-            android:textAppearance="@style/Text.Largest"
-            app:layout_constraintTop_toTopOf="@id/outlinedTextField_nickname"
-            app:layout_constraintBottom_toBottomOf="@id/outlinedTextField_nickname"
+            android:textAppearance="@style/Text.Large"
+            app:layout_constraintTop_toTopOf="@+id/outlinedTextField_nickname"
+            app:layout_constraintBottom_toBottomOf="@+id/outlinedTextField_nickname"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="@dimen/margin_default" />
 
-        <!--  area: danger zone -->
+        <!--  danger zone -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/danger_zone"
             android:layout_width="0dp"
@@ -139,25 +143,25 @@
                 android:padding="@dimen/margin_default" >
 
                 <TextView
-                    android:id="@+id/title_danger_zone"
+                    android:id="@+id/danger_zone_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DANGER ZONE"
                     android:textColor="@color/white"
-                    android:textAppearance="@style/Text.Normal.Bold"
+                    android:textAppearance="@style/Text.Large.Bold"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <!--  button: password -->
+                <!--  button: update password -->
                 <Button
                     android:id="@+id/containedButton_update_password"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/height_button"
                     android:backgroundTint="@color/white"
                     android:text="비밀번호 변경"
                     android:textAppearance="@style/Text.Normal"
                     android:textColor="@color/danger_color"
-                    app:layout_constraintTop_toBottomOf="@id/title_danger_zone"
+                    app:layout_constraintTop_toBottomOf="@id/danger_zone_title"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="@dimen/margin_default" />
@@ -166,7 +170,7 @@
                 <Button
                     android:id="@+id/containedButton_sign_out"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/height_button"
                     android:backgroundTint="@color/white"
                     android:text="회원 탈퇴"
                     android:textAppearance="@style/Text.Normal"
@@ -181,4 +185,5 @@
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>
