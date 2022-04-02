@@ -25,6 +25,9 @@ public class ProjectService {
         newProject.setDescription(projectDto.getDescription());
         newProject.setProvider(projectDto.getProvider());
         newProject.setAccepted(0);
+        newProject.setTypeA(projectDto.getTypeA());
+        newProject.setTypeB(projectDto.getTypeB());
+        newProject.setTypeC(projectDto.getTypeC());
         Project result = projectRepository.save(newProject);
         return result;
     }
