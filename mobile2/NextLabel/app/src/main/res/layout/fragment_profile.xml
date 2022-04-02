@@ -9,10 +9,12 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_profileF"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="프로필"
-        app:titleTextAppearance="@style/Text.Largest.Bold"/>
+        app:titleTextAppearance="@style/Text.Largest.Bold"
+        app:menu="@menu/profile_menu"/>
 
         <ScrollView
             android:layout_width="match_parent"

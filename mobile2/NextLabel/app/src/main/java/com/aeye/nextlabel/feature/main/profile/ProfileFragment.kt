@@ -38,15 +38,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
     private lateinit var pieChart: PieChart
     private lateinit var historyAdapter: HistoryAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Log.d(TAG, "onCreateView: ")
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ")
@@ -74,10 +65,28 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         binding.imageButtonProfileFEdit.setOnClickListener {
             startActivity(Intent(requireActivity(), UpdateActivity::class.java))
         }
+
+        setToolbar()
+    }
+
+    private fun setToolbar() {
+        binding.toolbarProfileF.apply {
+            setOnMenuItemClickListener {
+                return@setOnMenuItemClickListener when(it.itemId) {
+                    R.id.refresh_profile-> {
+                        LoginUtil.USER_ID?.let { id ->
+                            userViewModel.getProfile(id)
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
     }
 
     private fun initLiveDataObserver() {
-        userViewModel.profileRequestLiveData.observe(requireActivity()) {
+        userViewModel.profileRequestLiveData.observe(viewLifecycleOwner) {
             when(it.status) {
                 Status.SUCCESS -> {
                     user = it.data!!
