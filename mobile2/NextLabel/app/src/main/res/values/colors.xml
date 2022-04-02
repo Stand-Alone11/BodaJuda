@@ -20,5 +20,6 @@
     <color name="gold_color">#EED038</color>
     <color name="silver_color">#B4B4B4</color>
     <color name="bronze_color">#AE8A56</color>
+    <color name="black_transparent">#9A000000</color>
 
 </resources>
