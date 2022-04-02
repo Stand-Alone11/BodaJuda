@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="과자 이름" />
+        app:titleTextAppearance="@style/Text.Largest.Bold"/>
 
     <androidx.camera.view.PreviewView
         android:id="@+id/pv_camera"
