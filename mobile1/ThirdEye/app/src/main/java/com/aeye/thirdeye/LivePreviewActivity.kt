@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.core.app.ActivityCompat
@@ -61,6 +62,7 @@ class LivePreviewActivity :
     private var resultLast = ""
     lateinit var tsUtil: TextToSpeechUtil
     lateinit var actionBar: ActionBar
+    lateinit var blackPlate: FrameLayout
 
     // firebase 관련 변수들
     lateinit var remoteConfig: FirebaseRemoteConfig
@@ -95,6 +97,8 @@ class LivePreviewActivity :
             actionBar = it
         }
 
+        blackPlate = findViewById(R.id.frame_layout_plate)
+
         preview = findViewById(R.id.preview_view)
         if (preview == null) {
             Log.d(TAG, "Preview is null")
@@ -111,6 +115,7 @@ class LivePreviewActivity :
                 startCameraSource()
                 resultLast = ""
                 resultTextView.text = resultLast
+                dismissBlackPlate()
             }
         }
 
@@ -453,8 +458,21 @@ class LivePreviewActivity :
         runOnUiThread {
             preview?.stop()
             alert()
-            resultLast = getKorean(label)
+            resultLast = getLabel(label)
             resultTextView.text = resultLast
+            showBlackPlate()
+        }
+    }
+
+    private fun showBlackPlate() {
+        if(this::blackPlate.isInitialized) {
+            blackPlate.visibility = View.VISIBLE
+        }
+    }
+
+    private fun dismissBlackPlate() {
+        if(this::blackPlate.isInitialized) {
+            blackPlate.visibility = View.GONE
         }
     }
 
@@ -463,12 +481,17 @@ class LivePreviewActivity :
         VibratorUtil.vibrate(this)
     }
 
-    private fun getKorean(string: String): String {
+    private fun getLabel(string: String): String {
         val sb = StringBuffer()
-        val pattern = Pattern.compile("[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]")
-        val matcher = pattern.matcher(string)
-        while (matcher.find()) {
-            sb.append(matcher.group())
+//        val pattern = Pattern.compile("[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]")
+//        val matcher = pattern.matcher(string)
+//        while (matcher.find()) {
+//            sb.append(matcher.group())
+//
+//        }
+        val a = string.split("_")
+        if(a.size > 1) {
+            sb.append(a[0]).append(" ").append(a[1])
         }
         return sb.toString()
     }
