@@ -68,7 +68,19 @@ class CameraFragment: Fragment() {
         binding.btnCamera.setOnClickListener { takePhoto() }
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        setToolbar()
+
         return binding.root
+    }
+
+    private fun setToolbar() {
+        binding.toolbarCamera.apply {
+            setNavigationIcon(R.drawable.ic_back)
+            setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
+            title = "${labelingViewModel.project?.provider} ${labelingViewModel.project?.title}"
+        }
     }
 
     override fun onResume() {
