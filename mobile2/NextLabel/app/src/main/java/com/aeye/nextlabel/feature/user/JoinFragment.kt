@@ -41,7 +41,7 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
     }
 
     private fun initLiveDataObserver() {
-        userViewModel.joinRequestLiveData.observe(requireActivity()) {
+        userViewModel.joinRequestLiveData.observe(viewLifecycleOwner) {
             when(it.status) {
                 Status.SUCCESS -> {
                     // 회원가입에 성공하면 로그인 함께 수행

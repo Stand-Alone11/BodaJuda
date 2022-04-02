@@ -83,7 +83,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     }
 
     private fun initLiveDataObserver() {
-        projectViewModel.projectResponseLiveData.observe(requireActivity()) {
+        projectViewModel.projectResponseLiveData.observe(viewLifecycleOwner) {
             when(it.status) {
                 Status.LOADING -> {
                     // TODO: showLoading
@@ -94,7 +94,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
             }
         }
 
-        projectViewModel.projectListLiveData.observe(requireActivity()) {
+        projectViewModel.projectListLiveData.observe(viewLifecycleOwner) {
             // TODO: dismissLoading
             projectAdapter.addProject(it)
         }

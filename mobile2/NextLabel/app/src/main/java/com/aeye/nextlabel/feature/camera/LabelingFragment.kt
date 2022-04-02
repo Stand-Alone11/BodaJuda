@@ -89,7 +89,7 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
     }
 
     private fun initLiveDataObserver() {
-        labelingViewModel.uploadLabelResponse.observe(requireActivity()) {
+        labelingViewModel.uploadLabelResponse.observe(viewLifecycleOwner) {
             when(it.status) {
                 Status.SUCCESS -> {
                     updateUiOnSuccess()
@@ -109,8 +109,7 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
     private fun updateUiOnSuccess() {
         if(isLoading) {
             dismissLoading()
-            Toast.makeText(requireContext(), "라벨링 데이터 제공에 감사드립니다.", Toast.LENGTH_LONG).show()
-            labelingViewModel.uploadLabelResponse.removeObservers(requireActivity())
+            Toast.makeText(requireContext(), "소중한 데이터를 제공해 주셔서 감사합니다.", Toast.LENGTH_LONG).show()
             requireActivity().onBackPressed()
         }
     }
