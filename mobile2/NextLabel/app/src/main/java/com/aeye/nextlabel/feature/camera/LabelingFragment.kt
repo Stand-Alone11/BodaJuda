@@ -15,10 +15,12 @@ import com.aeye.nextlabel.model.dto.Label
 import com.aeye.nextlabel.util.BoundingBoxConverter
 import com.aeye.nextlabel.util.Status
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.lang.Exception
 
 class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingBinding::bind, R.layout.fragment_labeling) {
     private val TAG = "LabelingActivity_debuk"
     private val labelingViewModel: LabelingViewModel by activityViewModels()
+    private var isLoading = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,10 +75,16 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
     }
 
     private fun showLoading() {
-        binding.frameLayoutLabelingLoading.visibility = View.VISIBLE
+        isLoading = true
+        try {
+            binding.frameLayoutLabelingLoading.visibility = View.VISIBLE    
+        } catch (e: Exception) {
+            Log.d(TAG, "showLoading: $e")
+        }
     }
 
     private fun dismissLoading() {
+        isLoading = false
         binding.frameLayoutLabelingLoading.visibility = View.GONE
     }
 
@@ -84,20 +92,33 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
         labelingViewModel.uploadLabelResponse.observe(requireActivity()) {
             when(it.status) {
                 Status.SUCCESS -> {
-                    dismissLoading()
-                    Toast.makeText(requireContext(), "라벨링 데이터 제공에 감사드립니다.", Toast.LENGTH_LONG).show()
-                    requireActivity().onBackPressed()
+                    updateUiOnSuccess()
                     Log.d(TAG, "initLiveDataObserver: upload success")
                 }
                 Status.LOADING -> {
                     showLoading()
                 }
                 Status.ERROR -> {
-                    dismissLoading()
-                    Toast.makeText(requireContext(), "전송에 실패했습니다. 다시 시도해 주세요.", Toast.LENGTH_LONG).show()
+                    updateUiOnError()
                     Log.d(TAG, "initLiveDataObserver: upload fail")
                 }
             }
+        }
+    }
+
+    private fun updateUiOnSuccess() {
+        if(isLoading) {
+            dismissLoading()
+            Toast.makeText(requireContext(), "라벨링 데이터 제공에 감사드립니다.", Toast.LENGTH_LONG).show()
+            labelingViewModel.uploadLabelResponse.removeObservers(requireActivity())
+            requireActivity().onBackPressed()
+        }
+    }
+
+    private fun updateUiOnError() {
+        if(isLoading) {
+            dismissLoading()
+            Toast.makeText(requireContext(), "전송에 실패했습니다. 다시 시도해 주세요.", Toast.LENGTH_LONG).show()
         }
     }
 
