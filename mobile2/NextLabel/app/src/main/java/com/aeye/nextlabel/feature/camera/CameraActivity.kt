@@ -15,6 +15,7 @@ import com.aeye.nextlabel.global.*
 import com.aeye.nextlabel.model.dto.Project
 
 class CameraActivity : BaseActivity<ActivityCameraBinding>(ActivityCameraBinding::inflate) {
+    private val TAG = "CameraActivity_debuk"
     private val  labelingViewModel: LabelingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,16 +35,22 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(ActivityCameraBinding
         supportFragmentManager.setFragmentResultListener(MOVE_FRAGMENT, this) { _, bundle ->
             val transaction = supportFragmentManager.beginTransaction()
             when(bundle[FRAGMENT_BUNDLE_KEY]) {
-                CAMERA_FRAGMENT -> {
-                    transaction.replace(R.id.constraintLayout_camera, CameraFragment()).commit()
-                }
                 LABELING_FRAGMENT -> {
-                    transaction.replace(R.id.constraintLayout_camera, LabelingFragment()).commit()
+                    transaction.add(R.id.constraintLayout_camera, LabelingFragment()).addToBackStack(null).commit()
                 }
             }
         }
     }
     private fun setFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.constraintLayout_camera, CameraFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.constraintLayout_camera, CameraFragment()).addToBackStack(null).commit()
+        Log.d(TAG, "setFragment: ${supportFragmentManager.backStackEntryCount}")
+    }
+
+    override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount < 2) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
     }
 }
