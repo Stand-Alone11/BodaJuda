@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentLabelingBinding
@@ -22,6 +23,7 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
+        initLiveDataObserver()
     }
 
     private fun prepareDialog() {
@@ -70,16 +72,29 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
         }
     }
 
+    private fun showLoading() {
+        binding.frameLayoutLabelingLoading.visibility = View.VISIBLE
+    }
+
+    private fun dismissLoading() {
+        binding.frameLayoutLabelingLoading.visibility = View.GONE
+    }
+
     private fun initLiveDataObserver() {
-        labelingViewModel.uploadLabelResponse.observe(this) {
+        labelingViewModel.uploadLabelResponse.observe(requireActivity()) {
             when(it.status) {
                 Status.SUCCESS -> {
+                    dismissLoading()
+                    Toast.makeText(requireContext(), "라벨링 데이터 제공에 감사드립니다.", Toast.LENGTH_LONG).show()
+                    requireActivity().onBackPressed()
                     Log.d(TAG, "initLiveDataObserver: upload success")
                 }
                 Status.LOADING -> {
-                    // TODO: showloading
+                    showLoading()
                 }
                 Status.ERROR -> {
+                    dismissLoading()
+                    Toast.makeText(requireContext(), "전송에 실패했습니다. 다시 시도해 주세요.", Toast.LENGTH_LONG).show()
                     Log.d(TAG, "initLiveDataObserver: upload fail")
                 }
             }
