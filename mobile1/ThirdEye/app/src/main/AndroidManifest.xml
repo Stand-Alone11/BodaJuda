@@ -28,10 +28,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CameraXSourceActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".LivePreviewActivity"
             android:exported="true"
             android:screenOrientation="portrait">
