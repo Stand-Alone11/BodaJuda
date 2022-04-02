@@ -57,6 +57,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
                     }
                 }
             })
+
+            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val lastVisibleItemPosition =
+                        (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                    val itemTotalCount = recyclerView.adapter!!.itemCount-1
+
+                    // 스크롤이 끝에 도달했는지 확인
+                    if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL) && lastVisibleItemPosition == itemTotalCount) {
+                        projectViewModel.getProject()
+                    }
+                }
+            })
         }
     }
 

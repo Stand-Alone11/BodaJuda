@@ -47,8 +47,14 @@ class ProjectAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun addProject(list: List<Project>) {
         val lastIndex = items.lastIndex
-        items.addAll(list)
-        notifyItemInserted(lastIndex)
+        if(lastIndex == -1) {
+            items.addAll(list)
+            notifyItemInserted(0)
+        } else {
+            val sublist = list.subList(lastIndex + 1, list.lastIndex)
+            items.addAll(sublist)
+            notifyItemInserted(lastIndex + 1)
+        }
     }
 
     interface ItemClickListener {

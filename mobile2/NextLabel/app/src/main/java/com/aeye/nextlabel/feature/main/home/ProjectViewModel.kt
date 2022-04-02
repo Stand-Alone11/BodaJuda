@@ -17,6 +17,7 @@ class ProjectViewModel: ViewModel() {
     private var page = 0
     private val size = 20
     var isFirstLoaded = false
+    var isLastPage = false
 
     private val _projectResponseLiveData = MutableLiveData<Resource<List<Project>>>()
     val projectResponseLiveData: LiveData<Resource<List<Project>>>
@@ -27,11 +28,13 @@ class ProjectViewModel: ViewModel() {
         get() = _projectListLiveData
 
     fun getProject() = viewModelScope.launch {
+        if(isLastPage) return@launch
+
         _projectResponseLiveData.postValue(Resource.loading(null))
-        isFirstLoaded = true
         withContext(Dispatchers.IO) {
             val response = projectRepository.getProjectByPage(page)
             if(response.status == Status.SUCCESS) {
+                isFirstLoaded = true
                 updateItems(response.data!!)
             }
             _projectResponseLiveData.postValue(response)
@@ -47,6 +50,8 @@ class ProjectViewModel: ViewModel() {
                 }
                 _projectListLiveData.postValue(origin)
             }?: _projectListLiveData.postValue(data)
+        } else {
+            isLastPage = true
         }
     }
 }
