@@ -52,7 +52,7 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
     }
 
     private fun initLiveDataObserver() {
-        communityViewModel.leaderBoardResponseLiveData.observe(requireActivity()) {
+        communityViewModel.leaderBoardResponseLiveData.observe(viewLifecycleOwner) {
             if(communityViewModel.isFirstLoaded) {
                 // 두번째 로딩부터
                 when(it.status) {
@@ -89,11 +89,11 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
             
         }
 
-        communityViewModel.leaderBoardItems.observe(requireActivity()) {
+        communityViewModel.leaderBoardItems.observe(viewLifecycleOwner) {
             updateDiff(it)
         }
 
-        communityViewModel.top3LiveData.observe(requireActivity()) { list ->
+        communityViewModel.top3LiveData.observe(viewLifecycleOwner) { list ->
             list.forEach {
                 updateTop3(it)
             }

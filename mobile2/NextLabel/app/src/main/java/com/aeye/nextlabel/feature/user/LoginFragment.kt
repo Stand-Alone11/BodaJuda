@@ -42,7 +42,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
     
     private fun initLiveDataObserver() {
         // 로그인 요청 결과에 따른 ui 변경 
-        userViewModel.loginRequestLiveData.observe(requireActivity()) {
+        userViewModel.loginRequestLiveData.observe(viewLifecycleOwner) {
             when(it.status) {
                 Status.SUCCESS -> {
                     // 프로필 정보 저장
