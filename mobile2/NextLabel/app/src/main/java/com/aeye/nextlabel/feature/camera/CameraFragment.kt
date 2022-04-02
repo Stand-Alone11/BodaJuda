@@ -1,6 +1,7 @@
 package com.aeye.nextlabel.feature.camera
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -25,6 +26,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentCameraBinding
 import com.aeye.nextlabel.feature.labeling.LabelingActivity
@@ -44,9 +50,10 @@ import java.util.concurrent.Executors
 class CameraFragment: Fragment() {
     val labelingViewModel: LabelingViewModel by activityViewModels()
     val binding by lazy { FragmentCameraBinding.inflate(layoutInflater) }
+    lateinit var navController: NavController
 
     // TODO: activity를 MainActivity로 바로 사용하지 않게 수정
-    lateinit var activity: CameraActivity
+    lateinit var activity: Activity
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -58,7 +65,7 @@ class CameraFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity = context as CameraActivity
+        activity = requireActivity()
 
         if (!hasPermissions(activity)) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
@@ -67,6 +74,8 @@ class CameraFragment: Fragment() {
         outputDirectory = getOutputDirectory()
         binding.btnCamera.setOnClickListener { takePhoto() }
         cameraExecutor = Executors.newSingleThreadExecutor()
+
+        navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView_camera)
 
         setToolbar()
 
@@ -163,8 +172,16 @@ class CameraFragment: Fragment() {
                         arrayOf(savedUri.toFile().absolutePath),
                         arrayOf(mimeType)
                     ) { _, uri ->
-                        labelingViewModel.imageUrl = uri
-                        setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to LABELING_FRAGMENT))
+                        try {
+                            labelingViewModel.imageUrl = uri
+                            requireActivity().runOnUiThread {
+                                navController.navigate(R.id.action_cameraFragment_to_labelingFragment)
+                            }
+                        } catch (e: Exception) {
+                            Log.d(TAG, "onNav: $e")
+                        }
+
+//                        setFragmentResult(MOVE_FRAGMENT, bundleOf(FRAGMENT_BUNDLE_KEY to LABELING_FRAGMENT))
                         Log.d(TAG, "Image capture scanned into media store: $uri")
                     }
                 }
