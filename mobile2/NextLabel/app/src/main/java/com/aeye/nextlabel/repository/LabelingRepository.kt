@@ -13,9 +13,9 @@ class LabelingRepository {
     private val TAG = "LabelingRepository_debuk"
     var labelingApi: LabelingApi = ApplicationClass.sRetrofit.create(LabelingApi::class.java)
 
-    suspend fun uploadLabels(label: RequestBody, img: MultipartBody.Part): Resource<LabelingResponse> {
+    suspend fun uploadLabels(label: RequestBody, img: MultipartBody.Part, projectId: Int): Resource<LabelingResponse> {
         return try {
-            val response = labelingApi.giveLabels(label, img)
+            val response = labelingApi.giveLabels(label, img, projectId)
             if (response.isSuccessful) {
                 Resource.success(response.body()!!)
             } else {

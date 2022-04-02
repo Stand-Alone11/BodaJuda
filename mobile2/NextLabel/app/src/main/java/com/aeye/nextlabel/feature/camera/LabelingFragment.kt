@@ -4,19 +4,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
 import com.aeye.nextlabel.R
 import com.aeye.nextlabel.databinding.FragmentLabelingBinding
 import com.aeye.nextlabel.feature.common.BaseFragment
 import com.aeye.nextlabel.feature.labeling.LabelingViewModel
+import com.aeye.nextlabel.model.dto.Label
 import com.aeye.nextlabel.util.BoundingBoxConverter
 import com.aeye.nextlabel.util.Status
-import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingBinding::bind, R.layout.fragment_labeling) {
@@ -26,23 +22,15 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-        val btnSubmit = binding.imageButtonLabelingSubmit
-        btnSubmit.setOnClickListener { prepareDialog() }
     }
 
     private fun prepareDialog() {
-        val imgUri = labelingViewModel.imageUrl
-
         MaterialAlertDialogBuilder(requireActivity())
-            .setTitle("과자이름")
+            .setTitle("${labelingViewModel.project?.provider} ${labelingViewModel.project?.title}")
             .setMessage("사진을 전송하시겠습니까?")
             .setPositiveButton("전송") { dialog, which ->
                 Log.d("DIALOG_SUBMIT", "submited")
-                val boundingBoxCoor = setBoundingBox() // ltrb
-                getAbsolutePath(imgUri!!)?.let {
-                    Log.d("확인", "업로드 수행")
-//                labelingViewModel.uploadLabel(Label(name, manufacturer, boundingBoxCoor[0], boundingBoxCoor[1], boundingBoxCoor[2], boundingBoxCoor[3]), it)
-                }
+                uploadLabel()
             }
             .show()
     }
@@ -53,7 +41,33 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
 
         imgUri?.let {
             binding.boxImageViewLabeling.setImage(it)
-        }?: return
+        }?: requireActivity().finish()
+
+        labelingViewModel.project?: requireActivity().finish()
+
+        setToolbar()
+    }
+
+    private fun setToolbar() {
+        binding.toolbarLabeling.apply {
+            setNavigationIcon(R.drawable.ic_back)
+
+            setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
+
+            setOnMenuItemClickListener {
+                when(it.itemId) {
+                    R.id.label_submit -> {
+                        prepareDialog()
+                        true
+                    }
+                    else -> {
+                        false
+                    }
+                }
+            }
+        }
     }
 
     private fun initLiveDataObserver() {
@@ -68,6 +82,19 @@ class LabelingFragment : BaseFragment<FragmentLabelingBinding>(FragmentLabelingB
                 Status.ERROR -> {
                     Log.d(TAG, "initLiveDataObserver: upload fail")
                 }
+            }
+        }
+    }
+
+    private fun uploadLabel() {
+        val imgUri = labelingViewModel.imageUrl
+        val boundingBoxCoor = setBoundingBox() // ltrb
+
+        labelingViewModel.project?.let { project ->
+            getAbsolutePath(imgUri!!)?.let {
+                Log.d("확인", "업로드 수행")
+                val label = Label(project.title, project.provider, boundingBoxCoor[0], boundingBoxCoor[1], boundingBoxCoor[2], boundingBoxCoor[3])
+                labelingViewModel.uploadLabel(label, it, project.id)
             }
         }
     }
