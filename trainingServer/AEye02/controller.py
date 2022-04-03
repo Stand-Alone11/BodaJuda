@@ -11,8 +11,10 @@ from slack_post import image_upload
 from slack_sdk import WebClient
 import datetime as dt
 
-ORIGIN_IMAGE_PATH = '/home/team1/AEye/data/image/snack_30'
-INPUT_IMAGE_PATH = ORIGIN_IMAGE_PATH + '_rota'
+ORIGIN_IMAGE_PATH = '/home/team1/AEye/data/j6s004.p.ssafy.io/downloads'
+# ORIGIN_IMAGE_PATH = '/home/team1/AEye/data/image/snack_30'
+# INPUT_IMAGE_PATH = ORIGIN_IMAGE_PATH + '_rota'
+INPUT_IMAGE_PATH = ORIGIN_IMAGE_PATH + '_preprocessing'
 MODEL_PATH = '/home/team1/AEye/model_float16'
 KEY_PATH = '/home/team1/AEye/keys'
 KEY_NAME = 'aeye-9c1ee-firebase-adminsdk-9glw7-8f233a41fb.json'
