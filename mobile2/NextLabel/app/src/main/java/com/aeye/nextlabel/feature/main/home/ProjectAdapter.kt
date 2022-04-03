@@ -24,9 +24,9 @@ class ProjectAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.root.tag = project
             binding.textViewProjectItemName.text = "${project.provider} ${project.title}"
             binding.textViewProjectItemDesc.text = project.description
-            val progress = project.accepted / project.goal
+            val progress = (project.accepted.toFloat() / project.goal * 100).toInt()
             binding.progressBarProjectItem.setProgressCompat(progress, true)
-            binding.textViewProjectItemProgress.text = "${progress.toString()}%"
+            binding.textViewProjectItemProgress.text = "${progress}%"
         }
     }
 
