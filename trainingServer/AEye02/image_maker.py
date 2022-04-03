@@ -41,11 +41,11 @@ def image_maker(path):
             w = int(w*(1+s*2))
             h = w
          
-         createFolder(path + '_rota/'+i)
+         createFolder(path + '_preprocessing/'+i)
 
          
          for c in range(4):
-            new_img_name = path + '_rota/' + i +'/crop'+str(c)+'_'+j
+            new_img_name = path + '_preprocessing/' + i +'/crop'+str(c)+'_'+j
             if os.path.isfile(new_img_name):
                continue
             cxs = 0
@@ -73,7 +73,7 @@ def image_maker(path):
                   encoded_img.tofile(f)
 
          for mag in range(4):
-            new_img_name = path + '_rota/' + i +'/mag'+str(mag)+'_'+j
+            new_img_name = path + '_preprocessing/' + i +'/mag'+str(mag)+'_'+j
             if os.path.isfile(new_img_name):
                continue
             mxs = int(w*(0.1 + 0.1 * mag ))
@@ -90,7 +90,7 @@ def image_maker(path):
 
          
          for degree in range(0,361,3):
-            new_img_name = path + '_rota/' + i +'/rota'+str(degree)+'_'+j
+            new_img_name = path + '_preprocessing/' + i +'/rota'+str(degree)+'_'+j
             if os.path.isfile(new_img_name):
                continue
             matrix = cv2.getRotationMatrix2D((h/2,w/2), degree, 1)
