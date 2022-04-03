@@ -186,7 +186,6 @@ public class SlackImageService {
                 System.out.println("시퀀스 : " + Long.valueOf(seq));
                 if(image != null){
                     // 프로젝트 accepted 갱신 부분
-                    System.out.println("들어오나???");
                      Project nowProject = projectRepository.findById(image.getProject().getId()).orElse(null);
                      nowProject.setAccepted(nowProject.getAccepted() + 1);
                      projectRepository.save(nowProject);

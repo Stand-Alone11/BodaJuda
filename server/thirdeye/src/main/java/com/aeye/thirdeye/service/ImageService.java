@@ -104,12 +104,16 @@ public class ImageService {
         File curFile2 = new File(nowImage.getImage().substring(0,nowImage.getImage().length()-12)+".jpg");
         String pathPrefix = absolutePath + "gpuImgs/";
         String pathPrefix2 = absolutePath + "savedImgs/";
+        String nowFaceYN = nowImage.getFaceYN();
+        if(nowFaceYN == null || nowFaceYN.trim().length() == 0){
+            nowFaceYN = "전면";
+        }
         String pathSurfix = nowImage.getTypeA() + "/"
                 + nowImage.getTypeB() + "/"
                 + nowImage.getTypeC() + "/";
         String folderName = nowImage.getProvider() + "_"
                 + nowImage.getTitle() + "_"
-                + nowImage.getFaceYN() + "/";
+                + nowFaceYN + "/";
 
         LocalDate now = LocalDate.now();
 
