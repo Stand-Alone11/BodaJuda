@@ -16,6 +16,7 @@ def createFolder(directory):
         print ('Error: Creating directory. ' +  directory)
 
 def image_maker(path):
+   image_size = 280
    list = dict()
    a = 0
    for i in os.listdir(path):
@@ -27,7 +28,8 @@ def image_maker(path):
          image = cv2.imdecode(np.fromfile(path+'/'+i+'/'+j, dtype=np.uint8), cv2.IMREAD_COLOR)
          
          h, w, c = image.shape
-         s = (1-(1/math.sqrt(2)))/2
+         # s = (1-(1/math.sqrt(2)))/3
+         s = 0
          if(h>w):
             tb = int(h*s)
             rl = int((h-w)/2 + h*s)
@@ -37,7 +39,7 @@ def image_maker(path):
          else: 
             tb = int((w-h)/2 + w*s)
             rl = int(w*s)
-            image = cv2.copyMakeBorder(image, tb,tb, rl,rl,cv2.BORDER_CONSTANT ,0   )
+            image = cv2.copyMakeBorder(image, tb,tb, rl,rl,cv2.BORDER_CONSTANT ,0 )
             w = int(w*(1+s*2))
             h = w
          
@@ -66,27 +68,29 @@ def image_maker(path):
                cxe = int(w*0.9)
 
             crop_image = image[cys:cye,cxs:cxe]
+            crop_image = cv2.resize(crop_image,[image_size,image_size])
             extension = os.path.splitext(new_img_name)[1]
             result, encoded_img = cv2.imencode(extension, crop_image)
             if result:
                with open(new_img_name, mode='w+b') as f:
                   encoded_img.tofile(f)
 
-         for mag in range(4):
-            new_img_name = path + '_preprocessing/' + i +'/mag'+str(mag)+'_'+j
-            if os.path.isfile(new_img_name):
-               continue
-            mxs = int(w*(0.1 + 0.1 * mag ))
-            mxe = int(w*(0.9 - 0.1 * mag ))
-            mys = int(h*(0.1 + 0.1 * mag ))
-            mye = int(h*(0.9 - 0.1 * mag ))
+         # for mag in range(4):
+         #    new_img_name = path + '_preprocessing/' + i +'/mag'+str(mag)+'_'+j
+         #    if os.path.isfile(new_img_name):
+         #       continue
+         #    mxs = int(w*(0.1 + 0.1 * mag ))
+         #    mxe = int(w*(0.9 - 0.1 * mag ))
+         #    mys = int(h*(0.1 + 0.1 * mag ))
+         #    mye = int(h*(0.9 - 0.1 * mag ))
            
-            mag_image = image[mys:mye,mxs:mxe]
-            extension = os.path.splitext(new_img_name)[1]
-            result, encoded_img = cv2.imencode(extension, mag_image)
-            if result:
-               with open(new_img_name, mode='w+b') as f:
-                  encoded_img.tofile(f)
+         #    mag_image = image[mys:mye,mxs:mxe]
+         #    mag_image = cv2.resize(mag_image,[image_size,image_size])
+         #    extension = os.path.splitext(new_img_name)[1]
+         #    result, encoded_img = cv2.imencode(extension, mag_image)
+         #    if result:
+         #       with open(new_img_name, mode='w+b') as f:
+         #          encoded_img.tofile(f)
 
          
          for degree in range(0,361,3):
@@ -95,7 +99,7 @@ def image_maker(path):
                continue
             matrix = cv2.getRotationMatrix2D((h/2,w/2), degree, 1)
             rota_image = cv2.warpAffine(image, matrix, (h, w))
-            rota_image = cv2.resize(rota_image,[224,224])
+            rota_image = cv2.resize(rota_image,[image_size,image_size])
             extension = os.path.splitext(new_img_name)[1]
             result, encoded_img = cv2.imencode(extension, rota_image)
             if result:
