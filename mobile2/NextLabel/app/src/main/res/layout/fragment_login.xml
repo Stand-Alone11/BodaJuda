@@ -42,13 +42,14 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_login_user_id"
             app:hintTextAppearance="@style/Text.Normal"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/EditText.OutlinedBox.Base"
             app:layout_constraintTop_toBottomOf="@id/image_logo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/margin_default"
             android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default">
+            android:layout_marginEnd="@dimen/margin_default"
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_id"
@@ -64,15 +65,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_login_password"
+            style="@style/EditText.OutlinedBox.Base"
             app:hintTextAppearance="@style/Text.Normal"
             app:passwordToggleEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@id/outlinedTextField_user_id"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_small"
             android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default" >
+            android:layout_marginEnd="@dimen/margin_default"
+            app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"

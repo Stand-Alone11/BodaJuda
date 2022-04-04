@@ -26,10 +26,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         // 로그인 상태가 아니라면, 로그인 먼저 요청
        if (isLogin()) {
             init()
-        } else {
-            val intent = Intent(this@MainActivity, LoginActivity::class.java)
-            startActivity(intent)
+       } else {
+           gotoLogin()
+       }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(!isLogin()) {
+            gotoLogin()
         }
+    }
+
+    private fun gotoLogin() {
+        val intent = Intent(this@MainActivity, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun init() {
