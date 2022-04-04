@@ -3,6 +3,7 @@ package com.aeye.nextlabel.feature.user
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
@@ -56,7 +57,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
                     // TODO: showLoading() 
                 }
                 Status.ERROR -> {
-                    // TODO: dismissLoading() 
+                    it.message?.let { msg ->
+                        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
@@ -77,11 +80,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
 
         if(!InputValidUtil.isValidUserId(userId)) {
             result *= 0
-            binding.userId.error = resources.getText(R.string.userIdErrorMessage)
+            binding.outlinedTextFieldUserId.error = resources.getText(R.string.userIdErrorMessage)
         }
         if(!InputValidUtil.isValidPassword(password)) {
             result *= 0
-            binding.password.error = resources.getText(R.string.passwordErrorMessage)
+            binding.outlinedTextFieldPassword.error = resources.getText(R.string.passwordErrorMessage)
         }
 
         return when(result) {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Next Label</string>
+    <string name="app_name">Juda</string>
 
     <!--  password update dialog  -->
     <string name="password_update_dialog_title">비밀번호 변경</string>

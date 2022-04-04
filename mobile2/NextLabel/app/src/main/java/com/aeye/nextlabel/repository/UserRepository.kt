@@ -58,8 +58,8 @@ class UserRepository {
                 Resource.success(response.body()!!)
             } else {
                 when(response.code()) {
-                    401 -> Resource.error(null, "비밀번호 미일치")
-                    404 -> Resource.error(null, "해당 유저 없음")
+                    401 -> Resource.error(null, "비밀번호가 틀렸습니다.")
+                    404 -> Resource.error(null, "존재하지 않는 계정입니다.")
                     else -> Resource.error(null, "알 수 없는 오류입니다.")
                 }
             }

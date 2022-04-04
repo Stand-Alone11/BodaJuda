@@ -45,9 +45,21 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
             when(it.status) {
                 Status.SUCCESS -> {
                     // 회원가입에 성공하면 로그인 함께 수행
-//                    userViewModel.login(userForLogin)
+                    userViewModel.login(userForLogin)
+                }
+                Status.LOADING -> {
+                    // TODO: showLoading()
+                }
+                Status.ERROR -> {
+                    // TODO: dismissLoading()
+                }
+            }
+        }
 
-                    val intent = Intent(requireActivity(), LoginActivity::class.java)
+        userViewModel.loginRequestLiveData.observe(requireActivity()) {
+            when(it.status) {
+                Status.SUCCESS -> {
+                    val intent = Intent(requireActivity(), MainActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
                 }
@@ -59,22 +71,6 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
                 }
             }
         }
-
-//        userViewModel.loginRequestLiveData.observe(requireActivity()) {
-//            when(it.status) {
-//                Status.SUCCESS -> {
-//                    val intent = Intent(requireActivity(), MainActivity::class.java)
-//                    startActivity(intent)
-//                    requireActivity().finish()
-//                }
-//                Status.LOADING -> {
-//                    // TODO: showLoading()
-//                }
-//                Status.ERROR -> {
-//                    // TODO: dismissLoading()
-//                }
-//            }
-//        }
     }
 
     private fun join() {
@@ -99,23 +95,23 @@ class JoinFragment : BaseFragment<FragmentJoinBinding>(FragmentJoinBinding::bind
 
         if(!InputValidUtil.isValidUserId(userId)) {
             result *= 0
-            binding.userId.error = resources.getText(R.string.userIdErrorMessage)
+            binding.outlinedTextFieldUserId.error = resources.getText(R.string.userIdErrorMessage)
         }
         if(!InputValidUtil.isValidPassword(password)) {
             result *= 0
-            binding.password.error = resources.getText(R.string.passwordErrorMessage)
+            binding.outlinedTextFieldPassword.error = resources.getText(R.string.passwordErrorMessage)
         }
         if(password != passwordConfirmation) {
             result *= 0
-            binding.passwordConfirmation.error = resources.getText(R.string.passwordConfirmErrorMessage)
+            binding.outlinedTextFieldPasswordConfirmation.error = resources.getText(R.string.passwordConfirmErrorMessage)
         }
         if(!InputValidUtil.isValidEmail(email)) {
             result *= 0
-            binding.email.error = resources.getText(R.string.emailErrorMessage)
+            binding.outlinedTextFieldEmail.error = resources.getText(R.string.emailErrorMessage)
         }
         if(!InputValidUtil.isValidNickname(nickname)) {
             result *= 0
-            binding.nickname.error = resources.getText(R.string.nicknameErrorMessage)
+            binding.outlinedTextFieldNickname.error = resources.getText(R.string.nicknameErrorMessage)
         }
 
         return when(result) {

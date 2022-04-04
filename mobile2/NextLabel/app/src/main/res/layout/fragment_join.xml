@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,7 +97,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/margin_small"
             android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default" >
+            android:layout_marginEnd="@dimen/margin_default">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_confirmation"
