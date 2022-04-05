@@ -68,16 +68,13 @@ class CommunityViewModel: ViewModel() {
 
             try {
                 for(i in 0..2) {
-                    if(list[i].rank < 4) {
-                        top3List.add(list[i])
-                    }
+                    top3List.add(list[i])
                 }
             } catch (e: Exception) {
 
             } finally {
                 _top3LiveData.postValue(top3List)
             }
-
         } else {
             origin.addAll(list)
             _leaderBoardItems.postValue(origin)
