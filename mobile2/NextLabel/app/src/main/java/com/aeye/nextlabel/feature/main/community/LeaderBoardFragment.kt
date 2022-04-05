@@ -1,7 +1,9 @@
 package com.aeye.nextlabel.feature.main.community
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,6 +47,19 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
                     // 스크롤이 끝에 도달했는지 확인
                     if (!recyclerView.canScrollVertically(RecyclerView.VERTICAL) && lastVisibleItemPosition == itemTotalCount) {
                         communityViewModel.getLeaderBoard()
+                    }
+                }
+            })
+
+            addItemDecoration(object: RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    if(parent.getChildAdapterPosition(view) == 0) {
+                        outRect.top = outRect.top + 4.dp
                     }
                 }
             })
@@ -121,4 +136,10 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
     private fun updateDiff(list: List<RankUser>) {
         leaderAdapter.addUsers(list.subList(leaderAdapter.itemCount, list.lastIndex + 1))
     }
+
+    val Int.dp: Int
+        get() {
+            val metrics = resources.displayMetrics
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics).toInt()
+        }
 }
