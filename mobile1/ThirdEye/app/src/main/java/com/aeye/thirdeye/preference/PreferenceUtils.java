@@ -41,6 +41,7 @@ import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions;
 public class PreferenceUtils {
 
   private static final int POSE_DETECTOR_PERFORMANCE_MODE_FAST = 1;
+  private static final float DETECT_THRESHOLD = 0.4f;
 
   static void saveString(Context context, @StringRes int prefKeyId, @Nullable String value) {
     PreferenceManager.getDefaultSharedPreferences(context)
@@ -173,7 +174,7 @@ public class PreferenceUtils {
             sharedPreferences.getBoolean(context.getString(prefKeyForClassification), true);
 
     CustomObjectDetectorOptions.Builder builder =
-            new CustomObjectDetectorOptions.Builder(remoteModel).setDetectorMode(mode);
+            new CustomObjectDetectorOptions.Builder(remoteModel).setDetectorMode(mode).setClassificationConfidenceThreshold(DETECT_THRESHOLD);
     if (enableMultipleObjects) {
       builder.enableMultipleObjects();
     }
@@ -208,7 +209,7 @@ public class PreferenceUtils {
         sharedPreferences.getBoolean(context.getString(prefKeyForClassification), true);
 
     CustomObjectDetectorOptions.Builder builder =
-        new CustomObjectDetectorOptions.Builder(localModel).setDetectorMode(mode);
+        new CustomObjectDetectorOptions.Builder(localModel).setDetectorMode(mode).setClassificationConfidenceThreshold(DETECT_THRESHOLD);
     if (enableMultipleObjects) {
       builder.enableMultipleObjects();
     }
