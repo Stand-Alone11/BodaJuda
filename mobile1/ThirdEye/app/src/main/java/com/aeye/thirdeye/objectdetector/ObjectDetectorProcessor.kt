@@ -62,7 +62,8 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
   override fun onSuccess(results: List<DetectedObject>, graphicOverlay: GraphicOverlay) {
     for (result in results) {
       graphicOverlay.add(ObjectGraphic(graphicOverlay, result))
-      checkResult(result)
+      Log.d(TAG, "onSuccess: labelsize: ${result.labels.size} id: ${result.trackingId}")
+      if(result.labels.size > 0) checkResult(result)
     }
   }
 
