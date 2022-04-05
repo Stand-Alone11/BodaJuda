@@ -47,6 +47,7 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
     super.stop()
     try {
       detector.close()
+      timer.stop()
     } catch (e: IOException) {
       Log.e(
         TAG,
