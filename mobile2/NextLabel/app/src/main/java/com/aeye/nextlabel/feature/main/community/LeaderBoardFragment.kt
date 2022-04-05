@@ -94,23 +94,20 @@ class LeaderBoardFragment : BaseFragment<FragmentLeaderBoardBinding>(FragmentLea
         }
 
         communityViewModel.top3LiveData.observe(viewLifecycleOwner) { list ->
-            list.forEach {
-                updateTop3(it)
+            list.forEachIndexed { index, user ->
+                updateTop3(index, user)
             }
         }
     }
 
-    private fun updateTop3(user: RankUser) {
+    private fun updateTop3(index: Int, user: RankUser) {
         val imageViews = arrayOf(binding.imageViewLeaderFFirst, binding.imageViewLeaderFSecond, binding.imageViewLeaderFThird)
         val names = arrayOf(binding.textViewLeaderFFirstName, binding.textViewLeaderFSecondName, binding.textViewLeaderFThirdName)
         val contributes = arrayOf(binding.textViewLeaderFFirstAccepted, binding.textViewLeaderFSecondAccepted, binding.textViewLeaderFThirdAccepted)
 
-        if(user.rank < 4) {
-            val index = user.rank - 1
-            Glide.with(this).load("${ApplicationClass.IMAGE_BASE_URL}${user.profileImage}").error(R.drawable.bottom_nav_profile).circleCrop().into(imageViews[index])
-            names[index].text = user.nickName
-            contributes[index].text = user.imageAccepted.toString()
-        }
+        Glide.with(this).load("${ApplicationClass.IMAGE_BASE_URL}${user.profileImage}").error(R.drawable.bottom_nav_profile).circleCrop().into(imageViews[index])
+        names[index].text = user.nickName
+        contributes[index].text = user.imageAccepted.toString()
     }
 
     /** 첫 Fragment 생성 시 request*/

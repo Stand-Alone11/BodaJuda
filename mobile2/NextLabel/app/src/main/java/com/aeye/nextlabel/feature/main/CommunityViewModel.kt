@@ -74,6 +74,9 @@ class CommunityViewModel: ViewModel() {
 
             } finally {
                 _top3LiveData.postValue(top3List)
+                if(list.size > 3) {
+                    _leaderBoardItems.postValue(list.subList(3, list.size))
+                }
             }
         } else {
             origin.addAll(list)
