@@ -89,8 +89,6 @@ class LivePreviewActivity :
         }
     }
 
-    private fun isCameraPermissionAccepted(): Boolean = isPermissionGranted(this, Manifest.permission.CAMERA)
-
     private fun init() {
         tsUtil = TextToSpeechUtil(this)
         supportActionBar?.let {
