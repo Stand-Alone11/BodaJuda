@@ -19,12 +19,7 @@ class LeaderBoardAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class ViewHolder(val binding: LeaderboardItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(user: RankUser) {
             binding.user = user
-            val imgUri = if(user.profileImage.startsWith("/")) {
-                "${ApplicationClass.BASE_URL}${user.profileImage.drop(1)}"
-            } else {
-                user.profileImage
-            }
-            Glide.with(binding.root).load(imgUri).circleCrop().into(binding.imageViewLeaderBoard)
+            Glide.with(binding.root).load("${ApplicationClass.IMAGE_BASE_URL}${user.profileImage}").circleCrop().into(binding.imageViewLeaderBoard)
         }
     }
 
