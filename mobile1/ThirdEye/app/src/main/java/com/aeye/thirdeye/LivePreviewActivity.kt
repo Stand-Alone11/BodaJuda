@@ -110,7 +110,12 @@ class LivePreviewActivity :
         val refreshButton = findViewById<Button>(R.id.button_live_preview_refresh).apply {
             setOnClickListener {
                 // TODO: 재인식
-                startCameraSource()
+                cameraSource?.release()
+                if(this@LivePreviewActivity::aEyeRemoteModel.isInitialized) {
+                    createCameraSource(OBJECT_DETECTION_CUSTOM)
+                } else {
+                    createCameraSource(OBJECT_DETECTION_CUSTOM, true)
+                }
                 resultLast = ""
                 resultTextView.text = resultLast
                 dismissBlackPlate()
@@ -156,19 +161,6 @@ class LivePreviewActivity :
                         ObjectDetectorProcessor(this, objectDetectorOption, this)
                     )
                     startCameraSource()
-                }
-                CUSTOM_AUTOML_OBJECT_DETECTION -> {
-                    Log.i(TAG, "Using Custom AutoML Object Detector Processor")
-                    val customAutoMLODTLocalModel =
-                        LocalModel.Builder().setAssetManifestFilePath("automl/manifest.json").build()
-                    val customAutoMLODTOptions =
-                        PreferenceUtils.getCustomObjectDetectorOptionsForLivePreview(
-                            this,
-                            customAutoMLODTLocalModel
-                        )
-                    cameraSource!!.setMachineLearningFrameProcessor(
-                        ObjectDetectorProcessor(this, customAutoMLODTOptions, this)
-                    )
                 }
 
                 else -> Log.e(TAG, "Unknown model: $model")
@@ -384,7 +376,6 @@ class LivePreviewActivity :
     companion object {
         private const val OBJECT_DETECTION = "Object Detection"
         private const val OBJECT_DETECTION_CUSTOM = "Custom Object Detection"
-        private const val CUSTOM_AUTOML_OBJECT_DETECTION = "Custom AutoML Object Detection (Flower)"
 
         private const val TAG = "LivePreviewActivity"
 
@@ -453,12 +444,29 @@ class LivePreviewActivity :
     }
 
     override fun detectSuccess(label: String) {
+        Log.d("ObjectDetectorProcessor", "detectSuccess: ")
         runOnUiThread {
-            preview?.stop()
+            requestPreviewStop(label)
+        }
+    }
+
+    private fun requestPreviewStop(label: String) {
+//        preview?.stopForAlert(object: CameraStopListener {
+//            override fun onStop() {
+//                if(blackPlate.visibility == View.GONE) {
+//                    alert()
+//                    resultTextView.text = getLabel(label)
+//                    showBlackPlate()
+//                }
+//            }
+//        })
+
+        preview?.stop()
+        if(blackPlate.visibility == View.GONE) {
             alert()
-            resultLast = getLabel(label)
-            resultTextView.text = resultLast
+            resultTextView.text = getLabel(label)
             showBlackPlate()
+            cameraSource?.release()
         }
     }
 

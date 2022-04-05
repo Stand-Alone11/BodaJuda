@@ -41,11 +41,13 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
   private var isResultChanged = true
   private val detectSuccessListener = alertListener
   private var id = 0
+  private var timer = Timer()
 
   override fun stop() {
     super.stop()
     try {
       detector.close()
+      timer.stop()
     } catch (e: IOException) {
       Log.e(
         TAG,
@@ -63,7 +65,7 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
     for (result in results) {
       graphicOverlay.add(ObjectGraphic(graphicOverlay, result))
       Log.d(TAG, "onSuccess: labelsize: ${result.labels.size} id: ${result.trackingId}")
-      if(result.labels.size > 0) checkResult(result)
+      checkResult(result)
     }
   }
 
@@ -74,9 +76,9 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
    * label이 같다면 isResultChanged = false
    * 다르거나 없다면
    */
-  private fun checkResult(result: DetectedObject) {
+  private fun oldCheckResult(result: DetectedObject) {
     Log.d(TAG, "id: ${id++}, trackingId: ${result.trackingId}, label: ${result.labels[0].text}, isResultChanged: $isResultChanged")
-    if(trackingId != result.trackingId) {
+    if(trackingId != result.trackingId || result.labels.size > 1) {
       Log.d(TAG, "checkResult: TrackingId Changed")
       stopTimer()
       updateResult(result)
@@ -92,6 +94,30 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
         startTimer()
       }
     }
+  }
+
+  // TODO: Single Mode일 때 id 변경해야함
+  private fun checkResult(result: DetectedObject) {
+    val id = result.trackingId!!
+    val labels = result.labels
+
+    // tracking id 변화 없음
+    if(id == trackingId) {
+      // 라벨 값이 존재하고 변화했다면 타이머 스타트
+      if(labels.isNotEmpty() && labels[0].text != label) {
+        timer.start()
+      } else if(labels.isEmpty()) {
+        timer.stop()
+      }
+    }
+    // tracking id 변화 있음
+    else {
+      timer.stop()
+      if(labels.size > 0) {
+        timer.start()
+      }
+    }
+    updateResult(result)
   }
 
   private fun updateResult(result: DetectedObject) {
@@ -117,7 +143,7 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
     job = CoroutineScope(Dispatchers.Default).launch {
       isResultChanged = true
       delay(1000L)
-      Log.d(TAG, "inTimer: $isResultChanged")
+      Log.d(TAG, "afterTimer: $isResultChanged")
       if(!isResultChanged) {
         Log.d(TAG, "detect success")
         detectSuccessListener.detectSuccess(label)
@@ -126,10 +152,12 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
       trackingId = -1
       label = ""
     }
+    Log.d(TAG, "startTimer: $job")
   }
 
   private fun stopTimer() {
-    Log.d(TAG, "startTimer: stop")
+    Log.d(TAG, "stopTimer: stop")
+    Log.d(TAG, "stopTimer: ${job}")
     job?.cancel()
   }
 
@@ -139,6 +167,25 @@ class ObjectDetectorProcessor(context: Context, options: ObjectDetectorOptionsBa
 
   companion object {
     private const val TAG = "ObjectDetectorProcessor"
+  }
+
+  inner class Timer {
+    lateinit var job: Job
+
+    fun start() {
+      Log.d(TAG, "start: ")
+      stop()
+      job = CoroutineScope(Dispatchers.Default).launch {
+        delay(1000L)
+        detectSuccessListener.detectSuccess(label)
+        label = ""
+        trackingId = -1
+      }
+    }
+
+    fun stop() {
+      if(::job.isInitialized) job.cancel()
+    }
   }
 
   interface DetectSuccessListener {
