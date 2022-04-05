@@ -107,19 +107,10 @@ class LivePreviewActivity :
             Log.d(TAG, "graphicOverlay is null")
         }
 
-//        val refreshButton = findViewById<Button>(R.id.button_live_preview_refresh).apply {
-//            setOnClickListener {
-//                // TODO: 재인식
-//                startCameraSource()
-//                resultLast = ""
-//                resultTextView.text = resultLast
-//                dismissBlackPlate()
-//            }
-//        }
-
         val refreshButton = findViewById<Button>(R.id.button_live_preview_refresh).apply {
             setOnClickListener {
                 // TODO: 재인식
+                cameraSource?.release()
                 if(this@LivePreviewActivity::aEyeRemoteModel.isInitialized) {
                     createCameraSource(OBJECT_DETECTION_CUSTOM)
                 } else {
@@ -460,16 +451,23 @@ class LivePreviewActivity :
     }
 
     private fun requestPreviewStop(label: String) {
-        preview?.stopForAlert(object: CameraStopListener {
-            override fun onStop() {
-                if(blackPlate.visibility == View.GONE) {
-                    alert()
-                    resultTextView.text = getLabel(label)
-                    showBlackPlate()
-                }
-            }
-        })
-        cameraSource?.release()
+//        preview?.stopForAlert(object: CameraStopListener {
+//            override fun onStop() {
+//                if(blackPlate.visibility == View.GONE) {
+//                    alert()
+//                    resultTextView.text = getLabel(label)
+//                    showBlackPlate()
+//                }
+//            }
+//        })
+
+        preview?.stop()
+        if(blackPlate.visibility == View.GONE) {
+            alert()
+            resultTextView.text = getLabel(label)
+            showBlackPlate()
+            cameraSource?.release()
+        }
     }
 
     private fun showBlackPlate() {
