@@ -48,6 +48,7 @@ def image_maker(path):
          
          for c in range(4):
             new_img_name = path + '_preprocessing/' + i +'/crop'+str(c)+'_'+j
+            print(new_img_name)
             if os.path.isfile(new_img_name):
                continue
             cxs = 0
@@ -95,6 +96,7 @@ def image_maker(path):
          
          for degree in range(0,361,3):
             new_img_name = path + '_preprocessing/' + i +'/rota'+str(degree)+'_'+j
+            print(new_img_name)
             if os.path.isfile(new_img_name):
                continue
             matrix = cv2.getRotationMatrix2D((h/2,w/2), degree, 1)
