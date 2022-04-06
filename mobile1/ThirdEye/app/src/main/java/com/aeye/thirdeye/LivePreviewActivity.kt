@@ -127,7 +127,7 @@ class LivePreviewActivity :
 
         val voiceButton = findViewById<Button>(R.id.button_live_preview_voice).apply {
             setOnClickListener {
-                tsUtil.speakTxt(resultLast)
+                tsUtil.speakTxt(resultTextView.text.toString())
             }
         }
 
