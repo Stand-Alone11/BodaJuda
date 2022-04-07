@@ -8,8 +8,7 @@
 
 
 ## ERD
-
-![erd.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/157033cf-f011-4637-9ba5-a3327c0c3cf4/erd.png)
+![image](/uploads/b0656fdbb07eff90a37bd9e9abe7bebc/image.png)
 
 
 
