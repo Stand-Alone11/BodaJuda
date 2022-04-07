@@ -42,7 +42,7 @@
     - 박상현: Android
     - 서상용: AWS EC2, firebase, Android
     - 임다훈: Backend, AWS EC2
-<br>
+    <br>
 
 ### **기술 스택**
 
@@ -53,40 +53,40 @@
 5. UCC : Movavi Video Editor Plus 2020
 6. CI/CD : Jenkins
 7. 개발 환경
-- IDE
-    - IntelliJ : intellij IDEA 2021.3.1
-    - Android Studio : Bumblebee | 2021.1.1 Patch 2 for Windows 64-bit
-- OS : Windows 10, Monterey 12.3 (Mac OS)
-- Database : MySQL
-- Web Server : AWS EC2 (MobaXterm)
-    - Ubuntu 20.04.4 LTS
-    - Nginx
-- GPU Server
-    - Ubuntu 20.04.1 LTS
+    - IDE
+        - IntelliJ : intellij IDEA 2021.3.1
+        - Android Studio : Bumblebee | 2021.1.1 Patch 2 for Windows 64-bit
+    - OS : Windows 10, Monterey 12.3 (Mac OS)
+    - Database : MySQL
+    - Web Server : AWS EC2 (MobaXterm)
+        - Ubuntu 20.04.4 LTS
+        - Nginx
+    - GPU Server
+        - Ubuntu 20.04.1 LTS
 
 8. 상세 사용
 
-- Web Server
-    - Java : 11
-    - Spring Boot : 2.5.10
-    - Spring Boot Gradle : 7.4
-    - lombok, gson 2.8.9, querydsl 5.0.0, swagger 2.9.2, google-api-client 1.32.1,
-    jjwt 0.11.2, slack-api 1.20.1, bolt 1.20.1, okhttp3 4.9.1, qlrm 3.0.4, gcp 3.0.0
-- GPU Server
-    - anaconda python : 3.8.8
-    - pip : 22.0.4
-    - opencv-opencv-python : 4.5.5.64
-    - tensorflow : 2.8.0, tensorflow-gpu : 2.8.0, tflite_model_maker : 0.3.4,
-    firebase_admin : 5.2.0, oauth2client : 4.1.3, seaborn : 0.11.2
-- Android
-    - Android Studio
-        - Build #AI-211.7628.21.2111.8193401, built on February 17, 2022
-        - Runtime version: 11.0.11+0-b60-7772763 aarch64
-        - VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o.
-    - Android Gradle plugin version: 7.1.2
-    - Gradle version: 7.4.1
-    - Compile sdk version: 31
-<br>
+    - Web Server
+        - Java : 11
+        - Spring Boot : 2.5.10
+        - Spring Boot Gradle : 7.4
+        - lombok, gson 2.8.9, querydsl 5.0.0, swagger 2.9.2, google-api-client 1.32.1,
+        jjwt 0.11.2, slack-api 1.20.1, bolt 1.20.1, okhttp3 4.9.1, qlrm 3.0.4, gcp 3.0.0
+    - GPU Server
+        - anaconda python : 3.8.8
+        - pip : 22.0.4
+        - opencv-opencv-python : 4.5.5.64
+        - tensorflow : 2.8.0, tensorflow-gpu : 2.8.0, tflite_model_maker : 0.3.4,
+        firebase_admin : 5.2.0, oauth2client : 4.1.3, seaborn : 0.11.2
+    - Android
+        - Android Studio
+            - Build #AI-211.7628.21.2111.8193401, built on February 17, 2022
+            - Runtime version: 11.0.11+0-b60-7772763 aarch64
+            - VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o.
+        - Android Gradle plugin version: 7.1.2
+        - Gradle version: 7.4.1
+        - Compile sdk version: 31
+    <br>
 
 ### **디자인**
 
@@ -225,4 +225,4 @@ main
 
 - [포팅메뉴얼](./exec/AEye_포팅매뉴얼.pdf)
 - [시연 시나리오](./exec/AEye_시연시나리오.pdf)
-- [발표자료]
+- [최종발표자료](./pt/전자연계 최종발표.pptx)
