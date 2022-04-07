@@ -24,9 +24,9 @@
         - [기술 스택](#기술-스택)
         - [디자인](#디자인)
     - 2️⃣ [프로젝트 파일 구조](#2️⃣-프로젝트-파일-구조)
-        - [Backend Server](#Backend-Server)
-        - [Boda(app1)](#Android-(App1))
-        - [Juda(app2)](#Android-(App2))
+        - Backend Server
+        - Boda(app1)
+        - Juda(app2)
     - 3️⃣ [프로젝트 산출물](#3️⃣-프로젝트-산출물)
     - 4️⃣ [프로젝트 결과물](#4️⃣-프로젝트-결과물)
 
