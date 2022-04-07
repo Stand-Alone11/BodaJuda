@@ -1,8 +1,7 @@
 # **BODA / JUDA**
 
-<img src="/uploads/25e11bfce5f4ea8897ce6aa91ad4f819/image.png" alt="BODA-logos_transparent_흰배경" width="500" height="500" />
-<img src="/uploads/1485627ac32411e36128e1670f63843c/image.png" alt="JUDA-logos_transparent_흰배경" width="500" height="500" />
-
+<img src="/uploads/25e11bfce5f4ea8897ce6aa91ad4f819/image.png" alt="BODA-logos_transparent_흰배경" width="400" height="400"/>
+<img src="/uploads/1485627ac32411e36128e1670f63843c/image.png" alt="JUDA-logos_transparent_흰배경" width="400" height="400"/>
 
  ### **세상을 이해하는 또다른 눈, BODA** / **세상을 보여주는 경험, JUDA**<br>
 > **BODA** <br> 
@@ -92,13 +91,16 @@
 ### **디자인**
 
 **app1 ( BODA )**
+
 <br>
 <img src="/uploads/52f44d05ef78d92f20171abb922519f5/image.png" alt="BODA_영상" width="400" height="700" />
 <br><br>
+
 **app2 ( JUDA )**
 <br>
 ![image](/uploads/fb64c81e44772a3eafc8692570a76196/image.png)
 <br><br>
+
 ## **2️⃣ 프로젝트 파일 구조**
 
 ### Backend Server
@@ -131,6 +133,7 @@
 			└─ utils
 ```
 <br>
+
 ### **Android (App1)**
 
 ```
@@ -161,6 +164,7 @@ main
       └─values
 ```
 <br>
+
 ### **Android (App2)**
 
 ```
@@ -202,6 +206,7 @@ main
     └─values-night
 ```
 <br><br>
+
 ## **3️⃣ 프로젝트 산출물**
 
 - [Notion ( 공유 / 메모 )](https://www.notion.so/aeye/AEye-473dcc17ae144a3fb7e23d0c548d0f62)
@@ -215,6 +220,7 @@ main
 - [성능테스트](./docs/성능테스트.md)
 - [테스트케이스 문서](./docs/테스트케이스.pdf)
 <br><br>
+
 ## **4️⃣ 프로젝트 결과물**
 
 - [포팅메뉴얼](./exec/AEye_포팅매뉴얼.pdf)
